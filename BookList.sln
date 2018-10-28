@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.Service", "BookList.Service\BookList.Service.csproj", "{7DB9E36B-F1DA-48D0-98CD-BC56CFD66AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.Service.Tests", "BookList.Service.Tests\BookList.Service.Tests.csproj", "{2A090678-1F14-40BC-BD86-EA917EF5F635}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.Biz", "BookList.Biz\BookList.Biz.csproj", "{46A65286-17AF-4E67-99A0-E7E69AA152E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +15,9 @@ Global
 		{7DB9E36B-F1DA-48D0-98CD-BC56CFD66AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DB9E36B-F1DA-48D0-98CD-BC56CFD66AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DB9E36B-F1DA-48D0-98CD-BC56CFD66AED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A090678-1F14-40BC-BD86-EA917EF5F635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A090678-1F14-40BC-BD86-EA917EF5F635}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A090678-1F14-40BC-BD86-EA917EF5F635}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A090678-1F14-40BC-BD86-EA917EF5F635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46A65286-17AF-4E67-99A0-E7E69AA152E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46A65286-17AF-4E67-99A0-E7E69AA152E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46A65286-17AF-4E67-99A0-E7E69AA152E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46A65286-17AF-4E67-99A0-E7E69AA152E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

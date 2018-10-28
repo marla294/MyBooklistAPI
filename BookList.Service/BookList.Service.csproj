@@ -71,6 +71,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BookList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
