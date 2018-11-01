@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>BookList.Tests</RootNamespace>
     <AssemblyName>BookList.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +35,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BookList.Biz\BookList.Biz.csproj">
+      <Project>{46A65286-17AF-4E67-99A0-E7E69AA152E8}</Project>
+      <Name>BookList.Biz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookList.Service\BookList.Service.csproj">
+      <Project>{7DB9E36B-F1DA-48D0-98CD-BC56CFD66AED}</Project>
+      <Name>BookList.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Biz\" />
+    <Folder Include="Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -83,6 +83,12 @@
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BookList.Biz\BookList.Biz.csproj">
+      <Project>{46A65286-17AF-4E67-99A0-E7E69AA152E8}</Project>
+      <Name>BookList.Biz</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
