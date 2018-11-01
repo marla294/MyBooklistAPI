@@ -8,6 +8,9 @@ ALTER TABLE BOOKS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
 ALTER TABLE BOOKS ADD COLUMN NAME TEXT;
 ALTER TABLE BOOKS ADD COLUMN URL TEXT;
 
+ALTER TABLE BOOKS DROP COLUMN ID;
+ALTER TABLE BOOKS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
+
 CREATE TABLE USERS ();
 
 ALTER TABLE USERS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
@@ -31,4 +34,16 @@ ADD CONSTRAINT USERLINK FOREIGN KEY (USERNAME) REFERENCES USERS (ID);
 
 // Add test data into tables
 
-insert into books values (1 ,'all the light we cannot see', 'https://www.amazon.com/All-Light-We-Cannot-See/dp/1501173219/ref=sr_1_1?ie=UTF8&qid=1540570012&sr=8-1&keywords=all+the+light+we+cannot+see');
+// Books
+
+insert into books(name, url) values ('all the light we cannot see', 'https://www.amazon.com/All-Light-We-Cannot-See/dp/1501173219/ref=sr_1_1?ie=UTF8&qid=1540570012&sr=8-1&keywords=all+the+light+we+cannot+see');
+insert into books(name, url) values ('little fires everywhere', 'https://www.amazon.com/Little-Fires-Everywhere-Celeste-Ng/dp/0735224293/ref=sr_1_1?ie=UTF8&qid=1540570406&sr=8-1&keywords=little+fires+everywhere+by+celeste+ng&dpID=51XWy95kQjL&preST=_SY291_BO1,204,203,200_QL40_&dpSrc=srch');
+insert into books(name, url) values ('influence: the psychology of persuasion', 'https://www.amazon.com/Influence-Psychology-Persuasion-Robert-Cialdini/dp/006124189X/ref=sr_1_1?ie=UTF8&qid=1540570536&sr=8-1&keywords=influence+robert+cialdini');
+
+// Users
+
+insert into users(name) values ('Marla');
+
+// BookList
+
+insert into booklist(book, username, done, rating, notes, sortorder) values (2, 1, false, 3, 'on hold', 1);

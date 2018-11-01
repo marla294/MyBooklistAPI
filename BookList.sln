@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.Service", "BookLis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.Biz", "BookList.Biz\BookList.Biz.csproj", "{46A65286-17AF-4E67-99A0-E7E69AA152E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.Tests", "BookList.Tests\BookList.Tests.csproj", "{D68FBBBC-91CB-4E49-899E-C50C654942E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{46A65286-17AF-4E67-99A0-E7E69AA152E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A65286-17AF-4E67-99A0-E7E69AA152E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A65286-17AF-4E67-99A0-E7E69AA152E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D68FBBBC-91CB-4E49-899E-C50C654942E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68FBBBC-91CB-4E49-899E-C50C654942E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68FBBBC-91CB-4E49-899E-C50C654942E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68FBBBC-91CB-4E49-899E-C50C654942E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
