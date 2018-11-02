@@ -6,8 +6,8 @@ using BookList.Biz.Database;
 
 namespace BookList.Service.Controllers
 {
-    [EnableCors(origins: "http://127.0.0.1:8080", headers: "*", methods: "*")]
-    public class Books : ApiController
+    //[EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
+    public class BooksController : ApiController
     {
         public List<Book> Get()
         {
