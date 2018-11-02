@@ -59,6 +59,10 @@
     <Reference Include="System.Web.Mvc">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Http.Common">
+      <HintPath>..\packages\System.Web.Http.Common.4.0.20126.16343\lib\net40\System.Web.Http.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -72,6 +76,7 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BookList.cs" />
+    <Compile Include="Controllers\Books.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
