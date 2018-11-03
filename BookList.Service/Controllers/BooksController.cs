@@ -6,12 +6,13 @@ using BookList.Biz.Database;
 
 namespace BookList.Service.Controllers
 {
-    //[EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
+    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class BooksController : ApiController
     {
         public List<Book> Get()
         {
-            return LoadBook.LoadAll();
+            var books = LoadBook.LoadAll();
+            return books;
         }
     }
 }
