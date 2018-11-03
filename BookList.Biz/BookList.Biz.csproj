@@ -73,6 +73,7 @@
     <Compile Include="Database\ConnectionUtils.cs" />
     <Compile Include="Database\IDbConnection.cs" />
     <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\BookDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

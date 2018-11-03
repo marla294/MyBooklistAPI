@@ -6,15 +6,15 @@ namespace BookList.Biz.Database
 {
     public static class LoadBook
     {
-        public static List<Book> LoadAll()
+        public static List<BookDTO> LoadAll()
         {
             return LoadByQuery("select * from books order by id;");
         }
 
-        static List<Book> LoadByQuery(string sql)
+        static List<BookDTO> LoadByQuery(string sql)
         {
             var bookResultSet = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
-            var bookList = new List<Book>();
+            var bookList = new List<BookDTO>();
 
             for (var i = 0; i < bookResultSet[0].Count; i++)
             {
@@ -22,7 +22,7 @@ namespace BookList.Biz.Database
                     ? new Book(id, bookResultSet[1][i], bookResultSet[2][i])
                     : new Book();
                                  
-                bookList.Add(book);
+                bookList.Add(book.ToDTO());
             }
 
             return bookList;
