@@ -10,8 +10,12 @@ namespace BookList.Tests
         public void TestLoadBookLoadAll()
         {
             var testBookList = LoadBook.LoadAll();
+            var testBook = testBookList.Find(book => book.Id == 2);
 
-            Assert.AreEqual(testBookList.Count, 3);
+            Assert.IsNotNull(testBookList);
+            Assert.IsNotNull(testBook);
+            Assert.AreEqual(3, testBookList.Count);
+            Assert.AreEqual("all the light we cannot see", testBook.Name);
         }
     }
 }
