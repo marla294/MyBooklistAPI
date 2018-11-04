@@ -43,6 +43,7 @@ insert into books(name, url) values ('influence: the psychology of persuasion', 
 // Users
 
 insert into users(name) values ('Marla');
+insert into users(name) values ('Graydon');
 
 // BookList
 
