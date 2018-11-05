@@ -1,6 +1,6 @@
 ﻿namespace BookList.Biz.Models
 {
-    public class BookList
+    public class BookListItemDTO
     {
         public int Id { get; set; }
         public Book Book { get; set; }
@@ -10,7 +10,8 @@
         public string Notes { get; set; }
         public int SortOrder { get; set; }
 
-        public BookList() {
+        public BookListItemDTO()
+        {
             Id = 0;
             Book = null;
             User = null;
@@ -20,8 +21,9 @@
             SortOrder = 0;
         }
 
-        public BookList(int id, Book book, User user, bool done, int rating, 
-                        string notes, int sortOrder) {
+        public BookListItemDTO(int id, Book book, User user, bool done, int rating,
+                        string notes, int sortOrder)
+        {
             Id = id;
             Book = book;
             User = user;
