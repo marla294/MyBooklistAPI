@@ -77,6 +77,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserDTO.cs" />
     <Compile Include="Database\LoadUsers.cs" />
+    <Compile Include="Models\BookList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

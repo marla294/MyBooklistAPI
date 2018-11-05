@@ -1,5 +1,4 @@
-﻿using System;
-namespace BookList.Biz.Models
+﻿namespace BookList.Biz.Models
 {
     public class User
     {
