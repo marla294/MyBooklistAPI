@@ -1,13 +1,13 @@
 ﻿using NUnit.Framework;
 using BookList.Biz.Database;
 
-namespace BookList.Tests
+namespace BookList.Tests.Biz.Database
 {
     [TestFixture]
     public class LoadBookTests
     {
         [Test]
-        public void TestLoadBookLoadAll()
+        public void TestLoadAll()
         {
             var testBookList = LoadBook.LoadAll();
             var testBook = testBookList.Find(book => book.Id == 2);

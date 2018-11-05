@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Biz\Database\TestLoadBook.cs" />
+    <Compile Include="Biz\Database\TestLoadUsers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
