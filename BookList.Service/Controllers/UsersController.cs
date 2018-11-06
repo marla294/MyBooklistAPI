@@ -9,7 +9,7 @@ namespace BookList.Service.Controllers
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class UsersController : ApiController
     {
-        public List<UserDTO> Get()
+        public List<User> Get()
         {
             return LoadUsers.LoadAll();
         }

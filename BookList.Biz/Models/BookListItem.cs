@@ -2,13 +2,13 @@
 {
     public class BookListItem
     {
-        int Id { get; set; }
-        BookDTO Book { get; set; }
-        UserDTO User { get; set; }
-        bool Done { get; set; }
-        int Rating { get; set; }
-        string Notes { get; set; }
-        int SortOrder { get; set; }
+        public int Id { get; set; }
+        public Book Book { get; set; }
+        public User User { get; set; }
+        public bool Done { get; set; }
+        public int Rating { get; set; }
+        public string Notes { get; set; }
+        public int SortOrder { get; set; }
 
         public BookListItem() {
             Id = 0;
@@ -20,7 +20,7 @@
             SortOrder = 0;
         }
 
-        public BookListItem(int id, BookDTO book, UserDTO user, bool done, int rating, 
+        public BookListItem(int id, Book book, User user, bool done, int rating, 
                         string notes, int sortOrder) {
             Id = id;
             Book = book;

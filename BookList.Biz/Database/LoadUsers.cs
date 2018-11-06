@@ -6,15 +6,15 @@ namespace BookList.Biz.Database
 {
     public static class LoadUsers
     {
-        public static List<UserDTO> LoadAll()
+        public static List<User> LoadAll()
         {
             return LoadByQuery("select * from users order by id;");
         }
 
-        static List<UserDTO> LoadByQuery(string sql)
+        static List<User> LoadByQuery(string sql)
         {
             var userResultSet = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
-            var userList = new List<UserDTO>();
+            var userList = new List<User>();
 
             for (var i = 0; i < userResultSet[0].Count; i++)
             {
@@ -22,7 +22,7 @@ namespace BookList.Biz.Database
                     ? new User(id, userResultSet[1][i])
                     : new User();
 
-                userList.Add(user.ToDTO());
+                userList.Add(user);
             }
 
             return userList;

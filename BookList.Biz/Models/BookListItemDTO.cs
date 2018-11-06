@@ -3,8 +3,8 @@
     public class BookListItemDTO
     {
         public int Id { get; set; }
-        public BookDTO Book { get; set; }
-        public UserDTO User { get; set; }
+        public Book Book { get; set; }
+        public User User { get; set; }
         public bool Done { get; set; }
         public int Rating { get; set; }
         public string Notes { get; set; }
@@ -21,7 +21,7 @@
             SortOrder = 0;
         }
 
-        public BookListItemDTO(int id, BookDTO book, UserDTO user, bool done, int rating,
+        public BookListItemDTO(int id, Book book, User user, bool done, int rating,
                         string notes, int sortOrder)
         {
             Id = id;
