@@ -1,16 +1,17 @@
-﻿using System;
+﻿using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using BookList.Biz.Models;
+using BookList.Biz.Database;
 
 namespace BookList.Service.Controllers
 {
-    public class BookList : Controller
+    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
+    public class BookListController : ApiController
     {
-        public ActionResult Index()
+        public List<BookListItem> Get()
         {
-            return View ();
+            return LoadItems.LoadAll();
         }
     }
 }

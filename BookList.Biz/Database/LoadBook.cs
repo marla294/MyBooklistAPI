@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BookList.Biz.Models;
+using System.Linq;
 
 namespace BookList.Biz.Database
 {
@@ -9,6 +10,11 @@ namespace BookList.Biz.Database
         public static List<Book> LoadAll()
         {
             return LoadByQuery("select * from books order by id;");
+        }
+
+        public static Book LoadSingle(int id) 
+        {
+            return LoadAll().FirstOrDefault<Book>(book => book.Id == id);
         }
 
         static List<Book> LoadByQuery(string sql)
