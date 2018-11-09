@@ -25,7 +25,7 @@ namespace BookList.Biz.Database
             for (var i = 0; i < bookResultSet[0].Count; i++)
             {
                 Book book = Int32.TryParse(bookResultSet[0][i], out int id)
-                    ? new Book(id, bookResultSet[1][i], bookResultSet[2][i])
+                    ? new Book(id, bookResultSet[1][i], bookResultSet[2][i], bookResultSet[3][i])
                     : new Book();
                                  
                 bookList.Add(book);
