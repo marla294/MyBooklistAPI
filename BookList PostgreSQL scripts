@@ -56,3 +56,7 @@ ALTER TABLE Books ADD Author Text;
 UPDATE Books SET Author = 'Anthony Doerr' WHERE id = 2;
 UPDATE Books SET Author = 'Celeste Ng' WHERE id = 3;
 UPDATE Books SET Author = 'Robert B. Cialdini PhD' WHERE id = 4;
+
+// Renamed "name" column to "title" in Books table
+
+ALTER TABLE Books RENAME COLUMN Name TO Title;
