@@ -1,23 +1,44 @@
 DB Scripts for BookList
 
-// Create tables
+// Books
 
+// Create Books
 CREATE TABLE BOOKS ();
-
 ALTER TABLE BOOKS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
 ALTER TABLE BOOKS ADD COLUMN NAME TEXT;
 ALTER TABLE BOOKS ADD COLUMN URL TEXT;
-
 ALTER TABLE BOOKS DROP COLUMN ID;
 ALTER TABLE BOOKS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
 
-CREATE TABLE USERS ();
+// Add column Author to Books table
+ALTER TABLE Books ADD Author Text;
+UPDATE Books SET Author = 'Anthony Doerr' WHERE id = 2;
+UPDATE Books SET Author = 'Celeste Ng' WHERE id = 3;
+UPDATE Books SET Author = 'Robert B. Cialdini PhD' WHERE id = 4;
 
+// Insert data into Books
+insert into books(name, url) values ('all the light we cannot see', 'https://www.amazon.com/All-Light-We-Cannot-See/dp/1501173219/ref=sr_1_1?ie=UTF8&qid=1540570012&sr=8-1&keywords=all+the+light+we+cannot+see');
+insert into books(name, url) values ('little fires everywhere', 'https://www.amazon.com/Little-Fires-Everywhere-Celeste-Ng/dp/0735224293/ref=sr_1_1?ie=UTF8&qid=1540570406&sr=8-1&keywords=little+fires+everywhere+by+celeste+ng&dpID=51XWy95kQjL&preST=_SY291_BO1,204,203,200_QL40_&dpSrc=srch');
+insert into books(name, url) values ('influence: the psychology of persuasion', 'https://www.amazon.com/Influence-Psychology-Persuasion-Robert-Cialdini/dp/006124189X/ref=sr_1_1?ie=UTF8&qid=1540570536&sr=8-1&keywords=influence+robert+cialdini');
+
+// Renamed "name" column to "title" in Books table
+ALTER TABLE Books RENAME COLUMN Name TO Title;
+
+// Users
+
+// Create Users
+CREATE TABLE USERS ();
 ALTER TABLE USERS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
 ALTER TABLE USERS ADD COLUMN NAME TEXT;
 
-CREATE TABLE BOOKLIST ();
+// Insert data into Users
+insert into users(name) values ('Marla');
+insert into users(name) values ('Graydon');
 
+// BookList
+
+// Create BookList
+CREATE TABLE BOOKLIST ();
 ALTER TABLE BOOKLIST ADD COLUMN ID BIGSERIAL PRIMARY KEY;
 ALTER TABLE BOOKLIST ADD COLUMN BOOK INT;
 ALTER TABLE BOOKLIST ADD COLUMN USERNAME INT;
@@ -25,38 +46,19 @@ ALTER TABLE BOOKLIST ADD COLUMN DONE BOOLEAN;
 ALTER TABLE BOOKLIST ADD COLUMN RATING INT;
 ALTER TABLE BOOKLIST ADD COLUMN NOTES TEXT;
 ALTER TABLE BOOKLIST ADD COLUMN SORTORDER INT;
-
 ALTER TABLE BOOKLIST 
 ADD CONSTRAINT BOOKLINK FOREIGN KEY (BOOK) REFERENCES BOOKS (ID);
-
 ALTER TABLE BOOKLIST 
 ADD CONSTRAINT USERLINK FOREIGN KEY (USERNAME) REFERENCES USERS (ID);
 
-// Add test data into tables
-
-// Books
-
-insert into books(name, url) values ('all the light we cannot see', 'https://www.amazon.com/All-Light-We-Cannot-See/dp/1501173219/ref=sr_1_1?ie=UTF8&qid=1540570012&sr=8-1&keywords=all+the+light+we+cannot+see');
-insert into books(name, url) values ('little fires everywhere', 'https://www.amazon.com/Little-Fires-Everywhere-Celeste-Ng/dp/0735224293/ref=sr_1_1?ie=UTF8&qid=1540570406&sr=8-1&keywords=little+fires+everywhere+by+celeste+ng&dpID=51XWy95kQjL&preST=_SY291_BO1,204,203,200_QL40_&dpSrc=srch');
-insert into books(name, url) values ('influence: the psychology of persuasion', 'https://www.amazon.com/Influence-Psychology-Persuasion-Robert-Cialdini/dp/006124189X/ref=sr_1_1?ie=UTF8&qid=1540570536&sr=8-1&keywords=influence+robert+cialdini');
-
-// Users
-
-insert into users(name) values ('Marla');
-insert into users(name) values ('Graydon');
-
-// BookList
-
+// Insert data into BookList
 insert into booklist(book, username, done, rating, notes, sortorder) values (2, 1, false, 3, 'on hold', 1);
 
-// Add column Author to Books table
+// Lists
 
-ALTER TABLE Books ADD Author Text;
+CREATE TABLE LISTS ();
+ALTER TABLE LISTS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
+ALTER TABLE LISTS ADD COLUMN NAME TEXT;
 
-UPDATE Books SET Author = 'Anthony Doerr' WHERE id = 2;
-UPDATE Books SET Author = 'Celeste Ng' WHERE id = 3;
-UPDATE Books SET Author = 'Robert B. Cialdini PhD' WHERE id = 4;
-
-// Renamed "name" column to "title" in Books table
-
-ALTER TABLE Books RENAME COLUMN Name TO Title;
+// Insert data into Lists
+insert into lists(name) values ('Want To Read (From Database)');
