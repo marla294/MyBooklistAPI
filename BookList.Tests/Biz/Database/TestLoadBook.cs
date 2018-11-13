@@ -15,7 +15,7 @@ namespace BookList.Tests.Biz.Database
             Assert.IsNotNull(testBookList);
             Assert.IsNotNull(testBook);
             Assert.AreEqual(3, testBookList.Count);
-            Assert.AreEqual("all the light we cannot see", testBook.Name);
+            Assert.AreEqual("all the light we cannot see", testBook.Title);
         }
     }
 }

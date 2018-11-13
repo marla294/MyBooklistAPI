@@ -80,6 +80,7 @@
     <Compile Include="Models\BookListItem.cs" />
     <Compile Include="Models\BookListItemDTO.cs" />
     <Compile Include="Database\LoadItems.cs" />
+    <Compile Include="Models\List.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
