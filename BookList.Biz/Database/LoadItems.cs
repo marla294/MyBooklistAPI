@@ -34,8 +34,9 @@ namespace BookList.Biz.Database
             int rating = Int32.TryParse(itemResultSet[4][row], out int r) ? r : 0;
             string notes = itemResultSet[5][row];
             int sortOrder = Int32.TryParse(itemResultSet[6][row], out int s) ? s : 0;
+            List list = Int32.TryParse(itemResultSet[7][row], out int listId) ? LoadList.LoadSingle(listId) : new List();
 
-            return new BookListItem(id, book, user, done, rating, notes, sortOrder);
+            return new BookListItem(id, book, user, done, rating, notes, sortOrder, list);
         }
     }
 }

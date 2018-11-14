@@ -12,6 +12,11 @@ namespace BookList.Biz.Database
             return LoadByQuery("select * from lists order by id;");
         }
 
+        public static List LoadSingle(int id)
+        {
+            return LoadAll().FirstOrDefault<List>(list => list.Id == id);
+        }
+
         static List<List> LoadByQuery(string sql)
         {
             var listResultSet = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
