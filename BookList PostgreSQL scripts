@@ -51,6 +51,11 @@ ADD CONSTRAINT BOOKLINK FOREIGN KEY (BOOK) REFERENCES BOOKS (ID);
 ALTER TABLE BOOKLIST 
 ADD CONSTRAINT USERLINK FOREIGN KEY (USERNAME) REFERENCES USERS (ID);
 
+// Add foreign key to Lists table
+ALTER TABLE BOOKLIST ADD LIST INT;
+ALTER TABLE BOOKLIST 
+ADD CONSTRAINT LISTLINK FOREIGN KEY (LIST) REFERENCES LISTS (ID);
+
 // Insert data into BookList
 insert into booklist(book, username, done, rating, notes, sortorder) values (2, 1, false, 3, 'on hold', 1);
 
