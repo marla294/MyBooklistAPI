@@ -3,8 +3,10 @@ using System.Web.Http.Cors;
 using System.Collections.Generic;
 using BookList.Biz.Models;
 using BookList.Biz.Database;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+
+public class ListName {
+    public string Name { get; set; }
+}
 
 namespace BookList.Service.Controllers
 {
@@ -16,10 +18,9 @@ namespace BookList.Service.Controllers
             return LoadList.LoadAll();
         }
 
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]ListName value)
         {
-            var d = JsonConvert.DeserializeObject<string>(value);
-            UpdateList.UpdateListName(id, d);
+            UpdateList.UpdateListName(id, value.Name);
         }
     }
 }
