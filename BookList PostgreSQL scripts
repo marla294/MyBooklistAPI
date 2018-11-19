@@ -24,6 +24,13 @@ insert into books(name, url) values ('influence: the psychology of persuasion', 
 // Renamed "name" column to "title" in Books table
 ALTER TABLE Books RENAME COLUMN Name TO Title;
 
+// Added "cover" column on Books table
+ALTER TABLE BOOKS ADD COLUMN COVER TEXT;
+
+UPDATE Books SET cover = 'https://images-na.ssl-images-amazon.com/images/I/81v5wp2zeQL.jpg' where id = 2;
+UPDATE Books SET cover = 'https://images-na.ssl-images-amazon.com/images/I/51kgOTJWNXL._SY346_.jpg' where id = 3;
+UPDATE Books SET cover = 'https://images-na.ssl-images-amazon.com/images/I/512-B-1yXuL._SX331_BO1,204,203,200_.jpg' where id = 4;
+
 // Users
 
 // Create Users
