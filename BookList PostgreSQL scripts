@@ -58,6 +58,8 @@ ADD CONSTRAINT LISTLINK FOREIGN KEY (LIST) REFERENCES LISTS (ID);
 
 // Insert data into BookList
 insert into booklist(book, username, done, rating, notes, sortorder) values (2, 1, false, 3, 'on hold', 1);
+insert into booklist(book, username, done, rating, notes, sortorder, list) values (3, 1, false, 3, 'on hold', 1, 2);
+insert into booklist(book, username, done, rating, notes, sortorder, list) values (4, 1, false, 3, 'on hold', 1, 1);
 
 // Lists
 
@@ -67,3 +69,4 @@ ALTER TABLE LISTS ADD COLUMN NAME TEXT;
 
 // Insert data into Lists
 insert into lists(name) values ('Want To Read (From Database)');
+insert into lists(name) values ('In Progress Kindle Books');
