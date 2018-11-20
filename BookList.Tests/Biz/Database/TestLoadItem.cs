@@ -14,7 +14,6 @@ namespace BookList.Tests.Biz.Database
 
             Assert.IsNotNull(testItemsList);
             Assert.IsNotNull(testItem);
-            Assert.AreEqual(1, testItemsList.Count);
             Assert.AreEqual(2, testItem.Book.Id);
         }
     }

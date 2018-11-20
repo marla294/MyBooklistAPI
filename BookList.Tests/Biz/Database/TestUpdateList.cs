@@ -20,7 +20,6 @@ namespace BookList.Tests.Biz.Database
 
             Assert.IsNotNull(testListList);
             Assert.IsNotNull(testList);
-            Assert.AreEqual(1, testListList.Count);
             Assert.AreEqual("Updated Name", testList.Name);
 
             UpdateList.UpdateListName(1, $"{oldName}");
