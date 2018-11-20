@@ -22,5 +22,10 @@ namespace BookList.Service.Controllers
         {
             UpdateList.UpdateListName(id, value.Name);
         }
+
+        public void Post()
+        {
+            AddNewList.AddNew();
+        }
     }
 }
