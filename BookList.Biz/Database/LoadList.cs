@@ -17,6 +17,32 @@ namespace BookList.Biz.Database
             return LoadAll().FirstOrDefault<List>(list => list.Id == id);
         }
 
+        public static void UpdateListName(int id, string newName) {
+            var sql = $"update lists set name = '{newName}' where id = {id.ToString()}";
+            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+        }
+
+        public static void CreateNewList()
+        {
+            var sql = "insert into lists (name) values ('New List')";
+            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+
+            sql = "select id from lists order by id desc limit 1";
+            var id = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql)[0][0];
+
+            sql = "insert into booklist(book, username, done, rating, notes, " +
+                $"sortorder, list) values (null, 1, false, null, '', 0, {id})";
+            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+        }
+
+        public static void DeleteList(int id) {
+            var sql = $"delete from booklist where list = {id.ToString()}";
+            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+
+            sql = $"delete from lists where id = {id.ToString()}";
+            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+        }
+
         static List<List> LoadByQuery(string sql)
         {
             var listResultSet = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);

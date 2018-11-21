@@ -67,6 +67,8 @@ ADD CONSTRAINT LISTLINK FOREIGN KEY (LIST) REFERENCES LISTS (ID);
 insert into booklist(book, username, done, rating, notes, sortorder) values (2, 1, false, 3, 'on hold', 1);
 insert into booklist(book, username, done, rating, notes, sortorder, list) values (3, 1, false, 3, 'on hold', 1, 2);
 insert into booklist(book, username, done, rating, notes, sortorder, list) values (4, 1, false, 3, 'on hold', 1, 1);
+insert into booklist(book, username, done, rating, notes, sortorder, list) values (null, 1, false, 3, 'on hold', 3);
+insert into booklist(book, username, done, rating, notes, sortorder, list) values (null, 1, false, 3, 'on hold', 4, 4);
 
 // Lists
 

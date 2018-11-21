@@ -82,8 +82,6 @@
     <Compile Include="Database\LoadItems.cs" />
     <Compile Include="Models\List.cs" />
     <Compile Include="Database\LoadList.cs" />
-    <Compile Include="Database\UpdateList.cs" />
-    <Compile Include="Database\AddNewList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

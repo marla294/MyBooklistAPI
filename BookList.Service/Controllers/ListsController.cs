@@ -20,12 +20,17 @@ namespace BookList.Service.Controllers
 
         public void Put(int id, [FromBody]ListName value)
         {
-            UpdateList.UpdateListName(id, value.Name);
+            LoadList.UpdateListName(id, value.Name);
         }
 
         public void Post()
         {
-            AddNewList.AddNew();
+            LoadList.CreateNewList();
+        }
+
+        public void Delete(int id) 
+        {
+            LoadList.DeleteList(id);
         }
     }
 }

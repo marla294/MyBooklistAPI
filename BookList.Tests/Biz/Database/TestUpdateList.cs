@@ -13,7 +13,7 @@ namespace BookList.Tests.Biz.Database
             var testListOrig = testListListOrig.Find(list => list.Id == 1);
             var oldName = testListOrig.Name;
 
-            UpdateList.UpdateListName(1, "Updated Name");
+            LoadList.UpdateListName(1, "Updated Name");
 
             var testListList = LoadList.LoadAll();
             var testList = testListList.Find(list => list.Id == 1);
@@ -22,7 +22,7 @@ namespace BookList.Tests.Biz.Database
             Assert.IsNotNull(testList);
             Assert.AreEqual("Updated Name", testList.Name);
 
-            UpdateList.UpdateListName(1, $"{oldName}");
+            LoadList.UpdateListName(1, $"{oldName}");
         }
     }
 }
