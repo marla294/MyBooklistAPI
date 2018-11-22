@@ -9,6 +9,11 @@ namespace BookList.Biz.Database
             return dbConnection.ExecuteCommand(command);
         }
 
+        public static void UpdateListName(IDbConnection dbConnection, int id, string newName)
+        {
+            dbConnection.UpdateListName(id, newName);
+        }
+
         public static List<List<string>> CreateEmptyResultSet(int numCols)
         {
             List<List<string>> resultSet = new List<List<string>>();

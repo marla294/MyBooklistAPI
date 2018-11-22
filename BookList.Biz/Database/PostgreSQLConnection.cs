@@ -26,6 +26,23 @@ namespace BookList.Biz.Database
             return results;
         }
 
+        public void UpdateListName(int id, string newName) {
+
+            NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
+
+            connection.Open();
+
+            using (var cmd = new NpgsqlCommand($"update lists set name = '@name' where id = {id.ToString()}", connection))
+            {
+                cmd.Prepare();
+                cmd.Parameters.AddWithValue("name", newName.Replace("'", "''"));
+                cmd.ExecuteNonQuery();
+            }
+
+            connection.Close();
+
+        }
+
         private List<List<string>> ReadDBResults(NpgsqlDataReader dataReader)
         {
             List<List<string>> results = ConnectionUtils.CreateEmptyResultSet(dataReader.FieldCount);
