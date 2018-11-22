@@ -32,10 +32,9 @@ namespace BookList.Biz.Database
 
             connection.Open();
 
-            using (var cmd = new NpgsqlCommand($"update lists set name = '@name' where id = {id.ToString()}", connection))
+            using (var cmd = new NpgsqlCommand($"update lists set name = @name where id = {id.ToString()}", connection))
             {
-                cmd.Prepare();
-                cmd.Parameters.AddWithValue("name", newName.Replace("'", "''"));
+                cmd.Parameters.AddWithValue("@name", newName.Replace("'", "''"));
                 cmd.ExecuteNonQuery();
             }
 
