@@ -5,7 +5,7 @@ namespace BookList.Biz.Database
     public interface IDbConnection
     {
         List<List<string>> ExecuteCommand(string command);
-        void UpdateListName(int id, string newName);
+        void Update(string table, string setColumn, string setValue, string whereColumn, string whereValue);
     }
 }
 
