@@ -29,21 +29,42 @@ namespace BookList.Biz.Database
         }
 
         public void Update(string table, string setColumn, string setValue, 
-                           string whereColumn, string whereValue) {
-            var sql = $"update {table} set {setColumn} = @setValue where " +
+                           string whereColumn, string whereValue) 
+        {
+
+            var sql = $"update {table} set {setColumn} = @parameter where " +
                 $"{whereColumn} = {whereValue}";
 
-            NpgsqlConnection connection = 
-                new NpgsqlConnection(ConnectionString);
-            connection.Open();
+            using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString)) {
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) {
-                cmd.Parameters.AddWithValue("@setValue", 
-                                            setValue.Replace("'", "''"));
-                cmd.ExecuteNonQuery();
+                connection.Open();
+
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@parameter", setValue.Replace("'", "''"));
+                    cmd.ExecuteNonQuery();
+                }
+
+                connection.Close();
             }
 
-            connection.Close();
+        }
+
+        // pass in sql string with @parameter
+        private void ExecuteWithParameter(string sql, string parameter) 
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@parameter", parameter.Replace("'", "''"));
+                    cmd.ExecuteNonQuery();
+                }
+
+                connection.Close();
+            }
         }
 
         private List<List<string>> ReadDBResults(NpgsqlDataReader dataReader)
