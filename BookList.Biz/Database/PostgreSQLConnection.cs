@@ -31,23 +31,10 @@ namespace BookList.Biz.Database
         public void Update(string table, string setColumn, string setValue, 
                            string whereColumn, string whereValue) 
         {
-
             var sql = $"update {table} set {setColumn} = @parameter where " +
                 $"{whereColumn} = {whereValue}";
 
-            using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString)) {
-
-                connection.Open();
-
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue("@parameter", setValue.Replace("'", "''"));
-                    cmd.ExecuteNonQuery();
-                }
-
-                connection.Close();
-            }
-
+            ExecuteWithParameter(sql, setValue);
         }
 
         // pass in sql string with @parameter
