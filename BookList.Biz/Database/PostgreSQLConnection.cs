@@ -27,19 +27,21 @@ namespace BookList.Biz.Database
         }
 
         public void UpdateListName(int id, string newName) {
+            Update("lists", "name", newName, "id", id.ToString());
+        }
+
+        public void Update(string table, string setColumn, string setValue, string whereColumn, string whereValue) {
+            var sql = $"update {table} set {setColumn} = @setValue where {whereColumn} = {whereValue}";
 
             NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
-
             connection.Open();
 
-            using (var cmd = new NpgsqlCommand($"update lists set name = @name where id = {id.ToString()}", connection))
-            {
-                cmd.Parameters.AddWithValue("@name", newName.Replace("'", "''"));
+            using (var cmd = new NpgsqlCommand(sql, connection)) {
+                cmd.Parameters.AddWithValue("@setValue", setValue.Replace("'", "''"));
                 cmd.ExecuteNonQuery();
             }
 
             connection.Close();
-
         }
 
         private List<List<string>> ReadDBResults(NpgsqlDataReader dataReader)
