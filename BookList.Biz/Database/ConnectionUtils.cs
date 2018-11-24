@@ -11,7 +11,7 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName)
         {
-            dbConnection.Update("lists", "name", newName, "id", id.ToString());
+            dbConnection.Update("lists", "name", newName, "and", new WhereValues("id", id.ToString()));
         }
 
         public static List<List<string>> CreateEmptyResultSet(int numCols)

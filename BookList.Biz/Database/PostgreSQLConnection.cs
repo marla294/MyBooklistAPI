@@ -3,6 +3,17 @@ using Npgsql;
 
 namespace BookList.Biz.Database
 {
+    public class WhereValues
+    {
+        public string Column { get; set; }
+        public string Value { get; set; }
+
+        public WhereValues(string col, string val) {
+            Column = col;
+            Value = val;
+        }
+    }
+
     public class PostgreSQLConnection : IDbConnection
     {
         private string ConnectionString { get; set; }
@@ -28,11 +39,11 @@ namespace BookList.Biz.Database
             return results;
         }
 
-        public void Update(string table, string setColumn, string setValue, 
-                           string whereColumn, string whereValue) 
+        public void Update(string table, string setColumn, string setValue, string andOr,
+                           params WhereValues[] whereValues) 
         {
             var sql = $"update {table} set {setColumn} = @parameter1 where " +
-                $"{whereColumn} = {whereValue}";
+                $"{whereValues[0].Column} = {whereValues[0].Value}";
 
             ExecuteWithParameters(sql, setValue);
         }
