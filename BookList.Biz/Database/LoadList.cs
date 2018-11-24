@@ -21,7 +21,7 @@ namespace BookList.Biz.Database
             ConnectionUtils.UpdateListName(new PostgreSQLConnection(), id, newName);
         }
 
-        public static void CreateNewList()
+        public static string CreateNewList()
         {
             var sql = "insert into lists (name) values ('New List')";
             ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
@@ -32,6 +32,8 @@ namespace BookList.Biz.Database
             sql = "insert into booklist(book, username, done, rating, notes, " +
                 $"sortorder, list) values (null, 1, false, null, '', 0, {id})";
             ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+
+            return id;
         }
 
         public static void DeleteList(int id) {

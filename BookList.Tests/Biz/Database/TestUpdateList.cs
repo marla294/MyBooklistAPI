@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using BookList.Biz.Database;
 
 namespace BookList.Tests.Biz.Database
@@ -9,20 +10,20 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestUpdateList()
         {
-            var testListListOrig = LoadList.LoadAll();
-            var testListOrig = testListListOrig.Find(list => list.Id == 1);
-            var oldName = testListOrig.Name;
+            if (Int32.TryParse(LoadList.CreateNewList(), out int id)) 
+            {
+                LoadList.UpdateListName(id, "Updated Name");
+                var testList = LoadList.LoadSingle(id);
 
-            LoadList.UpdateListName(1, "Updated Name");
+                Assert.IsNotNull(testList);
+                Assert.AreEqual("Updated Name", testList.Name);
 
-            var testListList = LoadList.LoadAll();
-            var testList = testListList.Find(list => list.Id == 1);
-
-            Assert.IsNotNull(testListList);
-            Assert.IsNotNull(testList);
-            Assert.AreEqual("Updated Name", testList.Name);
-
-            LoadList.UpdateListName(1, $"{oldName}");
+                LoadList.DeleteList(id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }
