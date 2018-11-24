@@ -18,9 +18,6 @@ namespace BookList.Biz.Database
         }
 
         public static void UpdateListName(int id, string newName) {
-            //var sql = $"update lists set name = '{newName.Replace("'", "''")}' where id = {id.ToString()}";
-            //ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
-
             ConnectionUtils.UpdateListName(new PostgreSQLConnection(), id, newName);
         }
 

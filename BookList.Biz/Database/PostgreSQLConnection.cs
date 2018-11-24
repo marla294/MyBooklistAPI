@@ -31,14 +31,14 @@ namespace BookList.Biz.Database
         public void Update(string table, string setColumn, string setValue, 
                            string whereColumn, string whereValue) 
         {
-            var sql = $"update {table} set {setColumn} = @parameter where " +
+            var sql = $"update {table} set {setColumn} = @parameter1 where " +
                 $"{whereColumn} = {whereValue}";
 
-            ExecuteWithParameter(sql, setValue);
+            ExecuteWithParameters(sql, setValue);
         }
 
-        // pass in sql string with @parameter
-        private void ExecuteWithParameter(string sql, string parameter) 
+        // pass in sql string with @parameter1 - @parameterN
+        private void ExecuteWithParameters(string sql, params string[] parameters) 
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
             {
@@ -46,7 +46,11 @@ namespace BookList.Biz.Database
 
                 using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    cmd.Parameters.AddWithValue("@parameter", parameter.Replace("'", "''"));
+                    for (var i = 0; i < parameters.Length; i++) 
+                    {
+                        cmd.Parameters.AddWithValue($"@parameter{(i + 1).ToString()}", parameters[i].Replace("'", "''"));
+                    }
+
                     cmd.ExecuteNonQuery();
                 }
 
