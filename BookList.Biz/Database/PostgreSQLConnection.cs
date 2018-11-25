@@ -39,6 +39,13 @@ namespace BookList.Biz.Database
             return results;
         }
 
+        public List<List<string>> SelectAll(string table, string sortBy)
+        {
+            var sql = $"select * from {table} order by {sortBy}";
+
+            return ExecuteCommand(sql);
+        }
+
         public void Update(string table, string setColumn, string setValue, string andOr,
                            params WhereValues[] whereValues) 
         {

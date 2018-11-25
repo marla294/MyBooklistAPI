@@ -5,7 +5,7 @@ using BookList.Biz.Database;
 namespace BookList.Tests.Biz.Database
 {
     [TestFixture]
-    public class UpdateListTests
+    public class ListCRUDOperations
     {
         [Test]
         public void TestDeleteList()
@@ -29,11 +29,13 @@ namespace BookList.Tests.Biz.Database
         {
             if (Int32.TryParse(LoadList.CreateNewList(), out int id)) 
             {
-                LoadList.UpdateListName(id, "Updated Name");
+                var testListName = "Updated Name";
+
+                LoadList.UpdateListName(id, testListName);
                 var testList = LoadList.LoadSingle(id);
 
                 Assert.IsNotNull(testList);
-                Assert.AreEqual("Updated Name", testList.Name);
+                Assert.AreEqual(testListName, testList.Name);
 
                 LoadList.DeleteList(id);
             }

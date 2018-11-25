@@ -9,6 +9,11 @@ namespace BookList.Biz.Database
             return dbConnection.ExecuteCommand(command);
         }
 
+        public static List<List<string>> SelectAllLists(IDbConnection dbConnection)
+        {
+            return dbConnection.SelectAll("lists", "id");
+        }
+
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName)
         {
             dbConnection.Update("lists", "name", newName, "and", new WhereValues("id", id.ToString()));

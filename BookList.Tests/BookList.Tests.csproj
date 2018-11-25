@@ -35,7 +35,7 @@
     <Compile Include="Biz\Database\TestLoadUsers.cs" />
     <Compile Include="Biz\Database\TestLoadItem.cs" />
     <Compile Include="Biz\Database\TestLoadList.cs" />
-    <Compile Include="Biz\Database\TestUpdateList.cs" />
+    <Compile Include="Biz\Database\ListCRUDOperations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

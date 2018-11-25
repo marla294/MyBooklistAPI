@@ -9,7 +9,19 @@ namespace BookList.Biz.Database
     {
         public static List<List> LoadAll()
         {
-            return LoadByQuery("select * from lists order by id;");
+            var listResultSet = ConnectionUtils.SelectAllLists(new PostgreSQLConnection());
+            var listList = new List<List>();
+
+            for (var i = 0; i < listResultSet[0].Count; i++)
+            {
+                List list = Int32.TryParse(listResultSet[0][i], out int id)
+                    ? new List(id, listResultSet[1][i])
+                    : new List();
+
+                listList.Add(list);
+            }
+
+            return listList;
         }
 
         public static List LoadSingle(int id)
@@ -40,21 +52,6 @@ namespace BookList.Biz.Database
             ConnectionUtils.DeleteList(new PostgreSQLConnection(), id);
         }
 
-        static List<List> LoadByQuery(string sql)
-        {
-            var listResultSet = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
-            var listList = new List<List>();
-
-            for (var i = 0; i < listResultSet[0].Count; i++)
-            {
-                List list = Int32.TryParse(listResultSet[0][i], out int id)
-                    ? new List(id, listResultSet[1][i])
-                    : new List();
-
-                listList.Add(list);
-            }
-
-            return listList;
-        }
+        
     }
 }
