@@ -45,6 +45,8 @@ namespace BookList.Biz.Database
             var sql = $"update {table} set {setColumn} = @parameter1 where " +
                 $"{whereValues[0].Column} = {whereValues[0].Value}";
 
+            sql = AdditionalWhereValues(sql, "and", whereValues);
+
             ExecuteWithParameters(sql, setValue);
         }
 
@@ -52,7 +54,23 @@ namespace BookList.Biz.Database
         {
             var sql = $"delete from {table} where {whereValues[0].Column} = {whereValues[0].Value}";
 
+            sql = AdditionalWhereValues(sql, "and", whereValues);
+
             ExecuteCommand(sql);
+        }
+
+        private string AdditionalWhereValues(string sql, string andOr, params WhereValues[] whereValues)
+        {
+            if (whereValues.Length > 1)
+            {
+                for (var i = 1; i < whereValues.Length; i++)
+                {
+                    var addition = $"and {whereValues[i].Column} = {whereValues[i].Value}";
+                    sql = sql + addition;
+                }
+            }
+
+            return sql;
         }
 
         // pass in sql string with @parameter1 - @parameterN
