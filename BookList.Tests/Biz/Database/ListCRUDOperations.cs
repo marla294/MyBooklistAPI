@@ -8,15 +8,17 @@ namespace BookList.Tests.Biz.Database
     public class ListCRUDOperations
     {
         [Test]
-        public void TestDeleteList()
+        public void TestLoadAll()
         {
             if (Int32.TryParse(LoadList.CreateNewList(), out int id))
             {
+                var testListList = LoadList.LoadAll();
+                var testList = testListList.Find(list => list.Id == id);
+
+                Assert.IsNotNull(testListList);
+                Assert.IsNotNull(testList);
+
                 LoadList.DeleteList(id);
-
-                var testList = LoadList.LoadAll().Find(list => list.Id == id);
-
-                Assert.IsNull(testList);
             }
             else
             {
@@ -27,7 +29,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestUpdateList()
         {
-            if (Int32.TryParse(LoadList.CreateNewList(), out int id)) 
+            if (Int32.TryParse(LoadList.CreateNewList(), out int id))
             {
                 var testListName = "Updated Name";
 
@@ -38,6 +40,23 @@ namespace BookList.Tests.Biz.Database
                 Assert.AreEqual(testListName, testList.Name);
 
                 LoadList.DeleteList(id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestDeleteList()
+        {
+            if (Int32.TryParse(LoadList.CreateNewList(), out int id))
+            {
+                LoadList.DeleteList(id);
+
+                var testList = LoadList.LoadAll().Find(list => list.Id == id);
+
+                Assert.IsNull(testList);
             }
             else
             {
