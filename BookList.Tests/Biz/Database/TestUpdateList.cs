@@ -8,6 +8,23 @@ namespace BookList.Tests.Biz.Database
     public class UpdateListTests
     {
         [Test]
+        public void TestDeleteList()
+        {
+            if (Int32.TryParse(LoadList.CreateNewList(), out int id))
+            {
+                LoadList.DeleteList(id);
+
+                var testList = LoadList.LoadAll().Find(list => list.Id == id);
+
+                Assert.IsNull(testList);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
         public void TestUpdateList()
         {
             if (Int32.TryParse(LoadList.CreateNewList(), out int id)) 
@@ -25,5 +42,6 @@ namespace BookList.Tests.Biz.Database
                 Assert.Fail();
             }
         }
+
     }
 }
