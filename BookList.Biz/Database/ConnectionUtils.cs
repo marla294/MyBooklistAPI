@@ -14,6 +14,12 @@ namespace BookList.Biz.Database
             dbConnection.Update("lists", "name", newName, "and", new WhereValues("id", id.ToString()));
         }
 
+        public static void DeleteList(IDbConnection dbConnection, int id)
+        {
+            dbConnection.Delete("booklist", new WhereValues("id", id.ToString()));
+            dbConnection.Delete("lists", new WhereValues("id", id.ToString()));
+        }
+
         public static List<List<string>> CreateEmptyResultSet(int numCols)
         {
             List<List<string>> resultSet = new List<List<string>>();

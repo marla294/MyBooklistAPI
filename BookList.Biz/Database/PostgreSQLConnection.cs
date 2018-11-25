@@ -48,6 +48,13 @@ namespace BookList.Biz.Database
             ExecuteWithParameters(sql, setValue);
         }
 
+        public void Delete(string table, params WhereValues[] whereValues)
+        {
+            var sql = $"delete from {table} where {whereValues[0].Column} = {whereValues[0].Value}";
+
+            ExecuteCommand(sql);
+        }
+
         // pass in sql string with @parameter1 - @parameterN
         private void ExecuteWithParameters(string sql, params string[] parameters) 
         {

@@ -37,11 +37,7 @@ namespace BookList.Biz.Database
         }
 
         public static void DeleteList(int id) {
-            var sql = $"delete from booklist where list = {id.ToString()}";
-            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
-
-            sql = $"delete from lists where id = {id.ToString()}";
-            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+            ConnectionUtils.DeleteList(new PostgreSQLConnection(), id);
         }
 
         static List<List> LoadByQuery(string sql)
