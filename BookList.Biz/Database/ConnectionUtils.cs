@@ -9,6 +9,11 @@ namespace BookList.Biz.Database
             return dbConnection.ExecuteCommand(command);
         }
 
+        public static void InsertNewList(IDbConnection dbConnection)
+        {
+            dbConnection.Insert("lists", new InsertValues("name", "New List"));
+        }
+
         public static List<List<string>> SelectAllLists(IDbConnection dbConnection)
         {
             return dbConnection.SelectAll("lists", "id");

@@ -36,10 +36,10 @@ namespace BookList.Biz.Database
 
         public static string CreateNewList()
         {
-            var sql = "insert into lists (name) values ('New List')";
-            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+            //var sql = "insert into lists (name) values ('New List')";
+            ConnectionUtils.InsertNewList(new PostgreSQLConnection());
 
-            sql = "select id from lists order by id desc limit 1";
+            var sql = "select id from lists order by id desc limit 1";
             var id = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql)[0][0];
 
             sql = "insert into booklist(book, username, done, rating, notes, " +

@@ -14,6 +14,18 @@ namespace BookList.Biz.Database
         }
     }
 
+    public class InsertValues
+    {
+        public string Column { get; set; }
+        public string Value { get; set; }
+
+        public InsertValues(string col, string val)
+        {
+            Column = col;
+            Value = val;
+        }
+    }
+
     public class PostgreSQLConnection : IDbConnection
     {
         private string ConnectionString { get; set; }
@@ -37,6 +49,24 @@ namespace BookList.Biz.Database
             connection.Close();
 
             return results;
+        }
+
+        public void Insert(string table, params InsertValues[] insertValues)
+        {
+            //"insert into lists (name) values ('New List')"
+
+            var columns = $"{insertValues[0].Column}";
+            var values = $"'{insertValues[0].Value}'";
+
+            for (var i = 1; i < insertValues.Length; i++)
+            {
+                columns = columns + $", {insertValues[i].Column}";
+                values = values + $", '{insertValues[i].Value}'";
+            }
+
+            var sql = $"insert into {table} ({columns}) values ({values})";
+
+            ExecuteCommand(sql);
         }
 
         public List<List<string>> SelectAll(string table, string sortBy)
