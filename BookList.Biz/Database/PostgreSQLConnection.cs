@@ -73,31 +73,6 @@ namespace BookList.Biz.Database
             ExecuteWithParameters(sql, values.ToArray());
         }
 
-        private string InsertValueForSQL(object value)
-        {
-            if (value is string)
-            {
-                return $"{value}";
-            }
-
-            else if (value is null)
-            {
-                return "null";
-            }
-
-            else if (value is bool)
-            {
-                return (bool)value ? "true" : "false";
-            }
-
-            else if (value is int)
-            {
-                return $"{((int)value).ToString()}";
-            }
-
-            return "";
-        }
-
         public List<List<string>> SelectAll(string table, string sortBy)
         {
             var sql = $"select * from {table} order by {sortBy}";
