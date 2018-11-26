@@ -15,22 +15,22 @@ namespace BookList.Service.Controllers
     {
         public List<List> Get()
         {
-            return LoadList.LoadAll();
+            return ListFactory.LoadAll();
         }
 
         public void Put(int id, [FromBody]ListName value)
         {
-            LoadList.UpdateListName(id, value.Name);
+            ListFactory.UpdateListName(id, value.Name);
         }
 
         public void Post()
         {
-            LoadList.CreateNewList();
+            ListFactory.CreateNewList();
         }
 
         public void Delete(int id) 
         {
-            LoadList.DeleteList(id);
+            ListFactory.DeleteList(id);
         }
     }
 }

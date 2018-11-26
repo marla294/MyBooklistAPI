@@ -29,7 +29,8 @@ namespace BookList.Biz.Database
             return LoadAll().FirstOrDefault<List>(list => list.Id == id);
         }
 
-        public static void UpdateListName(int id, string newName) {
+        public static void UpdateListName(int id, string newName) 
+        {
             ConnectionUtils.UpdateListName(new PostgreSQLConnection(), id, newName);
         }
 

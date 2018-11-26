@@ -10,15 +10,15 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            if (Int32.TryParse(LoadList.CreateNewList(), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(), out int id))
             {
-                var testListList = LoadList.LoadAll();
+                var testListList = ListFactory.LoadAll();
                 var testList = testListList.Find(list => list.Id == id);
 
                 Assert.IsNotNull(testListList);
                 Assert.IsNotNull(testList);
 
-                LoadList.DeleteList(id);
+                ListFactory.DeleteList(id);
             }
             else
             {
@@ -29,17 +29,17 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestUpdateList()
         {
-            if (Int32.TryParse(LoadList.CreateNewList(), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(), out int id))
             {
                 var testListName = "Updated Name";
 
-                LoadList.UpdateListName(id, testListName);
-                var testList = LoadList.LoadSingle(id);
+                ListFactory.UpdateListName(id, testListName);
+                var testList = ListFactory.LoadSingle(id);
 
                 Assert.IsNotNull(testList);
                 Assert.AreEqual(testListName, testList.Name);
 
-                LoadList.DeleteList(id);
+                ListFactory.DeleteList(id);
             }
             else
             {
@@ -50,11 +50,11 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestDeleteList()
         {
-            if (Int32.TryParse(LoadList.CreateNewList(), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(), out int id))
             {
-                LoadList.DeleteList(id);
+                ListFactory.DeleteList(id);
 
-                var testList = LoadList.LoadAll().Find(list => list.Id == id);
+                var testList = ListFactory.LoadAll().Find(list => list.Id == id);
 
                 Assert.IsNull(testList);
             }
