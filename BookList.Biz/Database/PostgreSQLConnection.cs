@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Npgsql;
 
 namespace BookList.Biz.Database
@@ -54,24 +55,29 @@ namespace BookList.Biz.Database
         public void Insert(string table, params InsertValues[] insertValues)
         {
             var columns = $"{insertValues[0].Column}";
-            var values = $"{InsertValueForSQL(insertValues[0].Value)}";
+            List<object> values = new List<object>
+            {
+                insertValues[0].Value
+            };
+            var parameters = "@parameter1";
 
             for (var i = 1; i < insertValues.Length; i++)
             {
                 columns = columns + $", {insertValues[i].Column}";
-                values = values + $", {InsertValueForSQL(insertValues[i].Value)}";
+                values.Add(insertValues[i].Value);
+                parameters = parameters + $", @parameter{(i+1).ToString()}";
             }
 
-            var sql = $"insert into {table} ({columns}) values ({values})";
+            var sql = $"insert into {table} ({columns}) values ({parameters})";
 
-            ExecuteCommand(sql);
+            ExecuteWithParameters(sql, values.ToArray());
         }
 
         private string InsertValueForSQL(object value)
         {
             if (value is string)
             {
-                return $"'{value}'";
+                return $"{value}";
             }
 
             else if (value is null)
@@ -89,7 +95,7 @@ namespace BookList.Biz.Database
                 return $"{((int)value).ToString()}";
             }
 
-            return "''";
+            return "";
         }
 
         public List<List<string>> SelectAll(string table, string sortBy)
@@ -134,7 +140,7 @@ namespace BookList.Biz.Database
         }
 
         // pass in sql string with @parameter1 - @parameterN
-        private void ExecuteWithParameters(string sql, params string[] parameters) 
+        private void ExecuteWithParameters(string sql, params object[] parameters) 
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
             {
@@ -144,7 +150,16 @@ namespace BookList.Biz.Database
                 {
                     for (var i = 0; i < parameters.Length; i++) 
                     {
-                        cmd.Parameters.AddWithValue($"@parameter{(i + 1).ToString()}", parameters[i].Replace("'", "''"));
+                        var param = $"@parameter{(i + 1).ToString()}";
+                        if (parameters[i] != null)
+                        {
+                            cmd.Parameters.AddWithValue(param, parameters[i]);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue(param, DBNull.Value);
+                        }
+
                     }
 
                     cmd.ExecuteNonQuery();
