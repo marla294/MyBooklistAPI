@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BookList.Biz.Database
 {
@@ -9,9 +10,29 @@ namespace BookList.Biz.Database
             return dbConnection.ExecuteCommand(command);
         }
 
-        public static void InsertNewList(IDbConnection dbConnection)
+        public static string InsertNewList(IDbConnection dbConnection)
         {
-            dbConnection.Insert("lists", new InsertValues("name", "New List"));
+            dbConnection.Insert("lists", 
+                                new InsertValues("name", "New List")
+                               );
+
+            var sql = "select id from lists order by id desc limit 1";
+            var id = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql)[0][0];
+
+            Int32.TryParse(id, out int idConverted);
+
+            dbConnection.Insert("booklist", 
+                                new InsertValues("book", null), 
+                                new InsertValues("username", 1), 
+                                new InsertValues("done", false),
+                                new InsertValues("rating", null), 
+                                new InsertValues("notes", ""),
+                                new InsertValues("sortorder", 0), 
+                                new InsertValues("list", idConverted)
+                               );
+
+            return id;
+
         }
 
         public static List<List<string>> SelectAllLists(IDbConnection dbConnection)

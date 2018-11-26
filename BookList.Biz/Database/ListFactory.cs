@@ -7,6 +7,12 @@ namespace BookList.Biz.Database
 {
     public static class ListFactory
     {
+        // returns the id of the new list
+        public static string CreateNewList()
+        {
+            return ConnectionUtils.InsertNewList(new PostgreSQLConnection());
+        }
+
         public static List<List> LoadAll()
         {
             var listResultSet = ConnectionUtils.SelectAllLists(new PostgreSQLConnection());
@@ -32,21 +38,6 @@ namespace BookList.Biz.Database
         public static void UpdateListName(int id, string newName) 
         {
             ConnectionUtils.UpdateListName(new PostgreSQLConnection(), id, newName);
-        }
-
-        public static string CreateNewList()
-        {
-            //var sql = "insert into lists (name) values ('New List')";
-            ConnectionUtils.InsertNewList(new PostgreSQLConnection());
-
-            var sql = "select id from lists order by id desc limit 1";
-            var id = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql)[0][0];
-
-            sql = "insert into booklist(book, username, done, rating, notes, " +
-                $"sortorder, list) values (null, 1, false, null, '', 0, {id})";
-            ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
-
-            return id;
         }
 
         public static void DeleteList(int id) {

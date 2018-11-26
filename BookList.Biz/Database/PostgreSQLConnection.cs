@@ -17,9 +17,9 @@ namespace BookList.Biz.Database
     public class InsertValues
     {
         public string Column { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
 
-        public InsertValues(string col, string val)
+        public InsertValues(string col, object val)
         {
             Column = col;
             Value = val;
@@ -53,15 +53,53 @@ namespace BookList.Biz.Database
 
         public void Insert(string table, params InsertValues[] insertValues)
         {
-            //"insert into lists (name) values ('New List')"
-
             var columns = $"{insertValues[0].Column}";
-            var values = $"'{insertValues[0].Value}'";
+
+            var values = "";
+
+            if (insertValues[0].Value is string)
+            {
+                values = $"'{insertValues[0].Value}'";
+            }
+
+            if (insertValues[0].Value is null)
+            {
+                values = "null";
+            }
+
+            if (insertValues[0].Value is bool)
+            {
+                values = (bool)insertValues[0].Value ? "true" : "false";
+            }
+
+            if (insertValues[0].Value is int)
+            {
+                values = $"{((int)insertValues[0].Value).ToString()}";
+            }
 
             for (var i = 1; i < insertValues.Length; i++)
             {
                 columns = columns + $", {insertValues[i].Column}";
-                values = values + $", '{insertValues[i].Value}'";
+
+                if (insertValues[i].Value is string)
+                {
+                    values = values + $", '{insertValues[i].Value}'";
+                }
+
+                if (insertValues[i].Value is null)
+                {
+                    values = values + ", null";
+                }
+
+                if (insertValues[i].Value is bool)
+                {
+                    values = (bool)insertValues[i].Value ? values + ", true" : values + ", false";
+                }
+
+                if (insertValues[i].Value is int)
+                {
+                    values = values + $", {((int)insertValues[i].Value).ToString()}";
+                }
             }
 
             var sql = $"insert into {table} ({columns}) values ({values})";
