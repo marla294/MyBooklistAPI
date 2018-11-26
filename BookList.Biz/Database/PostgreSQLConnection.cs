@@ -54,57 +54,42 @@ namespace BookList.Biz.Database
         public void Insert(string table, params InsertValues[] insertValues)
         {
             var columns = $"{insertValues[0].Column}";
-
-            var values = "";
-
-            if (insertValues[0].Value is string)
-            {
-                values = $"'{insertValues[0].Value}'";
-            }
-
-            if (insertValues[0].Value is null)
-            {
-                values = "null";
-            }
-
-            if (insertValues[0].Value is bool)
-            {
-                values = (bool)insertValues[0].Value ? "true" : "false";
-            }
-
-            if (insertValues[0].Value is int)
-            {
-                values = $"{((int)insertValues[0].Value).ToString()}";
-            }
+            var values = $"{InsertValueForSQL(insertValues[0].Value)}";
 
             for (var i = 1; i < insertValues.Length; i++)
             {
                 columns = columns + $", {insertValues[i].Column}";
-
-                if (insertValues[i].Value is string)
-                {
-                    values = values + $", '{insertValues[i].Value}'";
-                }
-
-                if (insertValues[i].Value is null)
-                {
-                    values = values + ", null";
-                }
-
-                if (insertValues[i].Value is bool)
-                {
-                    values = (bool)insertValues[i].Value ? values + ", true" : values + ", false";
-                }
-
-                if (insertValues[i].Value is int)
-                {
-                    values = values + $", {((int)insertValues[i].Value).ToString()}";
-                }
+                values = values + $", {InsertValueForSQL(insertValues[i].Value)}";
             }
 
             var sql = $"insert into {table} ({columns}) values ({values})";
 
             ExecuteCommand(sql);
+        }
+
+        private string InsertValueForSQL(object value)
+        {
+            if (value is string)
+            {
+                return $"'{value}'";
+            }
+
+            else if (value is null)
+            {
+                return "null";
+            }
+
+            else if (value is bool)
+            {
+                return (bool)value ? "true" : "false";
+            }
+
+            else if (value is int)
+            {
+                return $"{((int)value).ToString()}";
+            }
+
+            return "''";
         }
 
         public List<List<string>> SelectAll(string table, string sortBy)
