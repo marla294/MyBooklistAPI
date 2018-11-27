@@ -80,6 +80,21 @@ namespace BookList.Biz.Database
             return ExecuteCommand(sql);
         }
 
+        //select id from lists order by id desc limit 1
+        public List<List<string>> Select(string[] columns, string table)
+        {
+            var sql = $"select {columns[0]}";
+
+            for (var i = 1; i < columns.Length; i++)
+            {
+                sql = sql + $", {columns[i]}";
+            }
+
+            sql = sql + $" from {table}";
+
+            return ExecuteCommand(sql);
+        }
+
         public void Update(string table, string setColumn, string setValue, string andOr,
                            params WhereValues[] whereValues) 
         {

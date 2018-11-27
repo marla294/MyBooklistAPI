@@ -16,7 +16,7 @@ namespace BookList.Biz.Database
         public static List<List> LoadAll()
         {
             var listResultSet = ConnectionUtils.SelectAllLists(new PostgreSQLConnection());
-            var listList = new List<List>();
+            var lists = new List<List>();
 
             for (var i = 0; i < listResultSet[0].Count; i++)
             {
@@ -24,10 +24,10 @@ namespace BookList.Biz.Database
                     ? new List(id, listResultSet[1][i])
                     : new List();
 
-                listList.Add(list);
+                lists.Add(list);
             }
 
-            return listList;
+            return lists;
         }
 
         public static List LoadSingle(int id)
