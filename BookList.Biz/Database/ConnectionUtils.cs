@@ -16,8 +16,7 @@ namespace BookList.Biz.Database
                                 new InsertValues("name", "New List")
                                );
 
-            var sql = "select id from lists order by id desc limit 1";
-            var id = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql)[0][0];
+            var id = dbConnection.Select(new string[] { "*" }, "lists", "id", "desc", 1)[0][0];
 
             Int32.TryParse(id, out int idConverted);
 
@@ -37,7 +36,7 @@ namespace BookList.Biz.Database
 
         public static List<List<string>> SelectAllLists(IDbConnection dbConnection)
         {
-            return dbConnection.SelectAll("lists", "id");
+            return dbConnection.Select(new string[] { "*" }, "lists", "id");
         }
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName)

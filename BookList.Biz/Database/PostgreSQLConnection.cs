@@ -73,15 +73,7 @@ namespace BookList.Biz.Database
             ExecuteWithParameters(sql, values.ToArray());
         }
 
-        public List<List<string>> SelectAll(string table, string sortBy)
-        {
-            var sql = $"select * from {table} order by {sortBy}";
-
-            return ExecuteCommand(sql);
-        }
-
-        //select id from lists order by id desc limit 1
-        public List<List<string>> Select(string[] columns, string table)
+        public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
         {
             var sql = $"select {columns[0]}";
 
@@ -91,6 +83,16 @@ namespace BookList.Biz.Database
             }
 
             sql = sql + $" from {table}";
+
+            if (orderBy != "")
+            {
+                sql = sql + $" order by {orderBy} {orderByDirection}";
+            }
+
+            if (limit != -1)
+            {
+                sql = sql + $" limit {limit.ToString()}";
+            }
 
             return ExecuteCommand(sql);
         }
