@@ -41,7 +41,7 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName)
         {
-            dbConnection.Update("lists", "name", newName, "and", new WhereValues("id", id.ToString()));
+            dbConnection.Update("lists", "name", newName, "and", new WhereValues("id", id));
         }
 
         public static void DeleteList(IDbConnection dbConnection, int id)

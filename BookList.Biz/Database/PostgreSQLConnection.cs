@@ -7,9 +7,9 @@ namespace BookList.Biz.Database
     public class WhereValues
     {
         public string Column { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
 
-        public WhereValues(string col, string val) {
+        public WhereValues(string col, object val) {
             Column = col;
             Value = val;
         }
@@ -86,11 +86,11 @@ namespace BookList.Biz.Database
                            params WhereValues[] whereValues) 
         {
             var sql = $"update {table} set {setColumn} = @parameter1 where " +
-                $"{whereValues[0].Column} = {whereValues[0].Value}";
+                $"{whereValues[0].Column} = @parameter2";
 
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
-            ExecuteNonQuery(sql, setValue);
+            ExecuteNonQuery(sql, setValue, whereValues[0].Value);
         }
 
         public void Delete(string table, params WhereValues[] whereValues)
