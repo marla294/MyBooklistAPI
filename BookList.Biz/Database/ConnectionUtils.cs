@@ -46,8 +46,8 @@ namespace BookList.Biz.Database
 
         public static void DeleteList(IDbConnection dbConnection, int id)
         {
-            dbConnection.Delete("booklist", new WhereValues("list", id.ToString()));
-            dbConnection.Delete("lists", new WhereValues("id", id.ToString()));
+            dbConnection.Delete("booklist", new WhereValues("list", id));
+            dbConnection.Delete("lists", new WhereValues("id", id));
         }
 
         public static List<List<string>> CreateEmptyResultSet(int numCols)

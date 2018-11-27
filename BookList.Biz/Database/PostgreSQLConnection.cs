@@ -85,8 +85,8 @@ namespace BookList.Biz.Database
         public void Update(string table, string setColumn, string setValue, string andOr,
                            params WhereValues[] whereValues) 
         {
-            var sql = $"update {table} set {setColumn} = @parameter1 where " +
-                $"{whereValues[0].Column} = @parameter2";
+            var sql = $"update {table} set {setColumn} = @parameter{(whereValues.Length + 1).ToString()} where " +
+                $"{whereValues[0].Column} = @parameter1";
 
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
@@ -97,12 +97,14 @@ namespace BookList.Biz.Database
                 values.Add(value.Value);
             }
 
-            ExecuteNonQuery(sql, setValue, values.ToArray());
+            values.Add(setValue);
+
+            ExecuteNonQuery(sql, values.ToArray());
         }
 
         public void Delete(string table, params WhereValues[] whereValues)
         {
-            var sql = $"delete from {table} where {whereValues[0].Column} = {whereValues[0].Value}";
+            var sql = $"delete from {table} where {whereValues[0].Column} = @parameter1";
 
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
@@ -122,7 +124,7 @@ namespace BookList.Biz.Database
             {
                 for (var i = 1; i < whereValues.Length; i++)
                 {
-                    var addition = $"and {whereValues[i].Column} = @parameter{(i+2).ToString()}";
+                    var addition = $"and {whereValues[i].Column} = @parameter{(i+1).ToString()}";
                     sql = sql + addition;
                 }
             }
@@ -150,6 +152,10 @@ namespace BookList.Biz.Database
                         else if (parameters[i] is string)
                         {
                             cmd.Parameters.AddWithValue(param, (string)parameters[i]);
+                        }
+                        else if (parameters[i] is bool)
+                        {
+                            cmd.Parameters.AddWithValue(param, (bool)parameters[i]);
                         }
                         else if (parameters[i] is null)
                         {
