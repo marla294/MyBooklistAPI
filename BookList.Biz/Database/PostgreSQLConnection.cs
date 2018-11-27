@@ -88,24 +88,18 @@ namespace BookList.Biz.Database
             var sql = $"update {table} set {setColumn} = @parameter{(whereValues.Length + 1).ToString()} where " +
                 $"{whereValues[0].Column} = @parameter1";
 
-            sql = AdditionalWhereValues(sql, "and", whereValues);
-
-            var values = new List<object>();
-
-            foreach(var value in whereValues)
-            {
-                values.Add(value.Value);
-            }
-
-            values.Add(setValue);
-
-            ExecuteNonQuery(sql, values.ToArray());
+            UpdateAndDelete(sql, whereValues, setValue);
         }
 
         public void Delete(string table, params WhereValues[] whereValues)
         {
             var sql = $"delete from {table} where {whereValues[0].Column} = @parameter1";
 
+            UpdateAndDelete(sql, whereValues);
+        }
+
+        private void UpdateAndDelete(string sql, WhereValues[] whereValues, string setValue = null)
+        {
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
             var values = new List<object>();
@@ -113,6 +107,11 @@ namespace BookList.Biz.Database
             foreach (var value in whereValues)
             {
                 values.Add(value.Value);
+            }
+
+            if (setValue != null)
+            {
+                values.Add(setValue);
             }
 
             ExecuteNonQuery(sql, values.ToArray());
