@@ -8,6 +8,24 @@ namespace BookList.Tests.Biz.Database
     public class ListCRUDOperations
     {
         [Test]
+        public void TestCreateNewList()
+        {
+            if (Int32.TryParse(ListFactory.CreateNewList(), out int id))
+            {
+                var testList = ListFactory.LoadAll().Find(list => list.Id == id);
+
+                Assert.IsNotNull(testList);
+                Assert.AreEqual("New List", testList.Name);
+
+                ListFactory.DeleteList(id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
         public void TestLoadAll()
         {
             if (Int32.TryParse(ListFactory.CreateNewList(), out int id))
