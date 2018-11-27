@@ -90,7 +90,14 @@ namespace BookList.Biz.Database
 
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
-            ExecuteNonQuery(sql, setValue, whereValues[0].Value);
+            var values = new List<object>();
+
+            foreach(var value in whereValues)
+            {
+                values.Add(value.Value);
+            }
+
+            ExecuteNonQuery(sql, setValue, values.ToArray());
         }
 
         public void Delete(string table, params WhereValues[] whereValues)
@@ -99,7 +106,14 @@ namespace BookList.Biz.Database
 
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
-            ExecuteQuery(sql);
+            var values = new List<object>();
+
+            foreach (var value in whereValues)
+            {
+                values.Add(value.Value);
+            }
+
+            ExecuteNonQuery(sql, values.ToArray());
         }
 
         private string AdditionalWhereValues(string sql, string andOr, params WhereValues[] whereValues)
@@ -108,7 +122,7 @@ namespace BookList.Biz.Database
             {
                 for (var i = 1; i < whereValues.Length; i++)
                 {
-                    var addition = $"and {whereValues[i].Column} = {whereValues[i].Value}";
+                    var addition = $"and {whereValues[i].Column} = @parameter{(i+2).ToString()}";
                     sql = sql + addition;
                 }
             }
@@ -128,11 +142,16 @@ namespace BookList.Biz.Database
                     for (var i = 0; i < parameters.Length; i++) 
                     {
                         var param = $"@parameter{(i + 1).ToString()}";
-                        if (parameters[i] != null)
+
+                        if (parameters[i] is int)
                         {
-                            cmd.Parameters.AddWithValue(param, parameters[i]);
+                            cmd.Parameters.AddWithValue(param, (int)parameters[i]);
                         }
-                        else
+                        else if (parameters[i] is string)
+                        {
+                            cmd.Parameters.AddWithValue(param, (string)parameters[i]);
+                        }
+                        else if (parameters[i] is null)
                         {
                             cmd.Parameters.AddWithValue(param, DBNull.Value);
                         }
