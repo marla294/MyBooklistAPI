@@ -37,21 +37,6 @@ namespace BookList.Biz.Database
                 "Password=Password1;Database=booklist";
         }
 
-        public List<List<string>> ExecuteCommand(string command)
-        {
-            NpgsqlConnection connection = 
-                new NpgsqlConnection(ConnectionString);
-
-            connection.Open();
-
-            var cmd = new NpgsqlCommand(command, connection);
-            var results = ReadDBResults(cmd.ExecuteReader());
-
-            connection.Close();
-
-            return results;
-        }
-
         public void Insert(string table, params InsertValues[] insertValues)
         {
             var columns = $"{insertValues[0].Column}";
@@ -70,7 +55,7 @@ namespace BookList.Biz.Database
 
             var sql = $"insert into {table} ({columns}) values ({parameters})";
 
-            ExecuteWithParameters(sql, values.ToArray());
+            ExecuteNonQuery(sql, values.ToArray());
         }
 
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
@@ -105,7 +90,7 @@ namespace BookList.Biz.Database
 
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
-            ExecuteWithParameters(sql, setValue);
+            ExecuteNonQuery(sql, setValue);
         }
 
         public void Delete(string table, params WhereValues[] whereValues)
@@ -132,7 +117,7 @@ namespace BookList.Biz.Database
         }
 
         // pass in sql string with @parameter1 - @parameterN
-        private void ExecuteWithParameters(string sql, params object[] parameters) 
+        private void ExecuteNonQuery(string sql, params object[] parameters) 
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
             {
@@ -158,6 +143,25 @@ namespace BookList.Biz.Database
                 }
 
                 connection.Close();
+            }
+        }
+
+        public List<List<string>> ExecuteCommand(string command)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                var results = ConnectionUtils.CreateEmptyResultSet(0);
+
+                using (var cmd = new NpgsqlCommand(command, connection))
+                {
+                    results = ReadDBResults(cmd.ExecuteReader());
+                }
+
+                connection.Close();
+
+                return results;
             }
         }
 
