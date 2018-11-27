@@ -79,7 +79,7 @@ namespace BookList.Biz.Database
                 sql = sql + $" limit {limit.ToString()}";
             }
 
-            return ExecuteCommand(sql);
+            return ExecuteQuery(sql);
         }
 
         public void Update(string table, string setColumn, string setValue, string andOr,
@@ -99,7 +99,7 @@ namespace BookList.Biz.Database
 
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
-            ExecuteCommand(sql);
+            ExecuteQuery(sql);
         }
 
         private string AdditionalWhereValues(string sql, string andOr, params WhereValues[] whereValues)
@@ -146,7 +146,7 @@ namespace BookList.Biz.Database
             }
         }
 
-        public List<List<string>> ExecuteCommand(string command)
+        public List<List<string>> ExecuteQuery(string sql)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
             {
@@ -154,7 +154,7 @@ namespace BookList.Biz.Database
 
                 var results = ConnectionUtils.CreateEmptyResultSet(0);
 
-                using (var cmd = new NpgsqlCommand(command, connection))
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
                     results = ReadDBResults(cmd.ExecuteReader());
                 }

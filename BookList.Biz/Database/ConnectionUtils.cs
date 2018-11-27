@@ -5,9 +5,9 @@ namespace BookList.Biz.Database
 {
     public static class ConnectionUtils
     {
-        public static List<List<string>> ExecuteCommand(IDbConnection dbConnection, string command)
+        public static List<List<string>> ExecuteQuery(IDbConnection dbConnection, string sql)
         {
-            return dbConnection.ExecuteCommand(command);
+            return dbConnection.ExecuteQuery(sql);
         }
 
         public static string InsertNewList(IDbConnection dbConnection)

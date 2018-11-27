@@ -13,7 +13,7 @@ namespace BookList.Biz.Database
 
         static List<BookListItem> LoadByQuery(string sql)
         {
-            var itemResultSet = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+            var itemResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
             var itemList = new List<BookListItem>();
 
             for (var i = 0; i < itemResultSet[0].Count; i++)

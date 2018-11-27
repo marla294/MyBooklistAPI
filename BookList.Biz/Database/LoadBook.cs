@@ -19,7 +19,7 @@ namespace BookList.Biz.Database
 
         static List<Book> LoadByQuery(string sql)
         {
-            var bookResultSet = ConnectionUtils.ExecuteCommand(new PostgreSQLConnection(), sql);
+            var bookResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
             var bookList = new List<Book>();
 
             for (var i = 0; i < bookResultSet[0].Count; i++)

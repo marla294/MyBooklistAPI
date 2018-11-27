@@ -4,7 +4,7 @@ namespace BookList.Biz.Database
 {
     public interface IDbConnection
     {
-        List<List<string>> ExecuteCommand(string command);
+        List<List<string>> ExecuteQuery(string command);
         List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1);
         void Update(string table, string setColumn, string setValue, string andOr,
                            params WhereValues[] whereValues);
