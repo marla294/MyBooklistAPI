@@ -29,11 +29,12 @@ namespace BookList.Biz.Database
         public void Insert(string table, params ColumnValuePairing[] insertValues)
         {
             var columns = $"{insertValues[0].Column}";
+            var parameters = "@parameter1";
+
             List<object> values = new List<object>
             {
                 insertValues[0].Value
             };
-            var parameters = "@parameter1";
 
             for (var i = 1; i < insertValues.Length; i++)
             {
@@ -91,19 +92,24 @@ namespace BookList.Biz.Database
         {
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
-            var values = new List<object>();
+            ExecuteNonQuery(sql, GetOnlyValuesArray(whereValues, setValue));
+        }
 
-            foreach (var value in whereValues)
+        private object[] GetOnlyValuesArray(ColumnValuePairing[] columnValuePairings, params string[] extraValues)
+        {
+            var onlyValues = new List<object>();
+
+            foreach (var pair in columnValuePairings)
             {
-                values.Add(value.Value);
+                onlyValues.Add(pair.Value);
             }
 
-            if (setValue != null)
+            foreach (var value in extraValues)
             {
-                values.Add(setValue);
+                onlyValues.Add(value);
             }
 
-            ExecuteNonQuery(sql, values.ToArray());
+            return onlyValues.ToArray();
         }
 
         private string AdditionalWhereValues(string sql, string andOr, params ColumnValuePairing[] whereValues)
