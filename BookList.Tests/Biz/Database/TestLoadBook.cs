@@ -9,7 +9,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            var testBookList = LoadBook.LoadAll();
+            var testBookList = LoadBook.LoadAll(new PostgreSQLConnection());
             var testBook = testBookList.Find(book => book.Id == 2);
 
             Assert.IsNotNull(testBookList);

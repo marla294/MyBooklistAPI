@@ -7,32 +7,46 @@ namespace BookList.Biz.Database
 {
     public static class LoadBook
     {
-        public static List<Book> LoadAll()
+        public static List<Book> LoadAll(IDbConnection dbConnection)
         {
-            return LoadByQuery("select * from books order by id;");
-        }
+            var bookResultSet = dbConnection.Select(new string[] { "*" }, "books", "id");
 
-        public static Book LoadSingle(int id) 
-        {
-            return LoadAll().FirstOrDefault<Book>(book => book.Id == id);
-        }
-
-        static List<Book> LoadByQuery(string sql)
-        {
-            var bookResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
-            var bookList = new List<Book>();
+            var books = new List<Book>();
 
             for (var i = 0; i < bookResultSet[0].Count; i++)
             {
                 Book book = Int32.TryParse(bookResultSet[0][i], out int id)
-                    ? new Book(id, bookResultSet[1][i], bookResultSet[2][i], 
+                    ? new Book(id, bookResultSet[1][i], bookResultSet[2][i],
                                bookResultSet[3][i], bookResultSet[4][i])
                     : new Book();
-                                 
-                bookList.Add(book);
+
+                books.Add(book);
             }
 
-            return bookList;
+            return books;
         }
+
+        public static Book LoadSingle(int id) 
+        {
+            return LoadAll(new PostgreSQLConnection()).FirstOrDefault<Book>(book => book.Id == id);
+        }
+
+        //static List<Book> LoadByQuery(string sql)
+        //{
+        //    var bookResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
+        //    var bookList = new List<Book>();
+
+        //    for (var i = 0; i < bookResultSet[0].Count; i++)
+        //    {
+        //        Book book = Int32.TryParse(bookResultSet[0][i], out int id)
+        //            ? new Book(id, bookResultSet[1][i], bookResultSet[2][i], 
+        //                       bookResultSet[3][i], bookResultSet[4][i])
+        //            : new Book();
+                                 
+        //        bookList.Add(book);
+        //    }
+
+        //    return bookList;
+        //}
     }
 }
