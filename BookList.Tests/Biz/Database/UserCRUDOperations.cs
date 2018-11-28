@@ -9,7 +9,9 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            var testUserList = UserFactory.LoadAll();
+            var db = new PostgreSQLConnection();
+
+            var testUserList = UserFactory.LoadAll(db);
             var testUser = testUserList.Find(user => user.Id == 1);
 
             Assert.IsNotNull(testUserList);

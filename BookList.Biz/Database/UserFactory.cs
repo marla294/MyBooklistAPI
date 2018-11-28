@@ -7,20 +7,10 @@ namespace BookList.Biz.Database
 {
     public static class UserFactory
     {
-        public static List<User> LoadAll()
+        public static List<User> LoadAll(IDbConnection dbConnection)
         {
-            return LoadByQuery("select * from users order by id;");
-        }
-
-        public static User LoadSingle(int id)
-        {
-            return LoadAll().FirstOrDefault<User>(user => user.Id == id);
-        }
-
-        static List<User> LoadByQuery(string sql)
-        {
-            var userResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
-            var userList = new List<User>();
+            var userResultSet = dbConnection.Select(new string[] { "*" }, "users", "id");
+            var users = new List<User>();
 
             for (var i = 0; i < userResultSet[0].Count; i++)
             {
@@ -28,10 +18,32 @@ namespace BookList.Biz.Database
                     ? new User(id, userResultSet[1][i])
                     : new User();
 
-                userList.Add(user);
+                users.Add(user);
             }
 
-            return userList;
+            return users;
         }
+
+        public static User LoadSingle(int id)
+        {
+            return LoadAll(new PostgreSQLConnection()).FirstOrDefault<User>(user => user.Id == id);
+        }
+
+        //static List<User> LoadByQuery(string sql)
+        //{
+        //    var userResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
+        //    var userList = new List<User>();
+
+        //    for (var i = 0; i < userResultSet[0].Count; i++)
+        //    {
+        //        User user = Int32.TryParse(userResultSet[0][i], out int id)
+        //            ? new User(id, userResultSet[1][i])
+        //            : new User();
+
+        //        userList.Add(user);
+        //    }
+
+        //    return userList;
+        //}
     }
 }
