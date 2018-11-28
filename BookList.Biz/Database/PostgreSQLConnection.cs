@@ -78,24 +78,24 @@ namespace BookList.Biz.Database
             var sql = $"update {table} set {setColumn} = @parameter{(whereValues.Length + 1).ToString()} where " +
                 $"{whereValues[0].Column} = @parameter1";
 
-            UpdateAndDelete(sql, whereValues, setValue);
+            UpdateAndDelete(sql, andOr, whereValues, setValue);
         }
 
-        public void Delete(string table, params ColumnValuePairing[] whereValues)
+        public void Delete(string table, string andOr, params ColumnValuePairing[] whereValues)
         {
             var sql = $"delete from {table} where {whereValues[0].Column} = @parameter1";
 
-            UpdateAndDelete(sql, whereValues);
+            UpdateAndDelete(sql, andOr, whereValues);
         }
 
-        private void UpdateAndDelete(string sql, ColumnValuePairing[] whereValues, string setValue = null)
+        private void UpdateAndDelete(string sql, string andOr, ColumnValuePairing[] whereValues, string setValue = null)
         {
-            sql = AdditionalWhereValues(sql, "and", whereValues);
+            sql = AdditionalWhereValues(sql, andOr, whereValues);
 
-            ExecuteNonQuery(sql, GetOnlyValuesArray(whereValues, setValue));
+            ExecuteNonQuery(sql, GetValuesArray(whereValues, setValue));
         }
 
-        private object[] GetOnlyValuesArray(ColumnValuePairing[] columnValuePairings, params string[] extraValues)
+        private object[] GetValuesArray(ColumnValuePairing[] columnValuePairings, params string[] extraValues)
         {
             var onlyValues = new List<object>();
 

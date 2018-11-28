@@ -46,8 +46,8 @@ namespace BookList.Biz.Database
 
         public static void DeleteList(IDbConnection dbConnection, int id)
         {
-            dbConnection.Delete("booklist", new ColumnValuePairing("list", id));
-            dbConnection.Delete("lists", new ColumnValuePairing("id", id));
+            dbConnection.Delete("booklist", "and", new ColumnValuePairing("list", id));
+            dbConnection.Delete("lists", "and", new ColumnValuePairing("id", id));
         }
 
         public static List<List<string>> CreateEmptyResultSet(int numCols)
