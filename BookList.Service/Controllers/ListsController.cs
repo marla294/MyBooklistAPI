@@ -13,24 +13,31 @@ namespace BookList.Service.Controllers
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class ListsController : ApiController
     {
+        PostgreSQLConnection Db { get; set; }
+
+        public ListsController()
+        {
+            Db = new PostgreSQLConnection();
+        }
+
         public List<List> Get()
         {
-            return ListFactory.LoadAll();
+            return ListFactory.LoadAll(Db);
         }
 
         public void Put(int id, [FromBody]ListName value)
         {
-            ListFactory.UpdateListName(id, value.Name);
+            ListFactory.UpdateListName(Db, id, value.Name);
         }
 
         public void Post()
         {
-            ListFactory.CreateNewList();
+            ListFactory.CreateNewList(Db);
         }
 
         public void Delete(int id) 
         {
-            ListFactory.DeleteList(id);
+            ListFactory.DeleteList(Db, id);
         }
     }
 }

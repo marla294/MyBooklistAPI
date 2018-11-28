@@ -8,9 +8,8 @@ namespace BookList.Biz.Database
     public static class ListFactory
     {
         // returns the id of the new list
-        public static string CreateNewList()
+        public static string CreateNewList(IDbConnection dbConnection)
         {
-            var dbConnection = new PostgreSQLConnection();
             string id;
 
             dbConnection.Insert("lists", new ColumnValuePairing[] {
@@ -34,9 +33,8 @@ namespace BookList.Biz.Database
             return id;
         }
 
-        public static List<List> LoadAll()
+        public static List<List> LoadAll(IDbConnection dbConnection)
         {
-            var dbConnection = new PostgreSQLConnection();
             var listResultSet = dbConnection.Select(new string[] { "*" }, "lists", "id");
 
             var lists = new List<List>();
@@ -53,15 +51,13 @@ namespace BookList.Biz.Database
             return lists;
         }
 
-        public static List LoadSingle(int id)
+        public static List LoadSingle(IDbConnection dbConnection, int id)
         {
-            return LoadAll().FirstOrDefault<List>(list => list.Id == id);
+            return LoadAll(dbConnection).FirstOrDefault<List>(list => list.Id == id);
         }
 
-        public static void UpdateListName(int id, string newName) 
+        public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
         {
-            var dbConnection = new PostgreSQLConnection();
-
             dbConnection.Update("lists", 
                                 new ColumnValuePairing("name", newName),
                                 "and", 
@@ -69,10 +65,8 @@ namespace BookList.Biz.Database
                                );
         }
 
-        public static void DeleteList(int id) 
+        public static void DeleteList(IDbConnection dbConnection, int id) 
         {
-            var dbConnection = new PostgreSQLConnection();
-
             dbConnection.Delete("booklist", "and", new ColumnValuePairing("list", id));
             dbConnection.Delete("lists", "and", new ColumnValuePairing("id", id));
         }
