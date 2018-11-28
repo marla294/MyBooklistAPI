@@ -4,23 +4,12 @@ using Npgsql;
 
 namespace BookList.Biz.Database
 {
-    public class WhereValues
+    public class ColumnValuePairing
     {
         public string Column { get; set; }
         public object Value { get; set; }
 
-        public WhereValues(string col, object val) {
-            Column = col;
-            Value = val;
-        }
-    }
-
-    public class InsertValues
-    {
-        public string Column { get; set; }
-        public object Value { get; set; }
-
-        public InsertValues(string col, object val)
+        public ColumnValuePairing(string col, object val)
         {
             Column = col;
             Value = val;
@@ -37,7 +26,7 @@ namespace BookList.Biz.Database
                 "Password=Password1;Database=booklist";
         }
 
-        public void Insert(string table, params InsertValues[] insertValues)
+        public void Insert(string table, params ColumnValuePairing[] insertValues)
         {
             var columns = $"{insertValues[0].Column}";
             List<object> values = new List<object>
@@ -83,7 +72,7 @@ namespace BookList.Biz.Database
         }
 
         public void Update(string table, string setColumn, string setValue, string andOr,
-                           params WhereValues[] whereValues) 
+                           params ColumnValuePairing[] whereValues) 
         {
             var sql = $"update {table} set {setColumn} = @parameter{(whereValues.Length + 1).ToString()} where " +
                 $"{whereValues[0].Column} = @parameter1";
@@ -91,14 +80,14 @@ namespace BookList.Biz.Database
             UpdateAndDelete(sql, whereValues, setValue);
         }
 
-        public void Delete(string table, params WhereValues[] whereValues)
+        public void Delete(string table, params ColumnValuePairing[] whereValues)
         {
             var sql = $"delete from {table} where {whereValues[0].Column} = @parameter1";
 
             UpdateAndDelete(sql, whereValues);
         }
 
-        private void UpdateAndDelete(string sql, WhereValues[] whereValues, string setValue = null)
+        private void UpdateAndDelete(string sql, ColumnValuePairing[] whereValues, string setValue = null)
         {
             sql = AdditionalWhereValues(sql, "and", whereValues);
 
@@ -117,7 +106,7 @@ namespace BookList.Biz.Database
             ExecuteNonQuery(sql, values.ToArray());
         }
 
-        private string AdditionalWhereValues(string sql, string andOr, params WhereValues[] whereValues)
+        private string AdditionalWhereValues(string sql, string andOr, params ColumnValuePairing[] whereValues)
         {
             if (whereValues.Length > 1)
             {

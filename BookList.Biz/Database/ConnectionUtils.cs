@@ -13,7 +13,7 @@ namespace BookList.Biz.Database
         public static string InsertNewList(IDbConnection dbConnection)
         {
             dbConnection.Insert("lists", 
-                                new InsertValues("name", "New List")
+                                new ColumnValuePairing("name", "New List")
                                );
 
             var id = dbConnection.Select(new string[] { "*" }, "lists", "id", "desc", 1)[0][0];
@@ -21,13 +21,13 @@ namespace BookList.Biz.Database
             Int32.TryParse(id, out int idConverted);
 
             dbConnection.Insert("booklist", 
-                                new InsertValues("book", null), 
-                                new InsertValues("username", 1), 
-                                new InsertValues("done", false),
-                                new InsertValues("rating", null), 
-                                new InsertValues("notes", ""),
-                                new InsertValues("sortorder", 0), 
-                                new InsertValues("list", idConverted)
+                                new ColumnValuePairing("book", null), 
+                                new ColumnValuePairing("username", 1), 
+                                new ColumnValuePairing("done", false),
+                                new ColumnValuePairing("rating", null), 
+                                new ColumnValuePairing("notes", ""),
+                                new ColumnValuePairing("sortorder", 0), 
+                                new ColumnValuePairing("list", idConverted)
                                );
 
             return id;
@@ -41,13 +41,13 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName)
         {
-            dbConnection.Update("lists", "name", newName, "and", new WhereValues("id", id));
+            dbConnection.Update("lists", "name", newName, "and", new ColumnValuePairing("id", id));
         }
 
         public static void DeleteList(IDbConnection dbConnection, int id)
         {
-            dbConnection.Delete("booklist", new WhereValues("list", id));
-            dbConnection.Delete("lists", new WhereValues("id", id));
+            dbConnection.Delete("booklist", new ColumnValuePairing("list", id));
+            dbConnection.Delete("lists", new ColumnValuePairing("id", id));
         }
 
         public static List<List<string>> CreateEmptyResultSet(int numCols)

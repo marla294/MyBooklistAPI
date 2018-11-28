@@ -40,7 +40,8 @@ namespace BookList.Biz.Database
             ConnectionUtils.UpdateListName(new PostgreSQLConnection(), id, newName);
         }
 
-        public static void DeleteList(int id) {
+        public static void DeleteList(int id) 
+        {
             ConnectionUtils.DeleteList(new PostgreSQLConnection(), id);
         }
 
