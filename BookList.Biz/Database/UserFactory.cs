@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BookList.Biz.Database
 {
-    public static class LoadUsers
+    public static class UserFactory
     {
         public static List<User> LoadAll()
         {

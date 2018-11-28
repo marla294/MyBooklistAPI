@@ -11,7 +11,7 @@ namespace BookList.Service.Controllers
     {
         public List<User> Get()
         {
-            return LoadUsers.LoadAll();
+            return UserFactory.LoadAll();
         }
     }
 }

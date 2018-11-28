@@ -4,12 +4,12 @@ using BookList.Biz.Database;
 namespace BookList.Tests.Biz.Database
 {
     [TestFixture]
-    public class LoadUsersTests
+    public class UserCRUDOperations
     {
         [Test]
         public void TestLoadAll()
         {
-            var testUserList = LoadUsers.LoadAll();
+            var testUserList = UserFactory.LoadAll();
             var testUser = testUserList.Find(user => user.Id == 1);
 
             Assert.IsNotNull(testUserList);
