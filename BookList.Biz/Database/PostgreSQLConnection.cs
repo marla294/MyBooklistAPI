@@ -72,13 +72,13 @@ namespace BookList.Biz.Database
             return ExecuteQuery(sql);
         }
 
-        public void Update(string table, string setColumn, string setValue, string andOr,
+        public void Update(string table, ColumnValuePairing setValue, string andOr,
                            params ColumnValuePairing[] whereValues) 
         {
-            var sql = $"update {table} set {setColumn} = @parameter{(whereValues.Length + 1).ToString()} where " +
+            var sql = $"update {table} set {setValue.Column} = @parameter{(whereValues.Length + 1).ToString()} where " +
                 $"{whereValues[0].Column} = @parameter1";
 
-            UpdateAndDelete(sql, andOr, whereValues, setValue);
+            UpdateAndDelete(sql, andOr, whereValues, setValue.Value.ToString());
         }
 
         public void Delete(string table, string andOr, params ColumnValuePairing[] whereValues)
