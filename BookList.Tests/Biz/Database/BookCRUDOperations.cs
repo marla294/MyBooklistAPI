@@ -4,12 +4,12 @@ using BookList.Biz.Database;
 namespace BookList.Tests.Biz.Database
 {
     [TestFixture]
-    public class LoadBookTests
+    public class BookCRUDOperations
     {
         [Test]
         public void TestLoadAll()
         {
-            var testBookList = LoadBook.LoadAll(new PostgreSQLConnection());
+            var testBookList = BookFactory.LoadAll(new PostgreSQLConnection());
             var testBook = testBookList.Find(book => book.Id == 2);
 
             Assert.IsNotNull(testBookList);

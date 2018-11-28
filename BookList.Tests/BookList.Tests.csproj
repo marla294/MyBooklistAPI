@@ -31,7 +31,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Biz\Database\TestLoadBook.cs" />
+    <Compile Include="Biz\Database\BookCRUDOperations.cs" />
     <Compile Include="Biz\Database\TestLoadUsers.cs" />
     <Compile Include="Biz\Database\TestLoadItem.cs" />
     <Compile Include="Biz\Database\ListCRUDOperations.cs" />

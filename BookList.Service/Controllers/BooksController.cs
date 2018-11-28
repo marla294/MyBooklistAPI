@@ -11,7 +11,7 @@ namespace BookList.Service.Controllers
     {
         public List<Book> Get()
         {
-            return LoadBook.LoadAll(new PostgreSQLConnection());
+            return BookFactory.LoadAll(new PostgreSQLConnection());
         }
     }
 }

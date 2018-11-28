@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Database\LoadBook.cs" />
+    <Compile Include="Database\BookFactory.cs" />
     <Compile Include="Database\PostgreSQLConnection.cs" />
     <Compile Include="Database\ConnectionUtils.cs" />
     <Compile Include="Database\IDbConnection.cs" />
