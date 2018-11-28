@@ -26,28 +26,6 @@ namespace BookList.Biz.Database
                 "Password=Password1;Database=booklist";
         }
 
-        public void Insert(string table, params ColumnValuePairing[] insertValues)
-        {
-            var columns = $"{insertValues[0].Column}";
-            var parameters = "@parameter1";
-
-            List<object> values = new List<object>
-            {
-                insertValues[0].Value
-            };
-
-            for (var i = 1; i < insertValues.Length; i++)
-            {
-                columns = columns + $", {insertValues[i].Column}";
-                values.Add(insertValues[i].Value);
-                parameters = parameters + $", @parameter{(i+1).ToString()}";
-            }
-
-            var sql = $"insert into {table} ({columns}) values ({parameters})";
-
-            ExecuteNonQuery(sql, values.ToArray());
-        }
-
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
         {
             var sql = $"select {columns[0]}";
@@ -70,6 +48,24 @@ namespace BookList.Biz.Database
             }
 
             return ExecuteQuery(sql);
+        }
+
+        public void Insert(string table, ColumnValuePairing[] insertValues)
+        {
+            var columns = $"{insertValues[0].Column}";
+            var values = new List<object> { insertValues[0].Value };
+            var parameters = "@parameter1";
+
+            for (var i = 1; i < insertValues.Length; i++)
+            {
+                columns = columns + $", {insertValues[i].Column}";
+                values.Add(insertValues[i].Value);
+                parameters = parameters + $", @parameter{(i+1).ToString()}";
+            }
+
+            var sql = $"insert into {table} ({columns}) values ({parameters})";
+
+            ExecuteNonQuery(sql, values.ToArray());
         }
 
         public void Update(string table, ColumnValuePairing setValue, string andOr,

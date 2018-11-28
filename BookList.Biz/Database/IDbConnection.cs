@@ -9,7 +9,7 @@ namespace BookList.Biz.Database
         void Update(string table, ColumnValuePairing setValue, string andOr,
                            params ColumnValuePairing[] whereValues);
         void Delete(string table, string andOr, params ColumnValuePairing[] whereValues);
-        void Insert(string table, params ColumnValuePairing[] insertValues);
+        void Insert(string table, ColumnValuePairing[] insertValues);
     }
 }
 
