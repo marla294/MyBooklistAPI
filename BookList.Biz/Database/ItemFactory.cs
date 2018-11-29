@@ -4,7 +4,7 @@ using BookList.Biz.Models;
 
 namespace BookList.Biz.Database
 {
-    public static class LoadItems
+    public static class ItemFactory
     {
         public static List<BookListItem> LoadAll()
         {

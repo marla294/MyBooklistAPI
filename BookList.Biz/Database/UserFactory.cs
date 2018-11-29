@@ -28,22 +28,5 @@ namespace BookList.Biz.Database
         {
             return LoadAll(new PostgreSQLConnection()).FirstOrDefault<User>(user => user.Id == id);
         }
-
-        //static List<User> LoadByQuery(string sql)
-        //{
-        //    var userResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
-        //    var userList = new List<User>();
-
-        //    for (var i = 0; i < userResultSet[0].Count; i++)
-        //    {
-        //        User user = Int32.TryParse(userResultSet[0][i], out int id)
-        //            ? new User(id, userResultSet[1][i])
-        //            : new User();
-
-        //        userList.Add(user);
-        //    }
-
-        //    return userList;
-        //}
     }
 }

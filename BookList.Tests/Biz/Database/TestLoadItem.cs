@@ -9,7 +9,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            var testItemsList = LoadItems.LoadAll();
+            var testItemsList = ItemFactory.LoadAll();
             var testItem = testItemsList.Find(item => item.Id == 1);
 
             Assert.IsNotNull(testItemsList);

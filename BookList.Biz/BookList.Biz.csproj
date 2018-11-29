@@ -79,7 +79,7 @@
     <Compile Include="Database\UserFactory.cs" />
     <Compile Include="Models\BookListItem.cs" />
     <Compile Include="Models\BookListItemDTO.cs" />
-    <Compile Include="Database\LoadItems.cs" />
+    <Compile Include="Database\ItemFactory.cs" />
     <Compile Include="Models\List.cs" />
     <Compile Include="Database\ListFactory.cs" />
   </ItemGroup>
