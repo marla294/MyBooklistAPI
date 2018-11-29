@@ -5,11 +5,6 @@ namespace BookList.Biz.Database
 {
     public static class ConnectionUtils
     {
-        public static List<List<string>> ExecuteQuery(IDbConnection dbConnection, string sql)
-        {
-            return dbConnection.ExecuteQuery(sql);
-        }
-
         public static List<List<string>> CreateEmptyResultSet(int numCols)
         {
             List<List<string>> resultSet = new List<List<string>>();
