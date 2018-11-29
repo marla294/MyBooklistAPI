@@ -129,30 +129,8 @@ namespace BookList.Biz.Database
             {
                 connection.Open();
 
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var cmd = AddParameters(new NpgsqlCommand(sql, connection), parameters))
                 {
-                    for (var i = 0; i < parameters.Length; i++) 
-                    {
-                        var param = $"@parameter{(i + 1).ToString()}";
-
-                        if (parameters[i] is int)
-                        {
-                            cmd.Parameters.AddWithValue(param, (int)parameters[i]);
-                        }
-                        else if (parameters[i] is string)
-                        {
-                            cmd.Parameters.AddWithValue(param, (string)parameters[i]);
-                        }
-                        else if (parameters[i] is bool)
-                        {
-                            cmd.Parameters.AddWithValue(param, (bool)parameters[i]);
-                        }
-                        else if (parameters[i] is null)
-                        {
-                            cmd.Parameters.AddWithValue(param, DBNull.Value);
-                        }
-                    }
-
                     cmd.ExecuteNonQuery();
                 }
 
@@ -169,30 +147,8 @@ namespace BookList.Biz.Database
 
                 var results = ConnectionUtils.CreateEmptyResultSet(0);
 
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var cmd = AddParameters(new NpgsqlCommand(sql, connection), parameters))
                 {
-                    for (var i = 0; i < parameters.Length; i++)
-                    {
-                        var param = $"@parameter{(i + 1).ToString()}";
-
-                        if (parameters[i] is int)
-                        {
-                            cmd.Parameters.AddWithValue(param, (int)parameters[i]);
-                        }
-                        else if (parameters[i] is string)
-                        {
-                            cmd.Parameters.AddWithValue(param, (string)parameters[i]);
-                        }
-                        else if (parameters[i] is bool)
-                        {
-                            cmd.Parameters.AddWithValue(param, (bool)parameters[i]);
-                        }
-                        else if (parameters[i] is null)
-                        {
-                            cmd.Parameters.AddWithValue(param, DBNull.Value);
-                        }
-                    }
-
                     results = ReadDBResults(cmd.ExecuteReader());
                 }
 
@@ -200,6 +156,33 @@ namespace BookList.Biz.Database
 
                 return results;
             }
+        }
+
+        private NpgsqlCommand AddParameters(NpgsqlCommand cmd, params object[] parameters)
+        {
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                var param = $"@parameter{(i + 1).ToString()}";
+
+                if (parameters[i] is int)
+                {
+                    cmd.Parameters.AddWithValue(param, (int)parameters[i]);
+                }
+                else if (parameters[i] is string)
+                {
+                    cmd.Parameters.AddWithValue(param, (string)parameters[i]);
+                }
+                else if (parameters[i] is bool)
+                {
+                    cmd.Parameters.AddWithValue(param, (bool)parameters[i]);
+                }
+                else if (parameters[i] is null)
+                {
+                    cmd.Parameters.AddWithValue(param, DBNull.Value);
+                }
+            }
+
+            return cmd;
         }
 
         private List<List<string>> ReadDBResults(NpgsqlDataReader dataReader)
