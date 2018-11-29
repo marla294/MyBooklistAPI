@@ -151,7 +151,6 @@ namespace BookList.Biz.Database
                         {
                             cmd.Parameters.AddWithValue(param, DBNull.Value);
                         }
-
                     }
 
                     cmd.ExecuteNonQuery();
@@ -161,7 +160,8 @@ namespace BookList.Biz.Database
             }
         }
 
-        public List<List<string>> ExecuteQuery(string sql)
+        // pass in sql string with @parameter1 - @parameterN
+        private List<List<string>> ExecuteQuery(string sql, params object[] parameters)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
             {
@@ -171,6 +171,28 @@ namespace BookList.Biz.Database
 
                 using (var cmd = new NpgsqlCommand(sql, connection))
                 {
+                    for (var i = 0; i < parameters.Length; i++)
+                    {
+                        var param = $"@parameter{(i + 1).ToString()}";
+
+                        if (parameters[i] is int)
+                        {
+                            cmd.Parameters.AddWithValue(param, (int)parameters[i]);
+                        }
+                        else if (parameters[i] is string)
+                        {
+                            cmd.Parameters.AddWithValue(param, (string)parameters[i]);
+                        }
+                        else if (parameters[i] is bool)
+                        {
+                            cmd.Parameters.AddWithValue(param, (bool)parameters[i]);
+                        }
+                        else if (parameters[i] is null)
+                        {
+                            cmd.Parameters.AddWithValue(param, DBNull.Value);
+                        }
+                    }
+
                     results = ReadDBResults(cmd.ExecuteReader());
                 }
 
