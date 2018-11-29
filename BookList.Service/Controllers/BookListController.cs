@@ -9,9 +9,16 @@ namespace BookList.Service.Controllers
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class BookListController : ApiController
     {
+        PostgreSQLConnection Db { get; set; }
+
+        public BookListController()
+        {
+            Db = new PostgreSQLConnection();
+        }
+
         public List<BookListItem> Get()
         {
-            return ItemFactory.LoadAll();
+            return ItemFactory.LoadAll(Db);
         }
     }
 }

@@ -33,7 +33,7 @@
   <ItemGroup>
     <Compile Include="Biz\Database\BookCRUDOperations.cs" />
     <Compile Include="Biz\Database\UserCRUDOperations.cs" />
-    <Compile Include="Biz\Database\TestLoadItem.cs" />
+    <Compile Include="Biz\Database\ItemCRUDOperations.cs" />
     <Compile Include="Biz\Database\ListCRUDOperations.cs" />
   </ItemGroup>
   <ItemGroup>

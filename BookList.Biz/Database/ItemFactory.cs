@@ -6,14 +6,10 @@ namespace BookList.Biz.Database
 {
     public static class ItemFactory
     {
-        public static List<BookListItem> LoadAll()
+        public static List<BookListItem> LoadAll(IDbConnection dbConnection)
         {
-            return LoadByQuery("select * from booklist order by id;");
-        }
+            var itemResultSet = dbConnection.Select(new string[] { "*" }, "booklist", "id");
 
-        static List<BookListItem> LoadByQuery(string sql)
-        {
-            var itemResultSet = ConnectionUtils.ExecuteQuery(new PostgreSQLConnection(), sql);
             var itemList = new List<BookListItem>();
 
             for (var i = 0; i < itemResultSet[0].Count; i++)
