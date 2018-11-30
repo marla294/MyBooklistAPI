@@ -12,7 +12,7 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            var results = db.Take(new string[] { "*" }, "test");
+            var results = db.Take("test");
 
             Assert.IsNotNull(results);
             Assert.AreEqual("Marla", results[1][0]);

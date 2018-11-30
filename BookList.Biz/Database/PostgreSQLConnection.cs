@@ -19,26 +19,43 @@ namespace BookList.Biz.Database
     public class PostgreSQLConnection : IDbConnection
     {
         private string ConnectionString { get; set; }
+
         public List<List<string>> ResultSet { get; private set; }
+        public string Table { get; private set; }
+        public Dictionary<int, string> Columns { get; private set; } // All the columns on the table
 
         public PostgreSQLConnection()
         {
             ConnectionString = "Host=127.0.0.1;Port=5433;Username=postgres; Password=Password1;Database=booklist";
+            ResetResults();
+        }
+
+        private void ResetResults()
+        {
             ResultSet = ConnectionUtils.CreateEmptyResultSet(0);
+            Table = "";
+            Columns = new Dictionary<int, string>();
+        }
+
+        private void SetTableAndColumns(string table)
+        {
+            Table = table;
+
+            var colResults = ExecuteQuery($"select column_name from information_schema.columns where table_name = '{table}'");
+
+            for (var i = 0; i < colResults[0].Count; i++)
+            {
+                Columns.Add(i, colResults[0][i]);
+            }
         }
 
         // Will select all results from the given table into the ResultSet property
-        // Select all columns, just pass in an array with "*" as the only member
-        public List<List<string>> Take(string[] columns, string table)
+        // Selects all columns
+        public List<List<string>> Take(string table)
         {
-            var sql = $"select {columns[0]}";
+            SetTableAndColumns(table);
 
-            for (var i = 0; i < columns.Length; i++)
-            {
-                sql = sql + $", {columns[i]}";
-            }
-
-            sql = sql + $" from {table}";
+            var sql = $"select * from {table}";
 
             ResultSet = ExecuteQuery(sql);
 
