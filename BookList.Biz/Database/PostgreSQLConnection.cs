@@ -31,7 +31,7 @@ namespace BookList.Biz.Database
         // Select all columns, just pass in an array with "*" as the only member
         public List<List<string>> Take(string[] columns, string table)
         {
-            var sql = "select {columns[0]}";
+            var sql = $"select {columns[0]}";
 
             for (var i = 0; i < columns.Length; i++)
             {
