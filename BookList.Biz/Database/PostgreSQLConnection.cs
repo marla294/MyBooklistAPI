@@ -27,6 +27,24 @@ namespace BookList.Biz.Database
             ResultSet = ConnectionUtils.CreateEmptyResultSet(0);
         }
 
+        // Will select all results from the given table into the ResultSet property
+        // Select all columns, just pass in an array with "*" as the only member
+        public List<List<string>> Take(string[] columns, string table)
+        {
+            var sql = "select {columns[0]}";
+
+            for (var i = 0; i < columns.Length; i++)
+            {
+                sql = sql + $", {columns[i]}";
+            }
+
+            sql = sql + $" from {table}";
+
+            ResultSet = ExecuteQuery(sql);
+
+            return ResultSet;
+        }
+
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
         {
             var sql = $"select {columns[0]}";
