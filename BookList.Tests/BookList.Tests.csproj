@@ -35,6 +35,7 @@
     <Compile Include="Biz\Database\UserCRUDOperations.cs" />
     <Compile Include="Biz\Database\ItemCRUDOperations.cs" />
     <Compile Include="Biz\Database\ListCRUDOperations.cs" />
+    <Compile Include="Biz\Database\PostgreSQL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
