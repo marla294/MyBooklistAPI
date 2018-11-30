@@ -14,8 +14,19 @@ namespace BookList.Tests.Biz.Database
 
             var results = db.Take("test");
 
+            Assert.IsNotNull(db.ResultSet);
+            Assert.AreEqual("Marla", db.ResultSet[1][0]);
+        }
+
+        [Test]
+        public void TestWhere()
+        {
+            var db = new PostgreSQLConnection();
+
+            var results = db.Take("test").Where("name", "Marla");
+
             Assert.IsNotNull(results);
-            Assert.AreEqual("Marla", results[1][0]);
+            Assert.AreEqual("Marla", db.ResultSet[1][0]);
         }
     }
 }

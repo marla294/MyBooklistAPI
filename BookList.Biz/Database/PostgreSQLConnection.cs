@@ -22,7 +22,7 @@ namespace BookList.Biz.Database
 
         public List<List<string>> ResultSet { get; private set; }
         public string Table { get; private set; }
-        public Dictionary<int, string> Columns { get; private set; } // All the columns on the table
+        public Dictionary<string, int> Columns { get; private set; } // All the columns on the table
 
         public PostgreSQLConnection()
         {
@@ -34,7 +34,7 @@ namespace BookList.Biz.Database
         {
             ResultSet = ConnectionUtils.CreateEmptyResultSet(0);
             Table = "";
-            Columns = new Dictionary<int, string>();
+            Columns = new Dictionary<string, int>();
         }
 
         private void SetTableAndColumns(string table)
@@ -45,13 +45,13 @@ namespace BookList.Biz.Database
 
             for (var i = 0; i < colResults[0].Count; i++)
             {
-                Columns.Add(i, colResults[0][i]);
+                Columns.Add(colResults[0][i], i);
             }
         }
 
         // Will select all results from the given table into the ResultSet property
         // Selects all columns
-        public List<List<string>> Take(string table)
+        public PostgreSQLConnection Take(string table)
         {
             SetTableAndColumns(table);
 
@@ -59,7 +59,28 @@ namespace BookList.Biz.Database
 
             ResultSet = ExecuteQuery(sql);
 
-            return ResultSet;
+            return this;
+        }
+
+        public PostgreSQLConnection Where(string column, string value)
+        {
+            var columnId = Columns[column];
+            var results = ConnectionUtils.CreateEmptyResultSet(0);
+
+            for (var i = 0; i < ResultSet[0].Count; i++)
+            {
+                if (ResultSet[columnId][i] == value)
+                {
+                    foreach (var col in Columns)
+                    {
+                        results[col.Value].Add(ResultSet[col.Value][i]);
+                    }
+                }
+            }
+
+            ResultSet = results;
+
+            return this;
         }
 
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
