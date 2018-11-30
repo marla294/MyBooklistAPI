@@ -16,28 +16,15 @@ namespace BookList.Biz.Database
         }
     }
 
-    public class ResultSet
-    {
-        public List<List<string>> Results {get; set;}
-
-        public ResultSet()
-        {
-            Results = ConnectionUtils.CreateEmptyResultSet(0);
-        }
-
-        public ResultSet(List<List<string>> results)
-        {
-            Results = results;
-        }
-    }
-
     public class PostgreSQLConnection : IDbConnection
     {
         private string ConnectionString { get; set; }
+        public List<List<string>> ResultSet { get; private set; }
 
         public PostgreSQLConnection()
         {
             ConnectionString = "Host=127.0.0.1;Port=5433;Username=postgres; Password=Password1;Database=booklist";
+            ResultSet = ConnectionUtils.CreateEmptyResultSet(0);
         }
 
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)

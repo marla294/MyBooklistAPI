@@ -16,7 +16,5 @@ namespace BookList.Biz.Database
 
             return resultSet;
         }
-
-
     }
 }
