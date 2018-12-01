@@ -65,22 +65,17 @@ namespace BookList.Biz.Database
 
         public PostgreSQLConnection Where(params ColumnValuePairing[] whereValues)
         {
-            var columns = new List<string>();
+            var whereColumns = FilteredColumnList(whereValues);
             var results = ConnectionUtils.CreateEmptyResultSet(Columns.Count);
-
-            foreach (var pairing in whereValues)
-            {
-                columns.Add(pairing.Column);
-            }
 
             for (var i = 0; i < ResultSet[0].Count; i++)
             {
                 var addVal = true;
 
-                foreach(var column in columns)
+                foreach(var whereColumn in whereColumns)
                 {
-                    var whereValue = whereValues.FirstOrDefault(val => val.Column == column);
-                    var id = Columns[column];
+                    var whereValue = whereValues.FirstOrDefault(val => val.Column == whereColumn);
+                    var id = Columns[whereColumn];
                     addVal &= ResultSet[id][i] == (string)whereValue.Value;
                 }
 
@@ -96,6 +91,18 @@ namespace BookList.Biz.Database
             }
 
             return this;
+        }
+
+        private List<string> FilteredColumnList(ColumnValuePairing[] pairings)
+        {
+            var filteredColumns = new List<string>();
+
+            foreach (var pairing in pairings)
+            {
+                filteredColumns.Add(pairing.Column);
+            }
+
+            return filteredColumns;
         }
 
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
