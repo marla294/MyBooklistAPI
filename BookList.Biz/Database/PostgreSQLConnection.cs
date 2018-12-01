@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Npgsql;
+using System.Linq;
 
 namespace BookList.Biz.Database
 {
@@ -62,23 +63,37 @@ namespace BookList.Biz.Database
             return this;
         }
 
-        public PostgreSQLConnection Where(string column, string value)
+        public PostgreSQLConnection Where(params ColumnValuePairing[] whereValues)
         {
-            var columnId = Columns[column];
+            var columns = new List<string>();
             var results = ConnectionUtils.CreateEmptyResultSet(0);
+
+            foreach (var pairing in whereValues)
+            {
+                columns.Add(pairing.Column);
+            }
 
             for (var i = 0; i < ResultSet[0].Count; i++)
             {
-                if (ResultSet[columnId][i] == value)
+                var addVal = true;
+
+                foreach(var column in columns)
                 {
-                    foreach (var col in Columns)
+                    var whereValue = whereValues.FirstOrDefault(val => val.Column == column);
+                    var id = Columns[column];
+                    addVal &= ResultSet[id][i] == (string)whereValue.Value;
+                }
+
+                if (addVal)
+                {
+                    foreach(var col in Columns)
                     {
                         results[col.Value].Add(ResultSet[col.Value][i]);
                     }
+
+                    ResultSet = results;
                 }
             }
-
-            ResultSet = results;
 
             return this;
         }
@@ -171,7 +186,7 @@ namespace BookList.Biz.Database
             {
                 for (var i = 1; i < whereValues.Length; i++)
                 {
-                    var addition = $"and {whereValues[i].Column} = @parameter{(i+1).ToString()}";
+                    var addition = $"and {whereValues[i].Column} = @parameter{(i + 1).ToString()}";
                     sql = sql + addition;
                 }
             }
