@@ -68,22 +68,20 @@ namespace BookList.Biz.Database
             var whereColumns = FilteredColumnList(whereValues);
             var results = ConnectionUtils.CreateEmptyResultSet(Columns.Count);
 
-            for (var i = 0; i < ResultSet[0].Count; i++)
+            for (var row = 0; row < ResultSet[0].Count; row++)
             {
                 var addVal = true;
 
                 foreach(var whereColumn in whereColumns)
                 {
-                    var whereValue = whereValues.FirstOrDefault(val => val.Column == whereColumn);
-                    var id = Columns[whereColumn];
-                    addVal &= ResultSet[id][i] == (string)whereValue.Value;
+                    addVal &= NotSureWhatToCallThisYet(row, whereColumn, whereValues);
                 }
 
                 if (addVal)
                 {
                     foreach(var col in Columns)
                     {
-                        results[col.Value].Add(ResultSet[col.Value][i]);
+                        results[col.Value].Add(ResultSet[col.Value][row]);
                     }
 
                     ResultSet = results;
@@ -91,6 +89,13 @@ namespace BookList.Biz.Database
             }
 
             return this;
+        }
+
+        private bool NotSureWhatToCallThisYet(int row, string column, ColumnValuePairing[] whereValues)
+        {
+            var whereValue = whereValues.FirstOrDefault(val => val.Column == column);
+            var id = Columns[column];
+            return ResultSet[id][row] == (string)whereValue.Value;
         }
 
         private List<string> FilteredColumnList(ColumnValuePairing[] pairings)
