@@ -23,10 +23,10 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            var results = db.Take("test").Where("name", "Marla");
+            var results = db.Take("test").Where(new ColumnValuePairing("name", "Susan"));
 
             Assert.IsNotNull(results);
-            Assert.AreEqual("Marla", db.ResultSet[1][0]);
+            Assert.AreEqual("Susan", db.ResultSet[1][0]);
         }
     }
 }

@@ -66,7 +66,7 @@ namespace BookList.Biz.Database
         public PostgreSQLConnection Where(params ColumnValuePairing[] whereValues)
         {
             var columns = new List<string>();
-            var results = ConnectionUtils.CreateEmptyResultSet(0);
+            var results = ConnectionUtils.CreateEmptyResultSet(Columns.Count);
 
             foreach (var pairing in whereValues)
             {
