@@ -65,23 +65,16 @@ namespace BookList.Biz.Database
 
         public PostgreSQLConnection Where(params ColumnValuePairing[] whereValues)
         {
-            var whereColumns = FilteredColumnList(whereValues);
             var results = ConnectionUtils.CreateEmptyResultSet(Columns.Count);
 
-            for (var row = 0; row < ResultSet[0].Count; row++)
+            for (var rowId = 0; rowId < ResultSet[0].Count; rowId++)
             {
-                var addVal = true;
-
-                foreach(var whereColumn in whereColumns)
-                {
-                    addVal &= NotSureWhatToCallThisYet(row, whereColumn, whereValues);
-                }
-
-                if (addVal)
+                if (CanAddRow(rowId, whereValues))
                 {
                     foreach(var col in Columns)
                     {
-                        results[col.Value].Add(ResultSet[col.Value][row]);
+                        var colId = col.Value;
+                        results[colId].Add(ResultSet[colId][rowId]);
                     }
 
                     ResultSet = results;
@@ -91,23 +84,37 @@ namespace BookList.Biz.Database
             return this;
         }
 
-        private bool NotSureWhatToCallThisYet(int row, string column, ColumnValuePairing[] whereValues)
+        private bool CanAddRow(int rowId, ColumnValuePairing[] whereValues)
         {
-            var whereValue = whereValues.FirstOrDefault(val => val.Column == column);
-            var id = Columns[column];
-            return ResultSet[id][row] == (string)whereValue.Value;
+            var whereColumns = ColumnList(whereValues);
+
+            var addVal = true;
+
+            foreach (var whereColumn in whereColumns)
+            {
+                addVal &= ColumnCheck(rowId, whereColumn, whereValues);
+            }
+
+            return addVal;
         }
 
-        private List<string> FilteredColumnList(ColumnValuePairing[] pairings)
+        private bool ColumnCheck(int rowId, string column, ColumnValuePairing[] whereValues)
         {
-            var filteredColumns = new List<string>();
+            var whereValue = whereValues.FirstOrDefault(val => val.Column == column);
+            var columnId = Columns[column];
+            return ResultSet[columnId][rowId] == (string)whereValue.Value;
+        }
+
+        private List<string> ColumnList(ColumnValuePairing[] pairings)
+        {
+            var columnList = new List<string>();
 
             foreach (var pairing in pairings)
             {
-                filteredColumns.Add(pairing.Column);
+                columnList.Add(pairing.Column);
             }
 
-            return filteredColumns;
+            return columnList;
         }
 
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
