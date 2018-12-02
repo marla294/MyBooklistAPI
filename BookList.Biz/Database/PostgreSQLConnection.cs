@@ -86,35 +86,21 @@ namespace BookList.Biz.Database
 
         private bool CanAddRow(int rowId, ColumnValuePairing[] whereValues)
         {
-            var whereColumns = ColumnList(whereValues);
+            var canAddRow = true;
 
-            var addVal = true;
-
-            foreach (var whereColumn in whereColumns)
+            foreach (var whereValue in whereValues)
             {
-                addVal &= ColumnCheck(rowId, whereColumn, whereValues);
+                canAddRow &= ColumnCheck(rowId, whereValue);
             }
 
-            return addVal;
+            return canAddRow;
         }
 
-        private bool ColumnCheck(int rowId, string column, ColumnValuePairing[] whereValues)
+        private bool ColumnCheck(int rowId, ColumnValuePairing whereValue)
         {
-            var whereValue = whereValues.FirstOrDefault(val => val.Column == column);
-            var columnId = Columns[column];
-            return ResultSet[columnId][rowId] == (string)whereValue.Value;
-        }
+            var colId = Columns[whereValue.Column];
 
-        private List<string> ColumnList(ColumnValuePairing[] pairings)
-        {
-            var columnList = new List<string>();
-
-            foreach (var pairing in pairings)
-            {
-                columnList.Add(pairing.Column);
-            }
-
-            return columnList;
+            return ResultSet[colId][rowId] == (string)whereValue.Value;
         }
 
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
