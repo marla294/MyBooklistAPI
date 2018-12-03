@@ -23,7 +23,7 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            var results = db.Take("test").Where(new ColumnValuePairing("name", "Susan"));
+            var results = db.Take("test").Where(new ColumnValuePairing("name", "Susan"), new ColumnValuePairing("id", 2));
 
             Assert.IsNotNull(results);
             Assert.AreEqual("Susan", db.ResultSet[1][0]);

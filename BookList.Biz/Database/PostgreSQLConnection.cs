@@ -69,11 +69,12 @@ namespace BookList.Biz.Database
 
             for (var rowId = 0; rowId < ResultSet[0].Count; rowId++)
             {
-                if (CanAddRow(rowId, whereValues))
+                if (RowCheck(rowId, whereValues))
                 {
                     foreach(var col in Columns)
                     {
                         var colId = col.Value;
+
                         results[colId].Add(ResultSet[colId][rowId]);
                     }
 
@@ -84,7 +85,7 @@ namespace BookList.Biz.Database
             return this;
         }
 
-        private bool CanAddRow(int rowId, ColumnValuePairing[] whereValues)
+        private bool RowCheck(int rowId, ColumnValuePairing[] whereValues)
         {
             var canAddRow = true;
 
@@ -100,7 +101,32 @@ namespace BookList.Biz.Database
         {
             var colId = Columns[whereValue.Column];
 
-            return ResultSet[colId][rowId] == (string)whereValue.Value;
+            return ResultSet[colId][rowId] == whereValue.Value.ToString();
+        }
+
+        public PostgreSQLConnection OrderBy(string orderBy, string orderByDirection = "desc")
+        {
+            var sortColId = Columns[orderBy];
+
+            for (var colId = 0; colId < ResultSet.Count; colId++)
+            {
+                if (colId != sortColId)
+                {
+                    var colDict = new Dictionary<string, string>();
+                    for (var rowId = 0; rowId < ResultSet[colId].Capacity; rowId++)
+                    {
+                        colDict.Add(ResultSet[sortColId][rowId], ResultSet[sortColId][rowId]);
+                    }
+                    colDict.OrderByDescending(item => item.Key);
+
+                    ResultSet[colId].Clear();
+                    ResultSet[colId] = colDict.Values.ToList<string>();
+                }
+            }
+
+            ResultSet[sortColId].OrderByDescending(item => item);
+
+            return this;
         }
 
         public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
