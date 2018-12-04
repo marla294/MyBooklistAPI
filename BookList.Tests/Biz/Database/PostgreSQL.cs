@@ -26,19 +26,20 @@ namespace BookList.Tests.Biz.Database
             var results = db.Take("test").Where(new ColumnValuePairing("name", "Susan"), new ColumnValuePairing("id", 2)).Execute();
 
             Assert.IsNotNull(results);
+            Assert.AreEqual(1, results[0].Count);
             Assert.AreEqual("Susan", results[1][0]);
         }
 
-        //[Test]
-        //public void TestOrderBy()
-        //{
-        //    var db = new PostgreSQLConnection();
+        [Test]
+        public void TestOrderBy()
+        {
+            var db = new PostgreSQLConnection();
 
-        //    var results = db.Take("test").OrderBy("name");
+            var results = db.Take("test").OrderBy("name").Execute();
 
-        //    Assert.IsNotNull(results);
-        //    Assert.AreEqual(5, results.ResultSet[0].Count);
-        //    Assert.AreEqual("Susan", results.ResultSet[1][0]);
-        //}
+            Assert.IsNotNull(results);
+            Assert.AreEqual(5, results[0].Count);
+            Assert.AreEqual("Susan", results[1][0]);
+        }
     }
 }

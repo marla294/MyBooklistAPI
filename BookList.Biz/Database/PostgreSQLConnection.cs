@@ -54,8 +54,6 @@ namespace BookList.Biz.Database
             }
         }
 
-        // Will select all results from the given table into the ResultSet property
-        // Selects all columns
         public PostgreSQLConnection Take(string table)
         {
             SetTableAndColumns(table);
@@ -88,25 +86,7 @@ namespace BookList.Biz.Database
 
         public PostgreSQLConnection OrderBy(string orderBy, string orderByDirection = "desc")
         {
-            var sortColId = Columns[orderBy];
-
-            for (var colId = 0; colId < ResultSet.Count; colId++)
-            {
-                if (colId != sortColId)
-                {
-                    var colDict = new Dictionary<string, string>();
-                    for (var rowId = 0; rowId < ResultSet[colId].Count; rowId++)
-                    {
-                        colDict.Add(ResultSet[sortColId][rowId], ResultSet[colId][rowId]);
-                    }
-                    var sorted = colDict.OrderByDescending(item => item.Key);
-
-                    ResultSet[colId].Clear();
-                    ResultSet[colId] = sorted.ToDictionary(x => x.Key, x => x.Value).Values.ToList<string>();
-                }
-            }
-
-            ResultSet[sortColId].OrderByDescending(item => item);
+            SQL = SQL + $" order by {orderBy} {orderByDirection}";
 
             return this;
         }
