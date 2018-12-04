@@ -56,6 +56,7 @@ namespace BookList.Biz.Database
 
         public PostgreSQLConnection Take(string table)
         {
+            ResetResults();
             SetTableAndColumns(table);
 
             var sql = $"select * from {table}";
@@ -87,6 +88,13 @@ namespace BookList.Biz.Database
         public PostgreSQLConnection OrderBy(string orderBy, string orderByDirection = "desc")
         {
             SQL = SQL + $" order by {orderBy} {orderByDirection}";
+
+            return this;
+        }
+
+        public PostgreSQLConnection Limit(int limit)
+        {
+            SQL = SQL + $" limit {limit}";
 
             return this;
         }
