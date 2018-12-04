@@ -25,6 +25,7 @@ namespace BookList.Biz.Database
         public string Table { get; private set; }
         public Dictionary<string, int> Columns { get; private set; } // All the columns on the table
         private string SQL { get; set; }
+        private Dictionary<int, object> Parameters { get; set; }
 
         public PostgreSQLConnection()
         {
@@ -37,6 +38,8 @@ namespace BookList.Biz.Database
             ResultSet = ConnectionUtils.CreateEmptyResultSet(0);
             Table = "";
             Columns = new Dictionary<string, int>();
+            SQL = "";
+            Parameters = new Dictionary<int, object>();
         }
 
         private void SetTableAndColumns(string table)
@@ -66,43 +69,21 @@ namespace BookList.Biz.Database
 
         public PostgreSQLConnection Where(params ColumnValuePairing[] whereValues)
         {
-            var results = ConnectionUtils.CreateEmptyResultSet(Columns.Count);
+            var parameterStart = Parameters.Count;
+            var sql = SQL + $" where {whereValues[0].Column} = @parameter{(parameterStart + 1).ToString()}";
+            Parameters.Add(parameterStart, whereValues[0].Value);
 
-            for (var rowId = 0; rowId < ResultSet[0].Count; rowId++)
+            for (var i = 1; i < whereValues.Length; i++)
             {
-                if (RowCheck(rowId, whereValues))
-                {
-                    foreach(var col in Columns)
-                    {
-                        var colId = col.Value;
-
-                        results[colId].Add(ResultSet[colId][rowId]);
-                    }
-
-                    ResultSet = results;
-                }
+                var whereValue = whereValues[i];
+                string snippet = $" and {whereValue.Column} = @parameter{(parameterStart + i + 1).ToString()}";
+                sql = sql + snippet;
+                Parameters.Add(parameterStart + i, whereValue.Value);
             }
+
+            SQL = sql;
 
             return this;
-        }
-
-        private bool RowCheck(int rowId, ColumnValuePairing[] whereValues)
-        {
-            var canAddRow = true;
-
-            foreach (var whereValue in whereValues)
-            {
-                canAddRow &= ColumnCheck(rowId, whereValue);
-            }
-
-            return canAddRow;
-        }
-
-        private bool ColumnCheck(int rowId, ColumnValuePairing whereValue)
-        {
-            var colId = Columns[whereValue.Column];
-
-            return ResultSet[colId][rowId] == whereValue.Value.ToString();
         }
 
         public PostgreSQLConnection OrderBy(string orderBy, string orderByDirection = "desc")
@@ -228,7 +209,7 @@ namespace BookList.Biz.Database
 
         public List<List<string>> Execute()
         {
-            return ExecuteQuery(SQL);
+            return ExecuteQuery(SQL, Parameters.Values.ToArray<object>());
         }
 
         // pass in sql string with @parameter1 - @parameterN
