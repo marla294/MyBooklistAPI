@@ -24,6 +24,7 @@ namespace BookList.Biz.Database
         public List<List<string>> ResultSet { get; private set; }
         public string Table { get; private set; }
         public Dictionary<string, int> Columns { get; private set; } // All the columns on the table
+        private string SQL { get; set; }
 
         public PostgreSQLConnection()
         {
@@ -58,7 +59,7 @@ namespace BookList.Biz.Database
 
             var sql = $"select * from {table}";
 
-            ResultSet = ExecuteQuery(sql);
+            SQL = sql;
 
             return this;
         }
@@ -113,14 +114,14 @@ namespace BookList.Biz.Database
                 if (colId != sortColId)
                 {
                     var colDict = new Dictionary<string, string>();
-                    for (var rowId = 0; rowId < ResultSet[colId].Capacity; rowId++)
+                    for (var rowId = 0; rowId < ResultSet[colId].Count; rowId++)
                     {
-                        colDict.Add(ResultSet[sortColId][rowId], ResultSet[sortColId][rowId]);
+                        colDict.Add(ResultSet[sortColId][rowId], ResultSet[colId][rowId]);
                     }
-                    colDict.OrderByDescending(item => item.Key);
+                    var sorted = colDict.OrderByDescending(item => item.Key);
 
                     ResultSet[colId].Clear();
-                    ResultSet[colId] = colDict.Values.ToList<string>();
+                    ResultSet[colId] = sorted.ToDictionary(x => x.Key, x => x.Value).Values.ToList<string>();
                 }
             }
 
@@ -223,6 +224,11 @@ namespace BookList.Biz.Database
             }
 
             return sql;
+        }
+
+        public List<List<string>> Execute()
+        {
+            return ExecuteQuery(SQL);
         }
 
         // pass in sql string with @parameter1 - @parameterN

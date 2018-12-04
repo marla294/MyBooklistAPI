@@ -12,21 +12,33 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            var results = db.Take("test");
+            var results = db.Take("test").Execute();
 
             Assert.IsNotNull(db.ResultSet);
-            Assert.AreEqual("Marla", db.ResultSet[1][0]);
+            Assert.AreEqual("Marla", results[1][0]);
         }
 
-        [Test]
-        public void TestWhere()
-        {
-            var db = new PostgreSQLConnection();
+        //[Test]
+        //public void TestWhere()
+        //{
+        //    var db = new PostgreSQLConnection();
 
-            var results = db.Take("test").Where(new ColumnValuePairing("name", "Susan"), new ColumnValuePairing("id", 2));
+        //    var results = db.Take("test").Where(new ColumnValuePairing("name", "Susan"), new ColumnValuePairing("id", 2));
 
-            Assert.IsNotNull(results);
-            Assert.AreEqual("Susan", db.ResultSet[1][0]);
-        }
+        //    Assert.IsNotNull(results);
+        //    Assert.AreEqual("Susan", db.ResultSet[1][0]);
+        //}
+
+        //[Test]
+        //public void TestOrderBy()
+        //{
+        //    var db = new PostgreSQLConnection();
+
+        //    var results = db.Take("test").OrderBy("name");
+
+        //    Assert.IsNotNull(results);
+        //    Assert.AreEqual(5, results.ResultSet[0].Count);
+        //    Assert.AreEqual("Susan", results.ResultSet[1][0]);
+        //}
     }
 }
