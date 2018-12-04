@@ -8,7 +8,7 @@ namespace BookList.Biz.Database
     {
         public static List<BookListItem> LoadAll(IDbConnection dbConnection)
         {
-            var itemResultSet = dbConnection.Select(new string[] { "*" }, "booklist", "id");
+            var itemResultSet = dbConnection.Take("booklist").OrderBy("id").Execute();
 
             var itemList = new List<BookListItem>();
 

@@ -16,7 +16,7 @@ namespace BookList.Biz.Database
                                 new ColumnValuePairing("name", "New List")
             });
 
-            id = dbConnection.Select(new string[] { "*" }, "lists", "id", "desc", 1)[0][0];
+            id = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
             Int32.TryParse(id, out int idConverted);
 
@@ -35,7 +35,7 @@ namespace BookList.Biz.Database
 
         public static List<List> LoadAll(IDbConnection dbConnection)
         {
-            var listResultSet = dbConnection.Select(new string[] { "*" }, "lists", "id");
+            var listResultSet = dbConnection.Take("lists").OrderBy("id", "asc").Execute();
 
             var lists = new List<List>();
 

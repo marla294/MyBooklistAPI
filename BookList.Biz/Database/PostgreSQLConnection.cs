@@ -99,30 +99,6 @@ namespace BookList.Biz.Database
             return this;
         }
 
-        public List<List<string>> Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1)
-        {
-            var sql = $"select {columns[0]}";
-
-            for (var i = 1; i < columns.Length; i++)
-            {
-                sql = sql + $", {columns[i]}";
-            }
-
-            sql = sql + $" from {table}";
-
-            if (orderBy != "")
-            {
-                sql = sql + $" order by {orderBy} {orderByDirection}";
-            }
-
-            if (limit != -1)
-            {
-                sql = sql + $" limit {limit.ToString()}";
-            }
-
-            return ExecuteQuery(sql);
-        }
-
         public void Insert(string table, ColumnValuePairing[] insertValues)
         {
             var columns = $"{insertValues[0].Column}";

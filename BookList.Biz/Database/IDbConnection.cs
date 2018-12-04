@@ -9,7 +9,6 @@ namespace BookList.Biz.Database
         PostgreSQLConnection    OrderBy(string orderBy, string orderByDirection = "desc");
         PostgreSQLConnection    Limit(int limit);
         void                    Insert(string table, ColumnValuePairing[] insertValues);
-        List<List<string>>      Select(string[] columns, string table, string orderBy = "", string orderByDirection = "desc", int limit = -1);
         void                    Update(string table, ColumnValuePairing setValue, string andOr, params ColumnValuePairing[] whereValues);
         void                    Delete(string table, string andOr, params ColumnValuePairing[] whereValues);
     }

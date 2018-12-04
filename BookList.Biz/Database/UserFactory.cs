@@ -9,7 +9,8 @@ namespace BookList.Biz.Database
     {
         public static List<User> LoadAll(IDbConnection dbConnection)
         {
-            var userResultSet = dbConnection.Select(new string[] { "*" }, "users", "id");
+            var userResultSet = dbConnection.Take("users").OrderBy("id").Execute();
+
             var users = new List<User>();
 
             for (var i = 0; i < userResultSet[0].Count; i++)
