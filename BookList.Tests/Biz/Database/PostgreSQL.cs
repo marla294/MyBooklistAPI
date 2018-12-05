@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using BookList.Biz.Database;
 
 namespace BookList.Tests.Biz.Database

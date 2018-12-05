@@ -132,13 +132,17 @@ namespace BookList.Biz.Database
             return this;
         }
 
-        public void Update(string table, ColumnValuePairing setValue, string andOr,
-                           params ColumnValuePairing[] whereValues) 
+        // Starting place
+        public PostgreSQLConnection Update(string table, ColumnValuePairing setValue)
         {
-            var sql = $"update {table} set {setValue.Column} = @parameter{(whereValues.Length + 1).ToString()} where " +
-                $"{whereValues[0].Column} = @parameter1";
+            ResetResults();
+            SetTableAndColumns(table);
+            IsQuery = false;
 
-            UpdateAndDelete(sql, andOr, whereValues, setValue.Value.ToString());
+            SQL = $"update {table} set {setValue.Column} = @parameter1";
+            Parameters.Add(0, setValue.Value);
+
+            return this;
         }
 
         public void Delete(string table, string andOr, params ColumnValuePairing[] whereValues)
