@@ -72,8 +72,26 @@ namespace BookList.Tests.Biz.Database
 
             Assert.IsNotNull(results);
             Assert.AreEqual("Graydon", results[1][0]);
+            Assert.AreEqual(1, results[0].Count);
 
             db.Delete("test", "and", new ColumnValuePairing("name", "Graydon"));
+        }
+
+        [Test]
+        public void TestUpdate()
+        {
+            var db = new PostgreSQLConnection();
+
+            db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
+            db.Update("test", new ColumnValuePairing("name", "Graydon Update")).Where(new ColumnValuePairing("name", "Graydon")).Execute();
+
+            var results = db.Take("test").Where(new ColumnValuePairing("name", "Graydon Update")).Execute();
+
+            Assert.IsNotNull(results);
+            Assert.AreEqual("Graydon Update", results[1][0]);
+            Assert.AreEqual(1, results[0].Count);
+
+            db.Delete("test", "and", new ColumnValuePairing("name", "Graydon Update"));
         }
     }
 }
