@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using BookList.Biz.Database;
 
 namespace BookList.Tests.Biz.Database
@@ -105,6 +106,14 @@ namespace BookList.Tests.Biz.Database
             var results = db.Take("test").Where(Pairing.Of("name", "Graydon")).Execute();
 
             Assert.AreEqual(0, results[0].Count);
+        }
+
+        [Test]
+        public void TestError()
+        {
+            var db = new PostgreSQLConnection();
+
+            Assert.Throws<Exception>(() => { db.Limit(1).Execute(); }, "Something went wrong with your sql statement, please try again.");
         }
     }
 }

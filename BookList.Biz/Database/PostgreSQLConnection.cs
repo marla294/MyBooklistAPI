@@ -5,18 +5,6 @@ using Npgsql;
 
 namespace BookList.Biz.Database
 {
-    //public class ColumnValuePairing
-    //{
-    //    public string Column { get; set; }
-    //    public object Value { get; set; }
-
-    //    public ColumnValuePairing(string col, object val)
-    //    {
-    //        Column = col;
-    //        Value = val;
-    //    }
-    //}
-
     public static class Pairing
     {
         public static KeyValuePair<string, object> Of(string Column, object Value)
@@ -43,6 +31,7 @@ namespace BookList.Biz.Database
         {
             SQL = "";
             Parameters = new Dictionary<int, object>();
+            IsQuery = false;
         }
 
         // Starting place
@@ -153,13 +142,22 @@ namespace BookList.Biz.Database
 
                 using (var cmd = AddParameters(new NpgsqlCommand(SQL, connection), parameters))
                 {
-                    cmd.Prepare();
+                    try
+                    {
+                        cmd.Prepare();
 
-                    if (IsQuery) {
-                        results = ReadDBResults(cmd.ExecuteReader());
+                        if (IsQuery)
+                        {
+                            results = ReadDBResults(cmd.ExecuteReader());
+                        }
+                        else
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
                     }
-                    else {
-                        cmd.ExecuteNonQuery();
+                    catch
+                    {
+                        throw new Exception("Something went wrong with your sql statement, please try again.");
                     }
                 }
 
