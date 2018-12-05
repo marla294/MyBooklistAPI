@@ -93,5 +93,18 @@ namespace BookList.Tests.Biz.Database
 
             db.Delete("test").Where(new ColumnValuePairing("name", "Graydon Update")).Execute();
         }
+
+        [Test]
+        public void TestDelete()
+        {
+            var db = new PostgreSQLConnection();
+
+            db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
+            db.Delete("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
+
+            var results = db.Take("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
+
+            Assert.AreEqual(0, results[0].Count);
+        }
     }
 }
