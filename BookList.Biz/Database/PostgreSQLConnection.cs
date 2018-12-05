@@ -21,46 +21,26 @@ namespace BookList.Biz.Database
     {
         private string ConnectionString { get; set; }
 
-        public List<List<string>> ResultSet { get; private set; }
-        public string Table { get; private set; }
-        public Dictionary<string, int> Columns { get; private set; } // All the columns on the table
-
         private string SQL { get; set; }
-        private Dictionary<int, object> Parameters { get; set; }
         private bool IsQuery { get; set; }
+        private Dictionary<int, object> Parameters { get; set; }
 
         public PostgreSQLConnection()
         {
             ConnectionString = "Host=127.0.0.1;Port=5433;Username=postgres; Password=Password1;Database=booklist";
-            ResetResults();
+            ResetFields();
         }
 
-        private void ResetResults()
+        private void ResetFields()
         {
-            ResultSet = ConnectionUtils.CreateEmptyResultSet(0);
-            Table = "";
-            Columns = new Dictionary<string, int>();
             SQL = "";
             Parameters = new Dictionary<int, object>();
-        }
-
-        private void SetTableAndColumns(string table)
-        {
-            Table = table;
-
-            var colResults = ExecuteQuery($"select column_name from information_schema.columns where table_name = '{table}'");
-
-            for (var i = 0; i < colResults[0].Count; i++)
-            {
-                Columns.Add(colResults[0][i], i);
-            }
         }
 
         // Starting place
         public PostgreSQLConnection Take(string table)
         {
-            ResetResults();
-            SetTableAndColumns(table);
+            ResetFields();
             IsQuery = true;
 
             var sql = $"select * from {table}";
@@ -106,8 +86,7 @@ namespace BookList.Biz.Database
         // Starting place
         public PostgreSQLConnection Insert(string table, params ColumnValuePairing[] insertValues)
         {
-            ResetResults();
-            SetTableAndColumns(table);
+            ResetFields();
             IsQuery = false;
 
             var columns = $"{insertValues[0].Column}";
@@ -135,8 +114,7 @@ namespace BookList.Biz.Database
         // Starting place
         public PostgreSQLConnection Update(string table, ColumnValuePairing setValue)
         {
-            ResetResults();
-            SetTableAndColumns(table);
+            ResetFields();
             IsQuery = false;
 
             SQL = $"update {table} set {setValue.Column} = @parameter1";
@@ -148,44 +126,12 @@ namespace BookList.Biz.Database
         // Starting place
         public PostgreSQLConnection Delete(string table)
         {
-            ResetResults();
-            SetTableAndColumns(table);
+            ResetFields();
             IsQuery = false;
 
             SQL = $"delete from {table}";
 
             return this;
-        }
-
-        private object[] GetValuesArray(ColumnValuePairing[] columnValuePairings, params string[] extraValues)
-        {
-            var onlyValues = new List<object>();
-
-            foreach (var pair in columnValuePairings)
-            {
-                onlyValues.Add(pair.Value);
-            }
-
-            foreach (var value in extraValues)
-            {
-                onlyValues.Add(value);
-            }
-
-            return onlyValues.ToArray();
-        }
-
-        private string AdditionalWhereValues(string sql, string andOr, params ColumnValuePairing[] whereValues)
-        {
-            if (whereValues.Length > 1)
-            {
-                for (var i = 1; i < whereValues.Length; i++)
-                {
-                    var addition = $"and {whereValues[i].Column} = @parameter{(i + 1).ToString()}";
-                    sql = sql + addition;
-                }
-            }
-
-            return sql;
         }
 
         public List<List<string>> Execute()
