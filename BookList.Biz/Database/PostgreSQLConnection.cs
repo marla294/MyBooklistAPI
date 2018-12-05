@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Npgsql;
 using System.Linq;
+using Npgsql;
 
 namespace BookList.Biz.Database
 {
@@ -14,6 +14,14 @@ namespace BookList.Biz.Database
         {
             Column = col;
             Value = val;
+        }
+    }
+
+    public static class Pairing
+    {
+        public static KeyValuePair<string, object> Of(string Column, object Value)
+        {
+            return new KeyValuePair<string, object>(Column, Value);
         }
     }
 
@@ -50,16 +58,16 @@ namespace BookList.Biz.Database
             return this;
         }
 
-        public PostgreSQLConnection Where(params ColumnValuePairing[] whereValues)
+        public PostgreSQLConnection Where(params KeyValuePair<string, object>[] whereValues)
         {
             var parameterStart = Parameters.Count;
-            var sql = SQL + $" where {whereValues[0].Column} = @parameter{(parameterStart + 1).ToString()}";
+            var sql = SQL + $" where {whereValues[0].Key} = @parameter{(parameterStart + 1).ToString()}";
             Parameters.Add(parameterStart, whereValues[0].Value);
 
             for (var i = 1; i < whereValues.Length; i++)
             {
                 var whereValue = whereValues[i];
-                string snippet = $" and {whereValue.Column} = @parameter{(parameterStart + i + 1).ToString()}";
+                string snippet = $" and {whereValue.Key} = @parameter{(parameterStart + i + 1).ToString()}";
                 sql = sql + snippet;
                 Parameters.Add(parameterStart + i, whereValue.Value);
             }

@@ -58,13 +58,13 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
         {
-            dbConnection.Update("lists", new ColumnValuePairing("name", newName)).Where(new ColumnValuePairing("id", id)).Execute();
+            dbConnection.Update("lists", new ColumnValuePairing("name", newName)).Where(Pairing.Of("id", id)).Execute();
         }
 
         public static void DeleteList(IDbConnection dbConnection, int id) 
         {
-            dbConnection.Delete("booklist").Where(new ColumnValuePairing("list", id)).Execute();
-            dbConnection.Delete("lists").Where(new ColumnValuePairing("id", id)).Execute();
+            dbConnection.Delete("booklist").Where(Pairing.Of("list", id)).Execute();
+            dbConnection.Delete("lists").Where(Pairing.Of("id", id)).Execute();
         }
 
         

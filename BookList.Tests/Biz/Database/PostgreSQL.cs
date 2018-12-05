@@ -22,7 +22,7 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            var results = db.Take("test").Where(new ColumnValuePairing("name", "Susan"), new ColumnValuePairing("id", 2)).Execute();
+            var results = db.Take("test").Where(Pairing.Of("name", "Susan"), Pairing.Of("id", 2)).Execute();
 
             Assert.IsNotNull(results);
             Assert.AreEqual(1, results[0].Count);
@@ -68,13 +68,13 @@ namespace BookList.Tests.Biz.Database
 
             db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
 
-            var results = db.Take("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
+            var results = db.Take("test").Where(Pairing.Of("name", "Graydon")).Execute();
 
             Assert.IsNotNull(results);
             Assert.AreEqual("Graydon", results[1][0]);
             Assert.AreEqual(1, results[0].Count);
 
-            db.Delete("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
+            db.Delete("test").Where(Pairing.Of("name", "Graydon")).Execute();
         }
 
         [Test]
@@ -83,15 +83,15 @@ namespace BookList.Tests.Biz.Database
             var db = new PostgreSQLConnection();
 
             db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
-            db.Update("test", new ColumnValuePairing("name", "Graydon Update")).Where(new ColumnValuePairing("name", "Graydon")).Execute();
+            db.Update("test", new ColumnValuePairing("name", "Graydon Update")).Where(Pairing.Of("name", "Graydon")).Execute();
 
-            var results = db.Take("test").Where(new ColumnValuePairing("name", "Graydon Update")).Execute();
+            var results = db.Take("test").Where(Pairing.Of("name", "Graydon Update")).Execute();
 
             Assert.IsNotNull(results);
             Assert.AreEqual("Graydon Update", results[1][0]);
             Assert.AreEqual(1, results[0].Count);
 
-            db.Delete("test").Where(new ColumnValuePairing("name", "Graydon Update")).Execute();
+            db.Delete("test").Where(Pairing.Of("name", "Graydon Update")).Execute();
         }
 
         [Test]
@@ -100,9 +100,9 @@ namespace BookList.Tests.Biz.Database
             var db = new PostgreSQLConnection();
 
             db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
-            db.Delete("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
+            db.Delete("test").Where(Pairing.Of("name", "Graydon")).Execute();
 
-            var results = db.Take("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
+            var results = db.Take("test").Where(Pairing.Of("name", "Graydon")).Execute();
 
             Assert.AreEqual(0, results[0].Count);
         }
