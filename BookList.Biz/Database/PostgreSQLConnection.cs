@@ -24,8 +24,10 @@ namespace BookList.Biz.Database
         public List<List<string>> ResultSet { get; private set; }
         public string Table { get; private set; }
         public Dictionary<string, int> Columns { get; private set; } // All the columns on the table
+
         private string SQL { get; set; }
         private Dictionary<int, object> Parameters { get; set; }
+        private bool IsQuery { get; set; }
 
         public PostgreSQLConnection()
         {
@@ -54,10 +56,12 @@ namespace BookList.Biz.Database
             }
         }
 
+        // Starting place
         public PostgreSQLConnection Take(string table)
         {
             ResetResults();
             SetTableAndColumns(table);
+            IsQuery = true;
 
             var sql = $"select * from {table}";
 
@@ -99,22 +103,31 @@ namespace BookList.Biz.Database
             return this;
         }
 
+        // Starting place
         public void Insert(string table, ColumnValuePairing[] insertValues)
         {
+            ResetResults();
+            SetTableAndColumns(table);
+            IsQuery = false;
+
             var columns = $"{insertValues[0].Column}";
             var values = new List<object> { insertValues[0].Value };
             var parameters = "@parameter1";
 
+            Parameters.Add(0, insertValues[0].Value);
+
             for (var i = 1; i < insertValues.Length; i++)
             {
-                columns = columns + $", {insertValues[i].Column}";
-                values.Add(insertValues[i].Value);
+                var insertValue = insertValues[i];
+
+                columns = columns + $", {insertValue.Column}";
+                values.Add(insertValue.Value);
                 parameters = parameters + $", @parameter{(i+1).ToString()}";
+
+                Parameters.Add(i, insertValue.Value);
             }
 
-            var sql = $"insert into {table} ({columns}) values ({parameters})";
-
-            ExecuteNonQuery(sql, values.ToArray());
+            SQL = $"insert into {table} ({columns}) values ({parameters})";
         }
 
         public void Update(string table, ColumnValuePairing setValue, string andOr,
@@ -173,7 +186,13 @@ namespace BookList.Biz.Database
 
         public List<List<string>> Execute()
         {
-            return ExecuteQuery(SQL, Parameters.Values.ToArray<object>());
+            if (IsQuery) {
+                return ExecuteQuery(SQL, Parameters.Values.ToArray<object>());
+            }
+            else {
+                ExecuteNonQuery(SQL, Parameters.Values.ToArray<object>());
+                return ConnectionUtils.CreateEmptyResultSet(0);
+            }
         }
 
         // pass in sql string with @parameter1 - @parameterN
