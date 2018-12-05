@@ -104,7 +104,7 @@ namespace BookList.Biz.Database
         }
 
         // Starting place
-        public void Insert(string table, ColumnValuePairing[] insertValues)
+        public PostgreSQLConnection Insert(string table, ColumnValuePairing[] insertValues)
         {
             ResetResults();
             SetTableAndColumns(table);
@@ -128,6 +128,8 @@ namespace BookList.Biz.Database
             }
 
             SQL = $"insert into {table} ({columns}) values ({parameters})";
+
+            return this;
         }
 
         public void Update(string table, ColumnValuePairing setValue, string andOr,

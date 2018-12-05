@@ -13,8 +13,8 @@ namespace BookList.Biz.Database
             string id;
 
             dbConnection.Insert("lists", new ColumnValuePairing[] {
-                                new ColumnValuePairing("name", "New List")
-            });
+                new ColumnValuePairing("name", "New List")
+            }).Execute();
 
             id = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
@@ -28,7 +28,7 @@ namespace BookList.Biz.Database
                                 new ColumnValuePairing("notes", ""),
                                 new ColumnValuePairing("sortorder", 0),
                                 new ColumnValuePairing("list", idConverted)
-            });
+            }).Execute();
 
             return id;
         }
