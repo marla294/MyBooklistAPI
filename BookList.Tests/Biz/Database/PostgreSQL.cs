@@ -66,7 +66,8 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
+            //db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
+            db.Insert("test", Pairing.Of("name", "Graydon")).Execute();
 
             var results = db.Take("test").Where(Pairing.Of("name", "Graydon")).Execute();
 
@@ -82,8 +83,8 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
-            db.Update("test", new ColumnValuePairing("name", "Graydon Update")).Where(Pairing.Of("name", "Graydon")).Execute();
+            db.Insert("test", Pairing.Of("name", "Graydon")).Execute();
+            db.Update("test", Pairing.Of("name", "Graydon Update")).Where(Pairing.Of("name", "Graydon")).Execute();
 
             var results = db.Take("test").Where(Pairing.Of("name", "Graydon Update")).Execute();
 
@@ -99,7 +100,7 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
+            db.Insert("test", Pairing.Of("name", "Graydon")).Execute();
             db.Delete("test").Where(Pairing.Of("name", "Graydon")).Execute();
 
             var results = db.Take("test").Where(Pairing.Of("name", "Graydon")).Execute();

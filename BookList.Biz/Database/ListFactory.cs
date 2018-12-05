@@ -12,22 +12,22 @@ namespace BookList.Biz.Database
         {
             string id;
 
-            dbConnection.Insert("lists", new ColumnValuePairing[] {
-                new ColumnValuePairing("name", "New List")
+            dbConnection.Insert("lists", new KeyValuePair<string, object>[] {
+                Pairing.Of("name", "New List")
             }).Execute();
 
             id = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
             Int32.TryParse(id, out int idConverted);
 
-            dbConnection.Insert("booklist", new ColumnValuePairing[] {
-                                new ColumnValuePairing("book", null),
-                                new ColumnValuePairing("username", 1),
-                                new ColumnValuePairing("done", false),
-                                new ColumnValuePairing("rating", null),
-                                new ColumnValuePairing("notes", ""),
-                                new ColumnValuePairing("sortorder", 0),
-                                new ColumnValuePairing("list", idConverted)
+            dbConnection.Insert("booklist", new KeyValuePair<string, object>[] {
+                                Pairing.Of("book", null),
+                                Pairing.Of("username", 1),
+                                Pairing.Of("done", false),
+                                Pairing.Of("rating", null),
+                                Pairing.Of("notes", ""),
+                                Pairing.Of("sortorder", 0),
+                                Pairing.Of("list", idConverted)
             }).Execute();
 
             return id;
@@ -58,7 +58,7 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
         {
-            dbConnection.Update("lists", new ColumnValuePairing("name", newName)).Where(Pairing.Of("id", id)).Execute();
+            dbConnection.Update("lists", Pairing.Of("name", newName)).Where(Pairing.Of("id", id)).Execute();
         }
 
         public static void DeleteList(IDbConnection dbConnection, int id) 

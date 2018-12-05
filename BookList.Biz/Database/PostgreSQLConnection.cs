@@ -5,17 +5,17 @@ using Npgsql;
 
 namespace BookList.Biz.Database
 {
-    public class ColumnValuePairing
-    {
-        public string Column { get; set; }
-        public object Value { get; set; }
+    //public class ColumnValuePairing
+    //{
+    //    public string Column { get; set; }
+    //    public object Value { get; set; }
 
-        public ColumnValuePairing(string col, object val)
-        {
-            Column = col;
-            Value = val;
-        }
-    }
+    //    public ColumnValuePairing(string col, object val)
+    //    {
+    //        Column = col;
+    //        Value = val;
+    //    }
+    //}
 
     public static class Pairing
     {
@@ -92,12 +92,12 @@ namespace BookList.Biz.Database
         }
 
         // Starting place
-        public PostgreSQLConnection Insert(string table, params ColumnValuePairing[] insertValues)
+        public PostgreSQLConnection Insert(string table, params KeyValuePair<string, object>[] insertValues)
         {
             ResetFields();
             IsQuery = false;
 
-            var columns = $"{insertValues[0].Column}";
+            var columns = $"{insertValues[0].Key}";
             var values = new List<object> { insertValues[0].Value };
             var parameters = "@parameter1";
 
@@ -107,7 +107,7 @@ namespace BookList.Biz.Database
             {
                 var insertValue = insertValues[i];
 
-                columns = columns + $", {insertValue.Column}";
+                columns = columns + $", {insertValue.Key}";
                 values.Add(insertValue.Value);
                 parameters = parameters + $", @parameter{(i+1).ToString()}";
 
@@ -120,12 +120,12 @@ namespace BookList.Biz.Database
         }
 
         // Starting place
-        public PostgreSQLConnection Update(string table, ColumnValuePairing setValue)
+        public PostgreSQLConnection Update(string table, KeyValuePair<string, object> setValue)
         {
             ResetFields();
             IsQuery = false;
 
-            SQL = $"update {table} set {setValue.Column} = @parameter1";
+            SQL = $"update {table} set {setValue.Key} = @parameter1";
             Parameters.Add(0, setValue.Value);
 
             return this;
@@ -196,8 +196,7 @@ namespace BookList.Biz.Database
 
         private List<List<string>> ReadDBResults(NpgsqlDataReader dataReader)
         {
-            List<List<string>> results = 
-                ConnectionUtils.CreateEmptyResultSet(dataReader.FieldCount);
+            List<List<string>> results = ConnectionUtils.CreateEmptyResultSet(dataReader.FieldCount);
 
             while (dataReader.Read())
             {
