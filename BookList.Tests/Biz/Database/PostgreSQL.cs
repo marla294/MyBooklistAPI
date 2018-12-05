@@ -66,7 +66,6 @@ namespace BookList.Tests.Biz.Database
         {
             var db = new PostgreSQLConnection();
 
-            //db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
             db.Insert("test", Pairing.Of("name", "Graydon")).Execute();
 
             var results = db.Take("test").Where(Pairing.Of("name", "Graydon")).Execute();

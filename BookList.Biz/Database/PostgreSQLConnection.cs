@@ -153,6 +153,8 @@ namespace BookList.Biz.Database
 
                 using (var cmd = AddParameters(new NpgsqlCommand(SQL, connection), parameters))
                 {
+                    cmd.Prepare();
+
                     if (IsQuery) {
                         results = ReadDBResults(cmd.ExecuteReader());
                     }
