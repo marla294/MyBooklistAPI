@@ -145,18 +145,16 @@ namespace BookList.Biz.Database
             return this;
         }
 
-        public void Delete(string table, string andOr, params ColumnValuePairing[] whereValues)
+        // Starting place
+        public PostgreSQLConnection Delete(string table)
         {
-            var sql = $"delete from {table} where {whereValues[0].Column} = @parameter1";
+            ResetResults();
+            SetTableAndColumns(table);
+            IsQuery = false;
 
-            UpdateAndDelete(sql, andOr, whereValues);
-        }
+            SQL = $"delete from {table}";
 
-        private void UpdateAndDelete(string sql, string andOr, ColumnValuePairing[] whereValues, string setValue = null)
-        {
-            sql = AdditionalWhereValues(sql, andOr, whereValues);
-
-            ExecuteNonQuery(sql, GetValuesArray(whereValues, setValue));
+            return this;
         }
 
         private object[] GetValuesArray(ColumnValuePairing[] columnValuePairings, params string[] extraValues)

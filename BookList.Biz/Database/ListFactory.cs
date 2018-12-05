@@ -63,8 +63,8 @@ namespace BookList.Biz.Database
 
         public static void DeleteList(IDbConnection dbConnection, int id) 
         {
-            dbConnection.Delete("booklist", "and", new ColumnValuePairing("list", id));
-            dbConnection.Delete("lists", "and", new ColumnValuePairing("id", id));
+            dbConnection.Delete("booklist").Where(new ColumnValuePairing("list", id)).Execute();
+            dbConnection.Delete("lists").Where(new ColumnValuePairing("id", id)).Execute();
         }
 
         

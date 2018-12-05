@@ -74,7 +74,7 @@ namespace BookList.Tests.Biz.Database
             Assert.AreEqual("Graydon", results[1][0]);
             Assert.AreEqual(1, results[0].Count);
 
-            db.Delete("test", "and", new ColumnValuePairing("name", "Graydon"));
+            db.Delete("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace BookList.Tests.Biz.Database
             Assert.AreEqual("Graydon Update", results[1][0]);
             Assert.AreEqual(1, results[0].Count);
 
-            db.Delete("test", "and", new ColumnValuePairing("name", "Graydon Update"));
+            db.Delete("test").Where(new ColumnValuePairing("name", "Graydon Update")).Execute();
         }
     }
 }

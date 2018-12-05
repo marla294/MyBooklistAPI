@@ -10,7 +10,7 @@ namespace BookList.Biz.Database
         PostgreSQLConnection    Limit(int limit);
         PostgreSQLConnection    Insert(string table, ColumnValuePairing[] insertValues);
         PostgreSQLConnection    Update(string table, ColumnValuePairing setValue);
-        void                    Delete(string table, string andOr, params ColumnValuePairing[] whereValues);
+        PostgreSQLConnection    Delete(string table);
     }
 }
 
