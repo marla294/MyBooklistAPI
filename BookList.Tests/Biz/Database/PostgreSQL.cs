@@ -14,7 +14,7 @@ namespace BookList.Tests.Biz.Database
 
             var results = db.Take("test").Execute();
 
-            Assert.IsNotNull(db.ResultSet);
+            Assert.IsNotNull(results);
             Assert.AreEqual("Marla", results[1][0]);
         }
 
@@ -60,6 +60,21 @@ namespace BookList.Tests.Biz.Database
             Assert.IsNotNull(results);
             Assert.AreEqual(1, results[0].Count);
             Assert.AreEqual("Susan", results[1][0]);
+        }
+
+        [Test]
+        public void TestInsert()
+        {
+            var db = new PostgreSQLConnection();
+
+            db.Insert("test", new ColumnValuePairing("name", "Graydon")).Execute();
+
+            var results = db.Take("test").Where(new ColumnValuePairing("name", "Graydon")).Execute();
+
+            Assert.IsNotNull(results);
+            Assert.AreEqual("Graydon", results[1][0]);
+
+            db.Delete("test", "and", new ColumnValuePairing("name", "Graydon"));
         }
     }
 }

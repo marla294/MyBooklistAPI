@@ -104,7 +104,7 @@ namespace BookList.Biz.Database
         }
 
         // Starting place
-        public PostgreSQLConnection Insert(string table, ColumnValuePairing[] insertValues)
+        public PostgreSQLConnection Insert(string table, params ColumnValuePairing[] insertValues)
         {
             ResetResults();
             SetTableAndColumns(table);
