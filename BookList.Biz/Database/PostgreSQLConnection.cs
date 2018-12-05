@@ -136,43 +136,21 @@ namespace BookList.Biz.Database
 
         public List<List<string>> Execute()
         {
-            if (IsQuery) {
-                return ExecuteQuery(SQL, Parameters.Values.ToArray<object>());
-            }
-            else {
-                ExecuteNonQuery(SQL, Parameters.Values.ToArray<object>());
-                return ConnectionUtils.CreateEmptyResultSet(0);
-            }
-        }
+            var parameters = Parameters.Values.ToArray<object>();
+            var results = ConnectionUtils.CreateEmptyResultSet(0);
 
-        // pass in sql string with @parameter1 - @parameterN
-        private void ExecuteNonQuery(string sql, params object[] parameters) 
-        {
             using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
             {
                 connection.Open();
 
-                using (var cmd = AddParameters(new NpgsqlCommand(sql, connection), parameters))
+                using (var cmd = AddParameters(new NpgsqlCommand(SQL, connection), parameters))
                 {
-                    cmd.ExecuteNonQuery();
-                }
-
-                connection.Close();
-            }
-        }
-
-        // pass in sql string with @parameter1 - @parameterN
-        private List<List<string>> ExecuteQuery(string sql, params object[] parameters)
-        {
-            using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
-            {
-                connection.Open();
-
-                var results = ConnectionUtils.CreateEmptyResultSet(0);
-
-                using (var cmd = AddParameters(new NpgsqlCommand(sql, connection), parameters))
-                {
-                    results = ReadDBResults(cmd.ExecuteReader());
+                    if (IsQuery) {
+                        results = ReadDBResults(cmd.ExecuteReader());
+                    }
+                    else {
+                        cmd.ExecuteNonQuery();
+                    }
                 }
 
                 connection.Close();
