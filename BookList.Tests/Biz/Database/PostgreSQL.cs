@@ -35,6 +35,31 @@ namespace BookList.Tests.Biz.Database
         }
 
         [Test]
+        public void TestCreateTable()
+        {
+            Db.CreateTable("newtable", Pairing.Of("name", "text"), Pairing.Of("number", "int")).Execute();
+
+            var table = Db.Take("information_schema.tables").Where(Pairing.Of("table_name", "newtable")).Execute();
+            var columns = Db.Take("information_schema.columns").Where(Pairing.Of("table_name", "newtable")).Execute()[3];
+
+            Assert.AreEqual(1, table[0].Count);
+            Assert.AreEqual(3, columns.Count);
+
+            Db.DropTable("newtable").Execute();
+        }
+
+        [Test]
+        public void TestDropTable()
+        {
+            Db.CreateTable("newtable", Pairing.Of("name", "text"), Pairing.Of("number", "int")).Execute();
+            Db.DropTable("newtable").Execute();
+
+            var table = Db.Take("information_schema.tables").Where(Pairing.Of("table_name", "newtable")).Execute();
+
+            Assert.AreEqual(0, table[0].Count);
+        }
+
+        [Test]
         public void TestTake()
         {
             var results = Db.Take("test").Execute();

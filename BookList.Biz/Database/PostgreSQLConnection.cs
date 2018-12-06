@@ -35,40 +35,6 @@ namespace BookList.Biz.Database
         }
 
         // Starting place
-        public PostgreSQLConnection CreateTable(string table, params KeyValuePair<string, object>[] columnTypes)
-        {
-            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", $"{table}")).Execute();
-
-            if (result[0].Count == 0)
-            {
-                SQL = $"create table {table}();" +
-                      $" alter table {table} add column id bigserial primary key;";
-
-                foreach (var columnType in columnTypes)
-                {
-                    SQL = SQL + $" alter table {table} add column {columnType.Key} {columnType.Value.ToString()};";
-                }
-            }
-
-            return this;
-        }
-
-        // Starting place
-        public PostgreSQLConnection DropTable(string table)
-        {
-            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", $"{table}")).Execute();
-
-            // Table is in the database so we can delete it
-            if (result[0].Count > 0)
-            {
-                SQL = $"drop table {table}";
-                IsQuery = false;
-            }
-
-            return this;
-        }
-
-        // Starting place
         public PostgreSQLConnection Take(string table)
         {
             IsQuery = true;
@@ -151,6 +117,40 @@ namespace BookList.Biz.Database
         public PostgreSQLConnection Delete(string table)
         {
             SQL = $"delete from {table}";
+
+            return this;
+        }
+
+        // Starting place
+        public PostgreSQLConnection CreateTable(string table, params KeyValuePair<string, object>[] columnTypes)
+        {
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", $"{table}")).Execute();
+
+            if (result[0].Count == 0)
+            {
+                SQL = $"create table {table}();" +
+                      $" alter table {table} add column id bigserial primary key;";
+
+                foreach (var columnType in columnTypes)
+                {
+                    SQL = SQL + $" alter table {table} add column {columnType.Key} {columnType.Value.ToString()};";
+                }
+            }
+
+            return this;
+        }
+
+        // Starting place
+        public PostgreSQLConnection DropTable(string table)
+        {
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", $"{table}")).Execute();
+
+            // Table is in the database so we can delete it
+            if (result[0].Count > 0)
+            {
+                SQL = $"drop table {table}";
+                IsQuery = false;
+            }
 
             return this;
         }
