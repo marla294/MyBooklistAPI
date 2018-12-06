@@ -42,7 +42,30 @@ namespace BookList.Biz.Database
             if (result[0].Count == 0)
             {
                 // Table isn't in the database, so we have to create it
-                var noWay = "asdf";
+                SQL = "CREATE TABLE TESTASDF ();" +
+                      "ALTER TABLE TESTASDF ADD COLUMN ID BIGSERIAL PRIMARY KEY;" +
+                      "ALTER TABLE TESTASDF ADD COLUMN NAME TEXT; ";
+
+                Execute();
+
+                Insert("testasdf", Pairing.Of("name", "Marla")).Execute();
+                Insert("testasdf", Pairing.Of("name", "Susan")).Execute();
+                Insert("testasdf", Pairing.Of("name", "John")).Execute();
+                Insert("testasdf", Pairing.Of("name", "Jenna")).Execute();
+                Insert("testasdf", Pairing.Of("name", "RJ")).Execute();
+            }
+        }
+
+        // This deletes the test table after every run
+        public void DropTestTable()
+        {
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "testasdf")).Execute();
+
+            if (result[0].Count > 0)
+            {
+                SQL = "DROP TABLE TESTASDF";
+
+                Execute();
             }
         }
 

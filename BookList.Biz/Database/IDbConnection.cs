@@ -12,6 +12,7 @@ namespace BookList.Biz.Database
         PostgreSQLConnection    Update(string table, KeyValuePair<string, object> setValue);
         PostgreSQLConnection    Delete(string table);
         void                    CreateTestTable();
+        void                    DropTestTable();
     }
 }
 

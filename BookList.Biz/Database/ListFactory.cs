@@ -35,8 +35,6 @@ namespace BookList.Biz.Database
 
         public static List<List> LoadAll(IDbConnection dbConnection)
         {
-            dbConnection.CreateTestTable();
-
             var listResultSet = dbConnection.Take("lists").OrderBy("id", "asc").Execute();
 
             var lists = new List<List>();
