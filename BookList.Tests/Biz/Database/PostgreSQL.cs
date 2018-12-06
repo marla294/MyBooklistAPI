@@ -20,7 +20,7 @@ namespace BookList.Tests.Biz.Database
         ~PostgreSQL()
         {
             // Once tests are complete drop table "test"
-            Db.DropTestTable();
+            Db.DropTable("test").Execute();
         }
 
         [Test]

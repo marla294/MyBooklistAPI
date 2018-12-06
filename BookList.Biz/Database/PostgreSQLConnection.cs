@@ -56,17 +56,20 @@ namespace BookList.Biz.Database
             }
         }
 
-        // This deletes the test table after every run
-        public void DropTestTable()
+        // Starting place
+        public PostgreSQLConnection DropTable(string table)
         {
-            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "test")).Execute();
+            ResetFields();
+
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", $"{table}")).Execute();
 
             if (result[0].Count > 0)
             {
-                SQL = "DROP TABLE TEST";
-
-                Execute();
+                SQL = $"drop table {table}";
+                IsQuery = false;
             }
+
+            return this;
         }
 
         // Starting place
