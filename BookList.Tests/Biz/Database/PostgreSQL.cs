@@ -12,6 +12,15 @@ namespace BookList.Tests.Biz.Database
         public PostgreSQL()
         {
             Db = new PostgreSQLConnection();
+
+            // Create table "test" for unit tests
+            Db.CreateTestTable();
+        }
+
+        ~PostgreSQL()
+        {
+            // Once tests are complete drop table "test"
+            Db.DropTestTable();
         }
 
         [Test]

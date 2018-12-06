@@ -37,33 +37,33 @@ namespace BookList.Biz.Database
         // This creates a testing table in your database that will be used for tests
         public void CreateTestTable()
         {
-            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "testasdf")).Execute();
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "test")).Execute();
 
             if (result[0].Count == 0)
             {
                 // Table isn't in the database, so we have to create it
-                SQL = "CREATE TABLE TESTASDF ();" +
-                      "ALTER TABLE TESTASDF ADD COLUMN ID BIGSERIAL PRIMARY KEY;" +
-                      "ALTER TABLE TESTASDF ADD COLUMN NAME TEXT; ";
+                SQL = "CREATE TABLE TEST ();" +
+                      "ALTER TABLE TEST ADD COLUMN ID BIGSERIAL PRIMARY KEY;" +
+                      "ALTER TABLE TEST ADD COLUMN NAME TEXT; ";
 
                 Execute();
 
-                Insert("testasdf", Pairing.Of("name", "Marla")).Execute();
-                Insert("testasdf", Pairing.Of("name", "Susan")).Execute();
-                Insert("testasdf", Pairing.Of("name", "John")).Execute();
-                Insert("testasdf", Pairing.Of("name", "Jenna")).Execute();
-                Insert("testasdf", Pairing.Of("name", "RJ")).Execute();
+                Insert("test", Pairing.Of("name", "Marla")).Execute();
+                Insert("test", Pairing.Of("name", "Susan")).Execute();
+                Insert("test", Pairing.Of("name", "John")).Execute();
+                Insert("test", Pairing.Of("name", "Jenna")).Execute();
+                Insert("test", Pairing.Of("name", "RJ")).Execute();
             }
         }
 
         // This deletes the test table after every run
         public void DropTestTable()
         {
-            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "testasdf")).Execute();
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "test")).Execute();
 
             if (result[0].Count > 0)
             {
-                SQL = "DROP TABLE TESTASDF";
+                SQL = "DROP TABLE TEST";
 
                 Execute();
             }
