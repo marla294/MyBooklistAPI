@@ -34,6 +34,18 @@ namespace BookList.Biz.Database
             IsQuery = false;
         }
 
+        // This creates a testing table in your database that will be used for tests
+        public void CreateTestTable()
+        {
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "testasdf")).Execute();
+
+            if (result[0].Count == 0)
+            {
+                // Table isn't in the database, so we have to create it
+                var noWay = "asdf";
+            }
+        }
+
         // Starting place
         public PostgreSQLConnection Take(string table)
         {
