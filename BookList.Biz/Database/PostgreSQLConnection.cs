@@ -34,35 +34,31 @@ namespace BookList.Biz.Database
             IsQuery = false;
         }
 
-        // This creates a testing table in your database that will be used for tests
-        public void CreateTestTable()
+        // Starting place
+        public PostgreSQLConnection CreateTable(string table, params KeyValuePair<string, object>[] columnTypes)
         {
-            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", "test")).Execute();
+            var result = Take("information_schema.tables").Where(Pairing.Of("table_name", $"{table}")).Execute();
 
             if (result[0].Count == 0)
             {
-                // Table isn't in the database, so we have to create it
-                SQL = "CREATE TABLE TEST ();" +
-                      "ALTER TABLE TEST ADD COLUMN ID BIGSERIAL PRIMARY KEY;" +
-                      "ALTER TABLE TEST ADD COLUMN NAME TEXT; ";
+                SQL = $"create table {table}();" +
+                      $" alter table {table} add column id bigserial primary key;";
 
-                Execute();
-
-                Insert("test", Pairing.Of("name", "Marla")).Execute();
-                Insert("test", Pairing.Of("name", "Susan")).Execute();
-                Insert("test", Pairing.Of("name", "John")).Execute();
-                Insert("test", Pairing.Of("name", "Jenna")).Execute();
-                Insert("test", Pairing.Of("name", "RJ")).Execute();
+                foreach (var columnType in columnTypes)
+                {
+                    SQL = SQL + $" alter table {table} add column {columnType.Key} {columnType.Value.ToString()};";
+                }
             }
+
+            return this;
         }
 
         // Starting place
         public PostgreSQLConnection DropTable(string table)
         {
-            ResetFields();
-
             var result = Take("information_schema.tables").Where(Pairing.Of("table_name", $"{table}")).Execute();
 
+            // Table is in the database so we can delete it
             if (result[0].Count > 0)
             {
                 SQL = $"drop table {table}";
@@ -75,7 +71,6 @@ namespace BookList.Biz.Database
         // Starting place
         public PostgreSQLConnection Take(string table)
         {
-            ResetFields();
             IsQuery = true;
 
             var sql = $"select * from {table}";
@@ -121,9 +116,6 @@ namespace BookList.Biz.Database
         // Starting place
         public PostgreSQLConnection Insert(string table, params KeyValuePair<string, object>[] insertValues)
         {
-            ResetFields();
-            IsQuery = false;
-
             var columns = $"{insertValues[0].Key}";
             var values = new List<object> { insertValues[0].Value };
             var parameters = "@parameter1";
@@ -149,9 +141,6 @@ namespace BookList.Biz.Database
         // Starting place
         public PostgreSQLConnection Update(string table, KeyValuePair<string, object> setValue)
         {
-            ResetFields();
-            IsQuery = false;
-
             SQL = $"update {table} set {setValue.Key} = @parameter1";
             Parameters.Add(0, setValue.Value);
 
@@ -161,9 +150,6 @@ namespace BookList.Biz.Database
         // Starting place
         public PostgreSQLConnection Delete(string table)
         {
-            ResetFields();
-            IsQuery = false;
-
             SQL = $"delete from {table}";
 
             return this;
@@ -200,6 +186,8 @@ namespace BookList.Biz.Database
                 }
 
                 connection.Close();
+
+                ResetFields();
 
                 return results;
             }

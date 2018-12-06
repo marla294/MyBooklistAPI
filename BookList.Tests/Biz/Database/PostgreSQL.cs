@@ -14,13 +14,24 @@ namespace BookList.Tests.Biz.Database
             Db = new PostgreSQLConnection();
 
             // Create table "test" for unit tests
-            Db.CreateTestTable();
+            CreateTestTable();
         }
 
         ~PostgreSQL()
         {
             // Once tests are complete drop table "test"
             Db.DropTable("test").Execute();
+        }
+
+        void CreateTestTable()
+        {
+            Db.CreateTable("test", Pairing.Of("name", "text")).Execute();
+
+            Db.Insert("test", Pairing.Of("name", "Marla")).Execute();
+            Db.Insert("test", Pairing.Of("name", "Susan")).Execute();
+            Db.Insert("test", Pairing.Of("name", "John")).Execute();
+            Db.Insert("test", Pairing.Of("name", "Jenna")).Execute();
+            Db.Insert("test", Pairing.Of("name", "RJ")).Execute();
         }
 
         [Test]
