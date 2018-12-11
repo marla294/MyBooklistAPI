@@ -19,8 +19,6 @@ namespace BookList.Biz.Database
 
             id = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
-            Int32.TryParse(id, out int idConverted);
-
             return id;
         }
 
