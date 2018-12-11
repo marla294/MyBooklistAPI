@@ -7,6 +7,23 @@ namespace BookList.Biz.Database
 {
     public static class BookFactory
     {
+        // returns the id of the new book
+        public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
+        {
+            string id;
+
+            dbConnection.Insert("books", new KeyValuePair<string, object>[] {
+                                Pairing.Of("title", $"{title}"),
+                                Pairing.Of("author", $"{author}")
+            }).Execute();
+
+            id = dbConnection.Take("books").OrderBy("id", "desc").Limit(1).Execute()[0][0];
+
+            Int32.TryParse(id, out int idConverted);
+
+            return id;
+        }
+
         public static List<Book> LoadAll(IDbConnection dbConnection)
         {
             var bookResultSet = dbConnection.Take("books").OrderBy("id").Execute();
@@ -26,9 +43,9 @@ namespace BookList.Biz.Database
             return books;
         }
 
-        public static Book LoadSingle(int id) 
+        public static Book LoadSingle(IDbConnection dbConnection, int id) 
         {
-            return LoadAll(new PostgreSQLConnection()).FirstOrDefault<Book>(book => book.Id == id);
+            return LoadAll(dbConnection).FirstOrDefault<Book>(book => book.Id == id);
         }
     }
 }

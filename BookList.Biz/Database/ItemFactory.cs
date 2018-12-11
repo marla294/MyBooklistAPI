@@ -24,7 +24,7 @@ namespace BookList.Biz.Database
 
         static BookListItem LoadOneItem(List<List<string>> itemResultSet, int row) {
             int id = Int32.TryParse(itemResultSet[0][row], out int _id) ? _id : 0;
-            Book book = Int32.TryParse(itemResultSet[1][row], out int bookId) ? BookFactory.LoadSingle(bookId) : new Book();
+            Book book = Int32.TryParse(itemResultSet[1][row], out int bookId) ? BookFactory.LoadSingle(new PostgreSQLConnection(), bookId) : new Book();
             bool done = bool.TryParse(itemResultSet[2][row], out bool d) && d;
             int rating = Int32.TryParse(itemResultSet[3][row], out int r) ? r : 0;
             string notes = itemResultSet[4][row];
