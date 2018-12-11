@@ -21,16 +21,6 @@ namespace BookList.Biz.Database
 
             Int32.TryParse(id, out int idConverted);
 
-            dbConnection.Insert("booklist", new KeyValuePair<string, object>[] {
-                                Pairing.Of("book", null),
-                                Pairing.Of("username", 1),
-                                Pairing.Of("done", false),
-                                Pairing.Of("rating", null),
-                                Pairing.Of("notes", ""),
-                                Pairing.Of("sortorder", 0),
-                                Pairing.Of("list", idConverted)
-            }).Execute();
-
             return id;
         }
 
