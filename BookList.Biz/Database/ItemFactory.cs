@@ -25,11 +25,11 @@ namespace BookList.Biz.Database
         static BookListItem LoadOneItem(List<List<string>> itemResultSet, int row) {
             int id = Int32.TryParse(itemResultSet[0][row], out int _id) ? _id : 0;
             Book book = Int32.TryParse(itemResultSet[1][row], out int bookId) ? BookFactory.LoadSingle(bookId) : new Book();
-            bool done = bool.TryParse(itemResultSet[3][row], out bool d) && d;
-            int rating = Int32.TryParse(itemResultSet[4][row], out int r) ? r : 0;
-            string notes = itemResultSet[5][row];
-            int sortOrder = Int32.TryParse(itemResultSet[6][row], out int s) ? s : 0;
-            int listId = Int32.TryParse(itemResultSet[7][row], out int l) ? l : 0;
+            bool done = bool.TryParse(itemResultSet[2][row], out bool d) && d;
+            int rating = Int32.TryParse(itemResultSet[3][row], out int r) ? r : 0;
+            string notes = itemResultSet[4][row];
+            int sortOrder = Int32.TryParse(itemResultSet[5][row], out int s) ? s : 0;
+            int listId = Int32.TryParse(itemResultSet[6][row], out int l) ? l : 0;
 
             return new BookListItem(id, book, done, rating, notes, sortOrder, listId);
         }
