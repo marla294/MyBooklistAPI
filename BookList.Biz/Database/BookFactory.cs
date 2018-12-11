@@ -47,5 +47,11 @@ namespace BookList.Biz.Database
         {
             return LoadAll(dbConnection).FirstOrDefault<Book>(book => book.Id == id);
         }
+
+        public static void DeleteBook(IDbConnection dbConnection, int id)
+        {
+            dbConnection.Delete("booklist").Where(Pairing.Of("book", id)).Execute();
+            dbConnection.Delete("books").Where(Pairing.Of("id", id)).Execute();
+        }
     }
 }

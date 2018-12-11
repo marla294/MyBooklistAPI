@@ -20,7 +20,7 @@ namespace BookList.Tests.Biz.Database
                 Assert.AreEqual("test book", testBook.Title);
                 Assert.AreEqual("test author", testBook.Author);
 
-                //ListFactory.DeleteList(db, id);
+                BookFactory.DeleteBook(db, id);
             }
             else
             {
@@ -31,13 +31,41 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            var testBookList = BookFactory.LoadAll(new PostgreSQLConnection());
-            var testBook = testBookList.Find(book => book.Id == 2);
+            var db = new PostgreSQLConnection();
 
-            Assert.IsNotNull(testBookList);
-            Assert.IsNotNull(testBook);
-            //Assert.AreEqual(3, testBookList.Count);
-            Assert.AreEqual("all the light we cannot see", testBook.Title);
+            if (Int32.TryParse(BookFactory.CreateNewBook(db, "test book", "test author"), out int id))
+            {
+                var testBooks = BookFactory.LoadAll(db);
+                var testBook = testBooks.Find(book => book.Id == id);
+
+                Assert.IsNotNull(testBooks);
+                Assert.IsNotNull(testBook);
+
+                BookFactory.DeleteBook(db, id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestDeleteBook()
+        {
+            var db = new PostgreSQLConnection();
+
+            if (Int32.TryParse(BookFactory.CreateNewBook(db, "test book", "test author"), out int id))
+            {
+                BookFactory.DeleteBook(db, id);
+
+                var testBook = BookFactory.LoadSingle(db, id);
+
+                Assert.IsNull(testBook);
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }
