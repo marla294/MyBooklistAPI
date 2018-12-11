@@ -30,9 +30,10 @@ namespace BookList.Service.Controllers
             ListFactory.UpdateListName(Db, id, value.Name);
         }
 
-        public void Post()
+        // returns the id of the new list as a string
+        public string Post([FromBody]ListName value)
         {
-            ListFactory.CreateNewList(Db);
+            return ListFactory.CreateNewList(Db, value.Name);
         }
 
         public void Delete(int id) 

@@ -8,12 +8,13 @@ namespace BookList.Biz.Database
     public static class ListFactory
     {
         // returns the id of the new list
-        public static string CreateNewList(IDbConnection dbConnection)
+        public static string CreateNewList(IDbConnection dbConnection, string listName = "New List")
         {
             string id;
 
             dbConnection.Insert("lists", new KeyValuePair<string, object>[] {
-                Pairing.Of("name", "New List")
+                                Pairing.Of("name", $"{listName}"), 
+                                Pairing.Of("owner", 1)
             }).Execute();
 
             id = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];

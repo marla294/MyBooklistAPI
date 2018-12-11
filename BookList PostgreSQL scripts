@@ -79,3 +79,7 @@ ALTER TABLE LISTS ADD COLUMN NAME TEXT;
 // Insert data into Lists
 insert into lists(name) values ('Want To Read (From Database)');
 insert into lists(name) values ('In Progress Kindle Books');
+
+// Add foreign key to users table
+ALTER TABLE LISTS ADD COLUMN OWNER INT;
+ALTER TABLE LISTS ADD CONSTRAINT USERLINK FOREIGN KEY (OWNER) REFERENCES USERS (ID);
