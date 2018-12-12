@@ -39,6 +39,11 @@ namespace BookList.Biz.Database
             return LoadAll(dbConnection).FirstOrDefault<BookListItem>(item => item.Id == id);
         }
 
+        public static void DeleteItem(IDbConnection dbConnection, int id)
+        {
+            dbConnection.Delete("booklist").Where(Pairing.Of("id", id)).Execute();
+        }
+
         static BookListItem LoadOneItem(List<List<string>> itemResultSet, int row) {
 
             int id = Int32.TryParse(itemResultSet[0][row], out int _id) ? _id : 0;
@@ -51,5 +56,7 @@ namespace BookList.Biz.Database
 
             return new BookListItem(id, book, done, rating, notes, sortOrder, listId);
         }
+
+
     }
 }

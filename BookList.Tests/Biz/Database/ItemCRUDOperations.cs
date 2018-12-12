@@ -23,7 +23,7 @@ namespace BookList.Tests.Biz.Database
                 Assert.AreEqual(bookId, testItem.Book.Id);
                 Assert.AreEqual(listId, testItem.ListId);
 
-                //ItemFactory.DeleteItem(db, id);
+                ItemFactory.DeleteItem(db, id);
 
                 BookFactory.DeleteBook(db, bookId);
                 ListFactory.DeleteList(db, listId);
@@ -45,6 +45,31 @@ namespace BookList.Tests.Biz.Database
             Assert.IsNotNull(testItemsList);
             //Assert.IsNotNull(testItem);
             //Assert.AreEqual(2, testItem.Book.Id);
+        }
+
+        [Test]
+        public void TestDeleteItem()
+        {
+            var db = new PostgreSQLConnection();
+
+            Int32.TryParse(BookFactory.CreateNewBook(db, "test book", "test author"), out int bookId);
+            Int32.TryParse(ListFactory.CreateNewList(db, "test list"), out int listId);
+
+            if (Int32.TryParse(ItemFactory.CreateNewItem(db, bookId, listId), out int id))
+            {
+                ItemFactory.DeleteItem(db, id);
+
+                var testItem = ItemFactory.LoadSingle(db, id);
+
+                Assert.IsNull(testItem);
+
+                BookFactory.DeleteBook(db, bookId);
+                ListFactory.DeleteList(db, listId);
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }
