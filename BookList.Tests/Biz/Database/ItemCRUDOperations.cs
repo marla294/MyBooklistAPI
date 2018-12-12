@@ -7,26 +7,39 @@ namespace BookList.Tests.Biz.Database
     [TestFixture]
     public class ItemCRUDOperations
     {
+        PostgreSQLConnection Db { get; set; }
+        int BookId { get; set; }
+        int ListId { get; set; }
+
+        public ItemCRUDOperations()
+        {
+            Db = new PostgreSQLConnection();
+
+            Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int bookId);
+            Int32.TryParse(ListFactory.CreateNewList(Db, "test list"), out int listId);
+
+            BookId = bookId;
+            ListId = listId;
+        }
+
+        ~ItemCRUDOperations()
+        {
+            BookFactory.DeleteBook(Db, BookId);
+            ListFactory.DeleteList(Db, ListId);
+        }
+
         [Test]
         public void TestCreateNewItem()
         {
-            var db = new PostgreSQLConnection();
-
-            Int32.TryParse(BookFactory.CreateNewBook(db, "test book", "test author"), out int bookId);
-            Int32.TryParse(ListFactory.CreateNewList(db, "test list"), out int listId);
-
-            if (Int32.TryParse(ItemFactory.CreateNewItem(db, bookId, listId), out int id))
+            if (Int32.TryParse(ItemFactory.CreateNewItem(Db, BookId, ListId), out int id))
             {
-                var testItem = ItemFactory.LoadSingle(db, id);
+                var testItem = ItemFactory.LoadSingle(Db, id);
 
                 Assert.IsNotNull(testItem);
-                Assert.AreEqual(bookId, testItem.Book.Id);
-                Assert.AreEqual(listId, testItem.ListId);
+                Assert.AreEqual(BookId, testItem.Book.Id);
+                Assert.AreEqual(ListId, testItem.ListId);
 
-                ItemFactory.DeleteItem(db, id);
-
-                BookFactory.DeleteBook(db, bookId);
-                ListFactory.DeleteList(db, listId);
+                ItemFactory.DeleteItem(Db, id);
             }
             else
             {
@@ -37,9 +50,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            var db = new PostgreSQLConnection();
-
-            var testItemsList = ItemFactory.LoadAll(db);
+            var testItemsList = ItemFactory.LoadAll(Db);
             //var testItem = testItemsList.Find(item => item.Id == 1);
 
             Assert.IsNotNull(testItemsList);
@@ -50,21 +61,13 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestDeleteItem()
         {
-            var db = new PostgreSQLConnection();
-
-            Int32.TryParse(BookFactory.CreateNewBook(db, "test book", "test author"), out int bookId);
-            Int32.TryParse(ListFactory.CreateNewList(db, "test list"), out int listId);
-
-            if (Int32.TryParse(ItemFactory.CreateNewItem(db, bookId, listId), out int id))
+            if (Int32.TryParse(ItemFactory.CreateNewItem(Db, BookId, ListId), out int id))
             {
-                ItemFactory.DeleteItem(db, id);
+                ItemFactory.DeleteItem(Db, id);
 
-                var testItem = ItemFactory.LoadSingle(db, id);
+                var testItem = ItemFactory.LoadSingle(Db, id);
 
                 Assert.IsNull(testItem);
-
-                BookFactory.DeleteBook(db, bookId);
-                ListFactory.DeleteList(db, listId);
             }
             else
             {
