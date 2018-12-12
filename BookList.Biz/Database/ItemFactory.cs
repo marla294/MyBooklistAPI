@@ -13,8 +13,8 @@ namespace BookList.Biz.Database
             // TODO: Add checking to make sure the book and list are also in the database
 
             dbConnection.Insert("booklist", new KeyValuePair<string, object>[] {
-                                Pairing.Of("book", $"{bookId}"),
-                                Pairing.Of("list", $"{listId}")
+                                Pairing.Of("book", bookId),
+                                Pairing.Of("list", listId)
             }).Execute();
 
             return dbConnection.Take("booklist").OrderBy("id", "desc").Limit(1).Execute()[0][0];
