@@ -32,5 +32,10 @@ namespace BookList.Service.Controllers
         {
             return ItemFactory.CreateNewItem(Db, value.BookId, value.ListId);
         }
+
+        public void Delete(int id)
+        {
+            ItemFactory.DeleteItem(Db, id);
+        }
     }
 }
