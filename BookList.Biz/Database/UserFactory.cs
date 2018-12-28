@@ -7,6 +7,22 @@ namespace BookList.Biz.Database
 {
     public static class UserFactory
     {
+        // returns the id of the new user
+        public static string CreateNewUser(IDbConnection dbConnection, string name, string username, string password)
+        {
+            string id;
+
+            dbConnection.Insert("users", new KeyValuePair<string, object>[] {
+                                Pairing.Of("name", $"{name}"),
+                                Pairing.Of("username", $"{username}"),
+                                Pairing.Of("password", $"{password}")
+            }).Execute();
+
+            id = dbConnection.Take("users").OrderBy("id", "desc").Limit(1).Execute()[0][0];
+
+            return id;
+        }
+
         public static List<User> LoadAll(IDbConnection dbConnection)
         {
             var userResultSet = dbConnection.Take("users").OrderBy("id").Execute();
@@ -28,6 +44,11 @@ namespace BookList.Biz.Database
         public static User LoadSingle(int id)
         {
             return LoadAll(new PostgreSQLConnection()).FirstOrDefault<User>(user => user.Id == id);
+        }
+
+        public static void DeleteUser(IDbConnection dbConnection, int id)
+        {
+            dbConnection.Delete("users").Where(Pairing.Of("id", id)).Execute();
         }
     }
 }
