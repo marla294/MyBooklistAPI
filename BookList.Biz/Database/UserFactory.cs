@@ -41,10 +41,19 @@ namespace BookList.Biz.Database
             return users;
         }
 
-        public static User LoadSingle(string username, string password)
+        public static int LoadSingle(string username, string password)
         {
-            return LoadAll(new PostgreSQLConnection())
+            var user = LoadAll(new PostgreSQLConnection())
                 .FirstOrDefault<User>(user => user.Username == username && user.Password == password);
+
+            if (user != null)
+            {
+                return user.Id;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public static void DeleteUser(IDbConnection dbConnection, int id)

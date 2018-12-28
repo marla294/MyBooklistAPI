@@ -23,9 +23,9 @@ namespace BookList.Service.Controllers
             Db = new PostgreSQLConnection();
         }
 
-        public List<User> Get()
+        public int Get([FromBody]UserData value)
         {
-            return UserFactory.LoadAll(Db);
+            return UserFactory.LoadSingle(value.Username, value.Password);
         }
 
         // returns the id of the new list as a string
