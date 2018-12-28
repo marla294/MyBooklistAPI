@@ -16,7 +16,7 @@ namespace BookList.Biz.Database
             for (var i = 0; i < userResultSet[0].Count; i++)
             {
                 User user = Int32.TryParse(userResultSet[0][i], out int id)
-                    ? new User(id, userResultSet[1][i])
+                    ? new User(id, userResultSet[1][i], userResultSet[2][i], userResultSet[3][i])
                     : new User();
 
                 users.Add(user);
