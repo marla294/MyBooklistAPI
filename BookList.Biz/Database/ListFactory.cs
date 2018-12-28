@@ -30,10 +30,16 @@ namespace BookList.Biz.Database
 
             for (var i = 0; i < listResultSet[0].Count; i++)
             {
+                User user = new User();
+
+                if (Int32.TryParse(listResultSet[2][i], out int userId)) {
+                    user = UserFactory.LoadAll(dbConnection).FirstOrDefault(u => u.Id == userId);
+                }
+
                 List list = Int32.TryParse(listResultSet[0][i], out int id)
                     ? new List(id, 
                                listResultSet[1][i], 
-                               Int32.TryParse(listResultSet[2][i], out int userId) ? UserFactory.LoadSingle(userId) : new User()
+                               user
                               )
                     : new List();
 
