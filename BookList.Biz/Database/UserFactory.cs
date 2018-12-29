@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BookList.Biz.Models;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace BookList.Biz.Database
 {
@@ -52,6 +53,13 @@ namespace BookList.Biz.Database
             return LoadSingle(username).Password == password ? true : false;
         }
 
+        private static string HashPassword(string password)
+        {
+            // TODO: convert this to a byte array
+            var saltedPassword = $"{password}5%d2$#@asdrewq@334";
+
+            new MD5CryptoServiceProvider().ComputeHash(saltedPassword);
+        }
 
         public static void DeleteUser(IDbConnection dbConnection, int id)
         {
