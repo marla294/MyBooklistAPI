@@ -47,6 +47,12 @@ namespace BookList.Biz.Database
                 .FirstOrDefault<User>(u => u.Username == username);
         }
 
+        public static bool ConfirmUserPassword(string username, string password)
+        {
+            return LoadSingle(username).Password == password ? true : false;
+        }
+
+
         public static void DeleteUser(IDbConnection dbConnection, int id)
         {
             dbConnection.Delete("users").Where(Pairing.Of("id", id)).Execute();

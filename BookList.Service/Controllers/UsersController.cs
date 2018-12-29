@@ -31,7 +31,18 @@ namespace BookList.Service.Controllers
         // returns the id of the new list as a string
         public string Post([FromBody]UserData value)
         {
-            return UserFactory.CreateNewUser(Db, value.Name, value.Username, value.Password);
+            if (value.Name != "")
+            {
+                return UserFactory.CreateNewUser(Db, value.Name, value.Username, value.Password);
+            }
+
+            else
+            {
+                return UserFactory.ConfirmUserPassword(value.Username, value.Password) ? 
+                                  UserFactory.LoadSingle(value.Username).Id.ToString() : 
+                                  null;
+            }
+
         }
     }
 }
