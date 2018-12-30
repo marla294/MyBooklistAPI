@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using BookList.Biz.Models;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace BookList.Biz.Database
         {
             string id;
 
+            var hashedPwd = HashPassword(password);
+
             dbConnection.Insert("users", new KeyValuePair<string, object>[] {
                                 Pairing.Of("name", $"{name}"),
                                 Pairing.Of("username", $"{username}"),
-                                Pairing.Of("password", $"{password}")
+                                Pairing.Of("password", $"{hashedPwd}")
             }).Execute();
 
             id = dbConnection.Take("users").OrderBy("id", "desc").Limit(1).Execute()[0][0];
@@ -50,15 +53,26 @@ namespace BookList.Biz.Database
 
         public static bool ConfirmUserPassword(string username, string password)
         {
-            return LoadSingle(username).Password == password ? true : false;
+            var hashedPwd = HashPassword(password);
+
+            return LoadSingle(username).Password == hashedPwd ? true : false;
         }
 
         private static string HashPassword(string password)
         {
-            // TODO: convert this to a byte array
-            var saltedPassword = $"{password}5%d2$#@asdrewq@334";
+            string salt = "5%d2$#@asdrewq@334";
+            string saltedPassword = password + salt;
 
-            new MD5CryptoServiceProvider().ComputeHash(saltedPassword);
+            byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
+
+            var sBuilder = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString());
+            }
+
+            return sBuilder.ToString();
         }
 
         public static void DeleteUser(IDbConnection dbConnection, int id)
