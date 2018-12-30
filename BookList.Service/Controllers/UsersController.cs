@@ -23,7 +23,12 @@ namespace BookList.Service.Controllers
             Db = new PostgreSQLConnection();
         }
 
-        // returns the id of the new list as a string
+        public User Get(int id)
+        {
+            return UserFactory.LoadSingle(id);
+        }
+
+        // returns the id of the user as a string if the user is found
         public string Post([FromBody]UserData value)
         {
             if (value.Name != "")

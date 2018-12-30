@@ -51,6 +51,12 @@ namespace BookList.Biz.Database
                 .FirstOrDefault<User>(u => u.Username == username);
         }
 
+        public static User LoadSingle(int id)
+        {
+            return LoadAll(new PostgreSQLConnection())
+                .FirstOrDefault<User>(u => u.Id == id);
+        }
+
         public static bool ConfirmUserPassword(string username, string password)
         {
             var hashedPwd = HashPassword(password);
