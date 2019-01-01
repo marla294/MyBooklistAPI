@@ -6,6 +6,7 @@ using BookList.Biz.Database;
 
 public class ListName {
     public string Name { get; set; }
+    public int UserId { get; set; }
 }
 
 namespace BookList.Service.Controllers
@@ -23,7 +24,6 @@ namespace BookList.Service.Controllers
         public List<List> Get(int id)
         {
             return ListFactory.LoadByUserId(Db, id);
-            //return ListFactory.LoadAll(Db);
         }
 
         public void Put(int id, [FromBody]ListName value)
@@ -34,7 +34,7 @@ namespace BookList.Service.Controllers
         // returns the id of the new list as a string
         public string Post([FromBody]ListName value)
         {
-            return ListFactory.CreateNewList(Db, value.Name);
+            return ListFactory.CreateNewList(Db, value.UserId, value.Name);
         }
 
         public void Delete(int id) 
