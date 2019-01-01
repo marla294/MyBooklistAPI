@@ -20,9 +20,10 @@ namespace BookList.Service.Controllers
             Db = new PostgreSQLConnection();
         }
 
-        public List<List> Get()
+        public List<List> Get(int id)
         {
-            return ListFactory.LoadAll(Db);
+            return ListFactory.LoadByUserId(Db, id);
+            //return ListFactory.LoadAll(Db);
         }
 
         public void Put(int id, [FromBody]ListName value)

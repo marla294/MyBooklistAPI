@@ -54,6 +54,20 @@ namespace BookList.Biz.Database
             return LoadAll(dbConnection).FirstOrDefault<List>(list => list.Id == id);
         }
 
+        public static List<List> LoadByUserId(IDbConnection dbConnection, int userId)
+        {
+            List<List> AllLists = LoadAll(dbConnection);
+            List<List> FilteredLists = new List<List>();
+
+            for (var i = 0; i < AllLists.Count; i++) {
+                if (AllLists[i].Owner.Id == userId) {
+                    FilteredLists.Add(AllLists[i]);
+                }
+            }
+
+            return FilteredLists;
+        }
+
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
         {
             dbConnection.Update("lists", Pairing.Of("name", newName)).Where(Pairing.Of("id", id)).Execute();
