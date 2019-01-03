@@ -47,8 +47,11 @@ namespace BookList.Biz.Database
 
         public static User LoadSingle(string username)
         {
-            return LoadAll(new PostgreSQLConnection())
+            var user = LoadAll(new PostgreSQLConnection())
                 .FirstOrDefault<User>(u => u.Username == username);
+
+            return user ?? null;
+
         }
 
         public static User LoadSingle(int id)
@@ -61,7 +64,13 @@ namespace BookList.Biz.Database
         {
             var hashedPwd = HashPassword(password);
 
-            return LoadSingle(username).Password == hashedPwd ? true : false;
+            var user = LoadSingle(username);
+
+            if (user != null) {
+                return user.Password == hashedPwd ? true : false;
+            } else {
+                return false;
+            }
         }
 
         private static string HashPassword(string password)
