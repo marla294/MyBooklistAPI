@@ -10,11 +10,17 @@ namespace BookList.Biz.Database
     public static class UserFactory
     {
         // returns the id of the new user
+        // if the username is already taken, returns null
         public static string CreateNewUser(IDbConnection dbConnection, string name, string username, string password)
         {
             string id;
 
             var hashedPwd = HashPassword(password);
+
+            if (LoadSingle(username) != null)
+            {
+                return null;
+            }
 
             dbConnection.Insert("users", new KeyValuePair<string, object>[] {
                                 Pairing.Of("name", $"{name}"),
