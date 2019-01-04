@@ -10,13 +10,19 @@ namespace BookList.Tests.Biz.Database
         PostgreSQLConnection Db { get; set; }
         int BookId { get; set; }
         int ListId { get; set; }
+        int UserId { get; set; }
 
         public ItemCRUDOperations()
         {
             Db = new PostgreSQLConnection();
 
+            if (Int32.TryParse(UserFactory.CreateNewUser(Db, "testuser", "testuseritem", "password"), out int userId))
+            {
+                UserId = userId;
+            }
+
             Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int bookId);
-            Int32.TryParse(ListFactory.CreateNewList(Db, "test list"), out int listId);
+            Int32.TryParse(ListFactory.CreateNewList(Db, UserId, "test list"), out int listId);
 
             BookId = bookId;
             ListId = listId;
@@ -26,6 +32,7 @@ namespace BookList.Tests.Biz.Database
         {
             BookFactory.DeleteBook(Db, BookId);
             ListFactory.DeleteList(Db, ListId);
+            UserFactory.DeleteUser(Db, UserId);
         }
 
         [Test]

@@ -7,19 +7,37 @@ namespace BookList.Tests.Biz.Database
     [TestFixture]
     public class ListCRUDOperations
     {
+        PostgreSQLConnection Db { get; set; }
+        int UserId { get; set; }
+
+        public ListCRUDOperations()
+        {
+            Db = new PostgreSQLConnection();
+
+            var id = UserFactory.CreateNewUser(Db, "testuser", "testuserlist", "password");
+
+            if (Int32.TryParse(id, out int userId)) {
+                UserId = userId;
+            }
+        }
+
+        ~ListCRUDOperations()
+        {
+            UserFactory.DeleteUser(Db, UserId);
+        }
+
+
         [Test]
         public void TestCreateNewList()
         {
-            var db = new PostgreSQLConnection();
-
-            if (Int32.TryParse(ListFactory.CreateNewList(db), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
             {
-                var testList = ListFactory.LoadSingle(db, id);
+                var testList = ListFactory.LoadSingle(Db, id);
 
                 Assert.IsNotNull(testList);
                 Assert.AreEqual("New List", testList.Name);
 
-                ListFactory.DeleteList(db, id);
+                ListFactory.DeleteList(Db, id);
             }
             else
             {
@@ -30,17 +48,15 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            var db = new PostgreSQLConnection();
-
-            if (Int32.TryParse(ListFactory.CreateNewList(db), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
             {
-                var testListList = ListFactory.LoadAll(db);
+                var testListList = ListFactory.LoadAll(Db);
                 var testList = testListList.Find(list => list.Id == id);
 
                 Assert.IsNotNull(testListList);
                 Assert.IsNotNull(testList);
 
-                ListFactory.DeleteList(db, id);
+                ListFactory.DeleteList(Db, id);
             }
             else
             {
@@ -51,19 +67,17 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestUpdateList()
         {
-            var db = new PostgreSQLConnection();
-
-            if (Int32.TryParse(ListFactory.CreateNewList(db), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
             {
                 var testListName = "Updated Name";
 
-                ListFactory.UpdateListName(db, id, testListName);
-                var testList = ListFactory.LoadSingle(db, id);
+                ListFactory.UpdateListName(Db, id, testListName);
+                var testList = ListFactory.LoadSingle(Db, id);
 
                 Assert.IsNotNull(testList);
                 Assert.AreEqual(testListName, testList.Name);
 
-                ListFactory.DeleteList(db, id);
+                ListFactory.DeleteList(Db, id);
             }
             else
             {
@@ -74,13 +88,11 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestDeleteList()
         {
-            var db = new PostgreSQLConnection();
-
-            if (Int32.TryParse(ListFactory.CreateNewList(db), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
             {
-                ListFactory.DeleteList(db, id);
+                ListFactory.DeleteList(Db, id);
 
-                var testList = ListFactory.LoadSingle(db, id);
+                var testList = ListFactory.LoadSingle(Db, id);
 
                 Assert.IsNull(testList);
             }
