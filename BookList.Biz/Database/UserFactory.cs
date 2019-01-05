@@ -19,9 +19,7 @@ namespace BookList.Biz.Database
             }
 
             string id;
-
             string userToken = GenerateUserToken();
-
             var hashedPwd = HashPassword(password);
 
             dbConnection.Insert("users", new KeyValuePair<string, object>[] {
@@ -33,7 +31,7 @@ namespace BookList.Biz.Database
 
             id = dbConnection.Take("users").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
-            return id;
+            return userToken;
         }
 
         public static List<User> LoadAll(IDbConnection dbConnection)

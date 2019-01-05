@@ -23,9 +23,9 @@ namespace BookList.Service.Controllers
             Db = new PostgreSQLConnection();
         }
 
-        public User Get(int id)
+        public User Get(string token)
         {
-            return UserFactory.LoadSingle(id);
+            return UserFactory.LoadSingleByToken(token);
         }
 
         // returns the id of the user as a string if the user is found
