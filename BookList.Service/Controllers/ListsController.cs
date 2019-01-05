@@ -6,7 +6,7 @@ using BookList.Biz.Database;
 
 public class ListName {
     public string Name { get; set; }
-    public int UserId { get; set; }
+    public string UserToken { get; set; }
 }
 
 namespace BookList.Service.Controllers
@@ -21,9 +21,12 @@ namespace BookList.Service.Controllers
             Db = new PostgreSQLConnection();
         }
 
-        public List<List> Get(int id)
+        public List<List> Get(string id)
         {
-            return ListFactory.LoadByUserId(Db, id);
+            // id is the token, have to convert to userId
+            var user = UserFactory.LoadSingleByToken(id);
+
+            return ListFactory.LoadByUserId(Db, user.Id);
         }
 
         public void Put(int id, [FromBody]ListName value)
@@ -34,7 +37,9 @@ namespace BookList.Service.Controllers
         // returns the id of the new list as a string
         public string Post([FromBody]ListName value)
         {
-            return ListFactory.CreateNewList(Db, value.UserId, value.Name);
+            var user = UserFactory.LoadSingleByToken(value.UserToken);
+
+            return ListFactory.CreateNewList(Db, user.Id, value.Name);
         }
 
         public void Delete(int id) 

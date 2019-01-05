@@ -23,12 +23,13 @@ namespace BookList.Service.Controllers
             Db = new PostgreSQLConnection();
         }
 
-        public User Get(string token)
+        // WHY DOES THIS HAVE TO BE NAMED ID
+        public User Get(string id)
         {
-            return UserFactory.LoadSingleByToken(token);
+            return UserFactory.LoadSingleByToken(id);
         }
 
-        // returns the id of the user as a string if the user is found
+        // returns the token of the user as a string if the user is found
         public string Post([FromBody]UserData value)
         {
             if (value.Name != "")
@@ -39,7 +40,7 @@ namespace BookList.Service.Controllers
             else
             {
                 return UserFactory.ConfirmUserPassword(value.Username, value.Password) ? 
-                                  UserFactory.LoadSingle(value.Username).Id.ToString() : 
+                                  UserFactory.LoadSingle(value.Username).Token.ToString() : 
                                   null;
             }
 
