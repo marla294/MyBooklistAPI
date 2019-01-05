@@ -37,6 +37,7 @@ UPDATE Books SET cover = 'https://images-na.ssl-images-amazon.com/images/I/512-B
 CREATE TABLE USERS ();
 ALTER TABLE USERS ADD COLUMN ID BIGSERIAL PRIMARY KEY;
 ALTER TABLE USERS ADD COLUMN NAME TEXT;
+ALTER TABLE USERS ADD COLUMN USERTOKEN TEXT;
 
 // Insert data into Users
 insert into users(name) values ('Marla');

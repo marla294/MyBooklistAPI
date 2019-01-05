@@ -13,19 +13,22 @@ namespace BookList.Biz.Database
         // if the username is already taken, returns null
         public static string CreateNewUser(IDbConnection dbConnection, string name, string username, string password)
         {
-            string id;
-
-            var hashedPwd = HashPassword(password);
-
             if (LoadSingle(username) != null)
             {
                 return null;
             }
 
+            string id;
+
+            string userToken = GenerateUserToken();
+
+            var hashedPwd = HashPassword(password);
+
             dbConnection.Insert("users", new KeyValuePair<string, object>[] {
                                 Pairing.Of("name", $"{name}"),
                                 Pairing.Of("username", $"{username}"),
-                                Pairing.Of("password", $"{hashedPwd}")
+                                Pairing.Of("password", $"{hashedPwd}"),
+                                Pairing.Of("usertoken", $"{userToken}")
             }).Execute();
 
             id = dbConnection.Take("users").OrderBy("id", "desc").Limit(1).Execute()[0][0];
@@ -94,6 +97,13 @@ namespace BookList.Biz.Database
             }
 
             return sBuilder.ToString();
+        }
+
+        private static string GenerateUserToken()
+        {
+            var rando = new Random().Next(0, 1000000000).ToString();
+
+            return HashPassword(rando);
         }
 
         public static void DeleteUser(IDbConnection dbConnection, int id)
