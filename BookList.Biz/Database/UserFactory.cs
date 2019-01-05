@@ -45,7 +45,7 @@ namespace BookList.Biz.Database
             for (var i = 0; i < userResultSet[0].Count; i++)
             {
                 User user = Int32.TryParse(userResultSet[0][i], out int id)
-                    ? new User(id, userResultSet[1][i], userResultSet[2][i], userResultSet[3][i])
+                    ? new User(id, userResultSet[1][i], userResultSet[2][i], userResultSet[3][i], userResultSet[4][i])
                     : new User();
 
                 users.Add(user);
@@ -67,6 +67,12 @@ namespace BookList.Biz.Database
         {
             return LoadAll(new PostgreSQLConnection())
                 .FirstOrDefault<User>(u => u.Id == id);
+        }
+
+        public static User LoadSingleByToken(string userToken)
+        {
+            return LoadAll(new PostgreSQLConnection())
+                .FirstOrDefault<User>(u => u.Token == userToken);
         }
 
         public static bool ConfirmUserPassword(string username, string password)
