@@ -16,16 +16,18 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewUser()
         {
-            if (Int32.TryParse(UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword"), out int id))
+            var userToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
+
+            if (userToken != null)
             {
-                var testUser = UserFactory.LoadSingle(id);
+                var testUser = UserFactory.LoadSingleByToken(userToken);
 
                 Assert.IsNotNull(testUser);
                 Assert.AreEqual("test", testUser.Name);
                 Assert.AreEqual("testusername", testUser.Username);
                 Assert.AreEqual(true, UserFactory.ConfirmUserPassword("testusername", "testpassword"));
 
-                UserFactory.DeleteUser(Db, id);
+                UserFactory.DeleteUser(Db, testUser.Id);
             }
             else
             {
