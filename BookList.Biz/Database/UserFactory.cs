@@ -18,7 +18,6 @@ namespace BookList.Biz.Database
                 return null;
             }
 
-            string id;
             string userToken = GenerateUserToken();
             var hashedPwd = HashPassword(password);
 
@@ -28,8 +27,6 @@ namespace BookList.Biz.Database
                                 Pairing.Of("password", $"{hashedPwd}"),
                                 Pairing.Of("usertoken", $"{userToken}")
             }).Execute();
-
-            id = dbConnection.Take("users").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
             return userToken;
         }
