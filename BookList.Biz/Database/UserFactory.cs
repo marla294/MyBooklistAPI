@@ -18,7 +18,16 @@ namespace BookList.Biz.Database
                 return null;
             }
 
-            string id;
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+
+            if (password.Length < 7)
+            {
+                return null;
+            }
+
             string userToken = GenerateUserToken();
             var hashedPwd = HashPassword(password);
 
@@ -28,8 +37,6 @@ namespace BookList.Biz.Database
                                 Pairing.Of("password", $"{hashedPwd}"),
                                 Pairing.Of("usertoken", $"{userToken}")
             }).Execute();
-
-            id = dbConnection.Take("users").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
             return userToken;
         }
@@ -58,7 +65,6 @@ namespace BookList.Biz.Database
                 .FirstOrDefault<User>(u => u.Username == username);
 
             return user ?? null;
-
         }
 
         public static User LoadSingle(int id)
@@ -79,9 +85,12 @@ namespace BookList.Biz.Database
 
             var user = LoadSingle(username);
 
-            if (user != null) {
+            if (user != null)
+            {
                 return user.Password == hashedPwd ? true : false;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }

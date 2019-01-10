@@ -23,13 +23,13 @@ namespace BookList.Service.Controllers
             Db = new PostgreSQLConnection();
         }
 
-        // WHY DOES THIS HAVE TO BE NAMED ID
+        // id == userToken
         public User Get(string id)
         {
             return UserFactory.LoadSingleByToken(id);
         }
 
-        // returns the token of the user as a string if the user is found
+        // returns the userToken if the user is found
         public string Post([FromBody]UserData value)
         {
             if (value.Name != "")
