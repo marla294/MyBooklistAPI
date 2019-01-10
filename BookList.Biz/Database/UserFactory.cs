@@ -67,12 +67,6 @@ namespace BookList.Biz.Database
             return user ?? null;
         }
 
-        public static User LoadSingle(int id)
-        {
-            return LoadAll(new PostgreSQLConnection())
-                .FirstOrDefault<User>(u => u.Id == id);
-        }
-
         public static User LoadSingleByToken(string userToken)
         {
             return LoadAll(new PostgreSQLConnection())
