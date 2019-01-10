@@ -33,7 +33,7 @@ namespace BookList.Biz.Database
 
             dbConnection.Insert("users", new KeyValuePair<string, object>[] {
                                 Pairing.Of("name", $"{name}"),
-                                Pairing.Of("username", $"{username}"),
+                                Pairing.Of("username", $"{username.ToLower()}"),
                                 Pairing.Of("password", $"{hashedPwd}"),
                                 Pairing.Of("usertoken", $"{userToken}")
             }).Execute();
@@ -62,7 +62,7 @@ namespace BookList.Biz.Database
         public static User LoadSingle(string username)
         {
             var user = LoadAll(new PostgreSQLConnection())
-                .FirstOrDefault<User>(u => u.Username == username);
+                .FirstOrDefault<User>(u => u.Username == username.ToLower());
 
             return user ?? null;
         }
@@ -83,7 +83,7 @@ namespace BookList.Biz.Database
         {
             var hashedPwd = HashPassword(password);
 
-            var user = LoadSingle(username);
+            var user = LoadSingle(username.ToLower());
 
             if (user != null)
             {
