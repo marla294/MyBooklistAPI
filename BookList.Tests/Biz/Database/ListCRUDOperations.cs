@@ -9,6 +9,7 @@ namespace BookList.Tests.Biz.Database
     {
         PostgreSQLConnection Db { get; set; }
         int UserId { get; set; }
+        string UserToken { get; set; }
 
         public ListCRUDOperations()
         {
@@ -18,12 +19,13 @@ namespace BookList.Tests.Biz.Database
 
             if (userToken != null) {
                 UserId = UserFactory.LoadSingleByToken(userToken).Id;
+                UserToken = userToken;
             }
         }
 
         ~ListCRUDOperations()
         {
-            UserFactory.DeleteUser(Db, UserId);
+            UserFactory.DeleteUser(Db, UserToken);
         }
 
 

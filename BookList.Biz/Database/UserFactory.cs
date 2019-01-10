@@ -119,9 +119,9 @@ namespace BookList.Biz.Database
             return HashPassword(rando);
         }
 
-        public static void DeleteUser(IDbConnection dbConnection, int id)
+        public static void DeleteUser(IDbConnection dbConnection, string userToken)
         {
-            dbConnection.Delete("users").Where(Pairing.Of("id", id)).Execute();
+            dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
         }
     }
 }

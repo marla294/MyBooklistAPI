@@ -27,7 +27,7 @@ namespace BookList.Tests.Biz.Database
                 Assert.AreEqual("testusername", testUser.Username);
                 Assert.AreEqual(true, UserFactory.ConfirmUserPassword("testusername", "testpassword"));
 
-                UserFactory.DeleteUser(Db, testUser.Id);
+                UserFactory.DeleteUser(Db, testUser.Token);
             }
             else
             {
