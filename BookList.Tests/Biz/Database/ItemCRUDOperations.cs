@@ -16,9 +16,11 @@ namespace BookList.Tests.Biz.Database
         {
             Db = new PostgreSQLConnection();
 
-            if (Int32.TryParse(UserFactory.CreateNewUser(Db, "testuser", "testuseritem", "password"), out int userId))
+            var userToken = UserFactory.CreateNewUser(Db, "testuser", "testuseritem", "password");
+
+            if (userToken != null)
             {
-                UserId = userId;
+                UserId = UserFactory.LoadSingleByToken(userToken).Id;
             }
 
             Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int bookId);

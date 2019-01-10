@@ -14,10 +14,10 @@ namespace BookList.Tests.Biz.Database
         {
             Db = new PostgreSQLConnection();
 
-            var id = UserFactory.CreateNewUser(Db, "testuser", "testuserlist", "password");
+            var userToken = UserFactory.CreateNewUser(Db, "testuser", "testuserlist", "password");
 
-            if (Int32.TryParse(id, out int userId)) {
-                UserId = userId;
+            if (userToken != null) {
+                UserId = UserFactory.LoadSingleByToken(userToken).Id;
             }
         }
 
