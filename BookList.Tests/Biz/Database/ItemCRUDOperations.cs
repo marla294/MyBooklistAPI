@@ -11,6 +11,7 @@ namespace BookList.Tests.Biz.Database
         int BookId { get; set; }
         int ListId { get; set; }
         int UserId { get; set; }
+        string UserToken { get; set; }
 
         public ItemCRUDOperations()
         {
@@ -21,6 +22,7 @@ namespace BookList.Tests.Biz.Database
             if (userToken != null)
             {
                 UserId = UserFactory.LoadSingleByToken(userToken).Id;
+                UserToken = userToken;
             }
 
             Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int bookId);
@@ -34,7 +36,7 @@ namespace BookList.Tests.Biz.Database
         {
             BookFactory.DeleteBook(Db, BookId);
             ListFactory.DeleteList(Db, ListId);
-            UserFactory.DeleteUser(Db, UserId);
+            UserFactory.DeleteUser(Db, UserToken);
         }
 
         [Test]
