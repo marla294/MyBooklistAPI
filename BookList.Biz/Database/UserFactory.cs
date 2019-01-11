@@ -18,12 +18,7 @@ namespace BookList.Biz.Database
                 return null;
             }
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                return null;
-            }
-
-            if (password.Length < 7)
+            if (!CheckUsername(username) || !CheckPassword(password))
             {
                 return null;
             }
@@ -44,7 +39,6 @@ namespace BookList.Biz.Database
         public static List<User> LoadAll(IDbConnection dbConnection)
         {
             var userResultSet = dbConnection.Take("users").OrderBy("id").Execute();
-
             var users = new List<User>();
 
             for (var i = 0; i < userResultSet[0].Count; i++)
@@ -61,36 +55,23 @@ namespace BookList.Biz.Database
 
         public static User LoadSingle(string username)
         {
-            if (string.IsNullOrEmpty(username))
-            {
-                return null;
-            }
-
-            var user = LoadAll(new PostgreSQLConnection())
-                .FirstOrDefault<User>(u => u.Username == username.ToLower());
-
-            return user ?? null;
+            return !CheckUsername(username)
+                ? null
+                : LoadAll(new PostgreSQLConnection())
+                .FirstOrDefault<User>(user => user.Username == username);
         }
 
         public static User LoadSingleByToken(string userToken)
         {
-            if (string.IsNullOrEmpty(userToken))
-            {
-                return null;
-            }
-
-            return LoadAll(new PostgreSQLConnection())
-                .FirstOrDefault<User>(u => u.Token == userToken);
+            return string.IsNullOrEmpty(userToken)
+                ? null
+                : LoadAll(new PostgreSQLConnection())
+                .FirstOrDefault<User>(user => user.Token == userToken);
         }
 
         public static bool ConfirmUserPassword(string username, string password)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                return false;
-            }
-
-            if (password.Length < 7)
+            if (!CheckUsername(username) || !CheckPassword(password))
             {
                 return false;
             }
@@ -106,6 +87,24 @@ namespace BookList.Biz.Database
             {
                 return false;
             }
+        }
+
+        public static void DeleteUser(IDbConnection dbConnection, string userToken)
+        {
+            if (!string.IsNullOrEmpty(userToken)) {
+                dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
+            }
+
+        }
+
+        private static bool CheckUsername(string username)
+        {
+            return !string.IsNullOrEmpty(username) && username.Length >= 7;
+        }
+
+        private static bool CheckPassword(string password)
+        {
+            return !string.IsNullOrEmpty(password) && password.Length >= 7;
         }
 
         private static string HashPassword(string password)
@@ -128,14 +127,6 @@ namespace BookList.Biz.Database
             var rando = new Random().Next(0, 1000000000).ToString();
 
             return HashPassword(rando);
-        }
-
-        public static void DeleteUser(IDbConnection dbConnection, string userToken)
-        {
-            if (!string.IsNullOrEmpty(userToken)) {
-                dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
-            }
-
         }
     }
 }
