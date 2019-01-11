@@ -61,28 +61,41 @@ namespace BookList.Biz.Database
 
         public static User LoadSingle(string username)
         {
+            if (string.IsNullOrEmpty(username))
+            {
+                return null;
+            }
+
             var user = LoadAll(new PostgreSQLConnection())
                 .FirstOrDefault<User>(u => u.Username == username.ToLower());
 
             return user ?? null;
         }
 
-        public static User LoadSingle(int id)
-        {
-            return LoadAll(new PostgreSQLConnection())
-                .FirstOrDefault<User>(u => u.Id == id);
-        }
-
         public static User LoadSingleByToken(string userToken)
         {
+            if (string.IsNullOrEmpty(userToken))
+            {
+                return null;
+            }
+
             return LoadAll(new PostgreSQLConnection())
                 .FirstOrDefault<User>(u => u.Token == userToken);
         }
 
         public static bool ConfirmUserPassword(string username, string password)
         {
-            var hashedPwd = HashPassword(password);
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                return false;
+            }
 
+            if (password.Length < 7)
+            {
+                return false;
+            }
+
+            var hashedPwd = HashPassword(password);
             var user = LoadSingle(username.ToLower());
 
             if (user != null)
@@ -99,9 +112,7 @@ namespace BookList.Biz.Database
         {
             string salt = "5%d2$#@asdrewq@334";
             string saltedPassword = password + salt;
-
             byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
-
             var sBuilder = new StringBuilder();
 
             for (int i = 0; i < data.Length; i++)
@@ -121,7 +132,10 @@ namespace BookList.Biz.Database
 
         public static void DeleteUser(IDbConnection dbConnection, string userToken)
         {
-            dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
+            if (!string.IsNullOrEmpty(userToken)) {
+                dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
+            }
+
         }
     }
 }

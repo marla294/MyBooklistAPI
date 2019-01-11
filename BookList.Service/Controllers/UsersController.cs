@@ -39,8 +39,8 @@ namespace BookList.Service.Controllers
 
             else
             {
-                return UserFactory.ConfirmUserPassword(value.Username, value.Password) ? 
-                                  UserFactory.LoadSingle(value.Username).Token.ToString() : 
+                return UserFactory.ConfirmUserPassword(value.Username, value.Password) ?
+                                  UserFactory.LoadSingle(value.Username).Token :
                                   null;
             }
 
