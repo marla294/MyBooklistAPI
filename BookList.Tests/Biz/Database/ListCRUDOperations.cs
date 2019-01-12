@@ -32,7 +32,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewList()
         {
-            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
             {
                 var testList = ListFactory.LoadSingle(Db, id);
 
@@ -50,7 +50,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestLoadAll()
         {
-            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
             {
                 var testListList = ListFactory.LoadAll(Db);
                 var testList = testListList.Find(list => list.Id == id);
@@ -69,7 +69,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestUpdateList()
         {
-            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
             {
                 var testListName = "Updated Name";
 
@@ -90,7 +90,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestDeleteList()
         {
-            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserId), out int id))
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
             {
                 ListFactory.DeleteList(Db, id);
 

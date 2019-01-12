@@ -26,7 +26,7 @@ namespace BookList.Tests.Biz.Database
             }
 
             Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int bookId);
-            Int32.TryParse(ListFactory.CreateNewList(Db, UserId, "test list"), out int listId);
+            Int32.TryParse(ListFactory.CreateNewList(Db, UserToken, "test list"), out int listId);
 
             BookId = bookId;
             ListId = listId;
