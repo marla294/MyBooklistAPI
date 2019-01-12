@@ -43,7 +43,6 @@ namespace BookList.Tests.Biz.Database
 
             if (userToken2 != null)
             {
-                UserFactory.DeleteUser(Db, userToken2);
                 Assert.Fail();
             }
             else
@@ -57,6 +56,7 @@ namespace BookList.Tests.Biz.Database
             }
 
             UserFactory.DeleteUser(Db, userToken1);
+            UserFactory.DeleteUser(Db, userToken2);
         }
 
         [Test]
@@ -132,6 +132,26 @@ namespace BookList.Tests.Biz.Database
             Assert.IsNotNull(testUserList);
             Assert.IsNotNull(testUser);
             Assert.AreEqual("Marla", testUser.Name);
+        }
+
+        [Test]
+        public void TestConfirmUserPassword()
+        {
+            var testUserToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
+            var testUser = UserFactory.LoadSingleByToken(testUserToken);
+
+            if (UserFactory.ConfirmUserPassword("testusername", "testpassword"))
+            {
+                UserFactory.DeleteUser(Db, testUserToken);
+                Assert.Pass();
+            }
+            else
+            {
+                UserFactory.DeleteUser(Db, testUserToken);
+                Assert.Fail();
+            }
+
+
         }
     }
 }
