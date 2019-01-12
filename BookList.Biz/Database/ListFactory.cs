@@ -8,18 +8,28 @@ namespace BookList.Biz.Database
     public static class ListFactory
     {
         // returns the id of the new list
-        public static string CreateNewList(IDbConnection dbConnection, int userId, string listName = "New List")
+        // if user doesn't exist return null
+        public static string CreateNewList(IDbConnection dbConnection, string userToken, string listName = "New List")
         {
-            string id;
+            string listId;
+
+            int userId;
+            User user = UserFactory.LoadSingleByToken(userToken);
+
+            if (user != null) {
+                userId = user.Id;
+            } else {
+                return null;
+            }
 
             dbConnection.Insert("lists", new KeyValuePair<string, object>[] {
                                 Pairing.Of("name", listName), 
                                 Pairing.Of("owner", userId)
             }).Execute();
 
-            id = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];
+            listId = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
-            return id;
+            return listId;
         }
 
         public static List<List> LoadAll(IDbConnection dbConnection)
