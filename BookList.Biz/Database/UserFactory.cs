@@ -23,6 +23,11 @@ namespace BookList.Biz.Database
                 return null;
             }
 
+            if (!(name.Length >= 1 && name.Length <= 40))
+            {
+                return null;
+            }
+
             string userToken = GenerateUserToken();
             var hashedPwd = HashPassword(password);
 
@@ -99,12 +104,12 @@ namespace BookList.Biz.Database
 
         private static bool CheckUsername(string username)
         {
-            return !string.IsNullOrEmpty(username) && username.Length >= 7;
+            return !string.IsNullOrEmpty(username) && username.Length >= 7 && username.Length <= 40;
         }
 
         private static bool CheckPassword(string password)
         {
-            return !string.IsNullOrEmpty(password) && password.Length >= 7;
+            return !string.IsNullOrEmpty(password) && password.Length >= 7 && password.Length <= 40;
         }
 
         private static string HashPassword(string password)
