@@ -108,9 +108,57 @@ namespace BookList.Tests.Biz.Database
         }
 
         [Test]
+        public void TestCreateInvalidUserTooLongUsername()
+        {
+            var userToken = UserFactory.CreateNewUser(Db, "test", "testasdf12testasdf12testasdf12testasdf12asdf", "testpassword");
+
+            if (userToken != null)
+            {
+                UserFactory.DeleteUser(Db, userToken);
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+
+        [Test]
+        public void TestCreateInvalidUserTooLongName()
+        {
+            var userToken = UserFactory.CreateNewUser(Db, "testasdf12testasdf12testasdf12testasdf12asdf", "testusername", "testpassword");
+
+            if (userToken != null)
+            {
+                UserFactory.DeleteUser(Db, userToken);
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+
+        [Test]
         public void TestCreateInvalidUserTooShortPassword()
         {
             var userToken = UserFactory.CreateNewUser(Db, "test", "testusername", "test");
+
+            if (userToken != null)
+            {
+                UserFactory.DeleteUser(Db, userToken);
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+
+        [Test]
+        public void TestCreateInvalidUserTooLongPassword()
+        {
+            var userToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testasdf12testasdf12testasdf12testasdf12asdf");
 
             if (userToken != null)
             {
