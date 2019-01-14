@@ -13,6 +13,7 @@ namespace BookList.Biz.Database
             string listId;
             int userId;
             User user = UserFactory.LoadSingleByToken(userToken);
+            string slicedListName = listName;
 
             // if user doesn't exist don't create
             if (user != null) {
@@ -21,14 +22,20 @@ namespace BookList.Biz.Database
                 return null;
             }
 
-            // if listname is blank don't create
+            // if listName is blank don't create
             if (listName == "")
             {
                 return null;
             }
 
+            // if listName is greater than 30 characters chop it
+            if (listName.Length > 30)
+            {
+                slicedListName = listName.Substring(0, 30);
+            }
+
             dbConnection.Insert("lists", new KeyValuePair<string, object>[] {
-                                Pairing.Of("name", listName), 
+                                Pairing.Of("name", slicedListName), 
                                 Pairing.Of("owner", userId)
             }).Execute();
 
@@ -86,7 +93,13 @@ namespace BookList.Biz.Database
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
         {
             if (newName != "") {
-                dbConnection.Update("lists", Pairing.Of("name", newName)).Where(Pairing.Of("id", id)).Execute();
+                string slicedNewName = newName;
+
+                if (newName.Length > 30) {
+                    slicedNewName = newName.Substring(0, 30);
+                }
+
+                dbConnection.Update("lists", Pairing.Of("name", slicedNewName)).Where(Pairing.Of("id", id)).Execute();
             }
         }
 
