@@ -8,17 +8,22 @@ namespace BookList.Biz.Database
     public static class ListFactory
     {
         // returns the id of the new list
-        // if user doesn't exist return null
         public static string CreateNewList(IDbConnection dbConnection, string userToken, string listName = "New List")
         {
             string listId;
-
             int userId;
             User user = UserFactory.LoadSingleByToken(userToken);
 
+            // if user doesn't exist don't create
             if (user != null) {
                 userId = user.Id;
             } else {
+                return null;
+            }
+
+            // if listname is blank don't create
+            if (listName == "")
+            {
                 return null;
             }
 
@@ -80,7 +85,9 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
         {
-            dbConnection.Update("lists", Pairing.Of("name", newName)).Where(Pairing.Of("id", id)).Execute();
+            if (newName != "") {
+                dbConnection.Update("lists", Pairing.Of("name", newName)).Where(Pairing.Of("id", id)).Execute();
+            }
         }
 
         public static void DeleteList(IDbConnection dbConnection, int id) 
