@@ -48,6 +48,37 @@ namespace BookList.Tests.Biz.Database
         }
 
         [Test]
+        public void TestCreateNewListBlankName()
+        {
+            if (ListFactory.CreateNewList(Db, UserToken, "") == null)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestCreateNewListTooLongName()
+        {
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken, "asdf123456asdf123456asdf123456asdf"), out int id))
+            {
+                var testList = ListFactory.LoadSingle(Db, id);
+
+                Assert.IsNotNull(testList);
+                Assert.AreEqual("asdf123456asdf123456asdf123456", testList.Name);
+
+                ListFactory.DeleteList(Db, id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
         public void TestLoadAll()
         {
             if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
@@ -78,6 +109,53 @@ namespace BookList.Tests.Biz.Database
 
                 Assert.IsNotNull(testList);
                 Assert.AreEqual(testListName, testList.Name);
+
+                ListFactory.DeleteList(Db, id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestUpdateListBlankName()
+        {
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
+            {
+                // First update to normal name
+                var testListName = "Normal Name";
+                ListFactory.UpdateListName(Db, id, testListName);
+
+                // Then try to update it to be blank
+                ListFactory.UpdateListName(Db, id, "");
+
+                var testList = ListFactory.LoadSingle(Db, id);
+
+                // Make sure the name of the list is the old name, not blank
+                Assert.IsNotNull(testList);
+                Assert.AreEqual(testListName, testList.Name);
+
+                ListFactory.DeleteList(Db, id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestUpdateListTooLongName()
+        {
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
+            {
+                var testListName = "asdf123456asdf123456asdf123456asdf";
+
+                ListFactory.UpdateListName(Db, id, testListName);
+                var testList = ListFactory.LoadSingle(Db, id);
+
+                Assert.IsNotNull(testList);
+                Assert.AreEqual("asdf123456asdf123456asdf123456", testList.Name);
 
                 ListFactory.DeleteList(Db, id);
             }
