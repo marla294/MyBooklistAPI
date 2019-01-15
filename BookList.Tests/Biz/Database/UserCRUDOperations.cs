@@ -203,12 +203,12 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestIsUserTokenInDbFalse()
         {
-            if (UserFactory.IsUserTokenInDB(Db, new Random().Next(0, 1000000000).ToString()))
-            {
-                Assert.Fail();
-            } else
+            if (UserFactory.LoadSingleByToken(new Random().Next(0, 1000000000).ToString()) == null)
             {
                 Assert.Pass();
+            } else
+            {
+                Assert.Fail();
             }
         }
 
@@ -217,15 +217,15 @@ namespace BookList.Tests.Biz.Database
         {
             var testUserToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
 
-            if (UserFactory.IsUserTokenInDB(Db, testUserToken))
+            if (UserFactory.LoadSingleByToken(testUserToken) == null)
             {
                 UserFactory.DeleteUser(Db, testUserToken);
-                Assert.Pass();
+                Assert.Fail();
             }
             else
             {
                 UserFactory.DeleteUser(Db, testUserToken);
-                Assert.Fail();
+                Assert.Pass();
             }
         }
     }
