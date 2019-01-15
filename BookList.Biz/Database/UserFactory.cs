@@ -99,7 +99,13 @@ namespace BookList.Biz.Database
             if (!string.IsNullOrEmpty(userToken)) {
                 dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
             }
+        }
 
+        public static bool IsUserTokenInDB(IDbConnection dbConnection, string userToken)
+        {
+            var user = dbConnection.Take("users").Where(Pairing.Of("userToken", userToken)).Execute();
+
+            return user[0].Count != 0;
         }
 
         private static bool CheckUsername(string username)

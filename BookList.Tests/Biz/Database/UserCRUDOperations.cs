@@ -198,8 +198,35 @@ namespace BookList.Tests.Biz.Database
                 UserFactory.DeleteUser(Db, testUserToken);
                 Assert.Fail();
             }
+        }
 
+        [Test]
+        public void TestIsUserTokenInDbFalse()
+        {
+            if (UserFactory.IsUserTokenInDB(Db, new Random().Next(0, 1000000000).ToString()))
+            {
+                Assert.Fail();
+            } else
+            {
+                Assert.Pass();
+            }
+        }
 
+        [Test]
+        public void TestIsUserTokenInDbTrue()
+        {
+            var testUserToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
+
+            if (UserFactory.IsUserTokenInDB(Db, testUserToken))
+            {
+                UserFactory.DeleteUser(Db, testUserToken);
+                Assert.Pass();
+            }
+            else
+            {
+                UserFactory.DeleteUser(Db, testUserToken);
+                Assert.Fail();
+            }
         }
     }
 }
