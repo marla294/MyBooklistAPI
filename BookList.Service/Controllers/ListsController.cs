@@ -23,10 +23,10 @@ namespace BookList.Service.Controllers
 
         public List<List> Get(string id)
         {
-            // id is the token, have to convert to userId
+            // id is the userToken, have to convert to userId
             var user = UserFactory.LoadSingleByToken(id);
 
-            return ListFactory.LoadByUserId(Db, user.Id);
+            return user == null ? null : ListFactory.LoadByUserId(Db, user.Id);
         }
 
         public void Put(int id, [FromBody]ListName value)
