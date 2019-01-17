@@ -16,7 +16,7 @@ namespace BookList.Biz.Database
             string slicedBookAuthor = author;
 
             // Shouldn't be creating books with the title or author blank
-            if (title == "" || author == "")
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(author))
             {
                 return null;
             }

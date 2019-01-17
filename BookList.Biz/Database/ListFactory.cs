@@ -23,7 +23,7 @@ namespace BookList.Biz.Database
             }
 
             // if listName is blank don't create
-            if (listName == "")
+            if (string.IsNullOrWhiteSpace(listName))
             {
                 return null;
             }
@@ -92,7 +92,7 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
         {
-            if (newName != "") {
+            if (!string.IsNullOrWhiteSpace(newName)) {
                 string slicedNewName = newName;
 
                 if (newName.Length > 30) {
