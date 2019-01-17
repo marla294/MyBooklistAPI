@@ -8,9 +8,16 @@ namespace BookList.Biz.Database
     public static class BookFactory
     {
         // returns the id of the new book
+        // if the book can't be created returns null
         public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
             string id;
+
+            // Shouldn't be creating books with the title or author blank
+            if (title == "" || author == "")
+            {
+                return null;
+            }
 
             dbConnection.Insert("books", new KeyValuePair<string, object>[] {
                                 Pairing.Of("title", $"{title}"),
