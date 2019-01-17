@@ -12,6 +12,8 @@ namespace BookList.Biz.Database
         public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
             string id;
+            string slicedBookTitle = title;
+            string slicedBookAuthor = author;
 
             // Shouldn't be creating books with the title or author blank
             if (title == "" || author == "")
@@ -19,9 +21,21 @@ namespace BookList.Biz.Database
                 return null;
             }
 
+            // if title is greater than 30 characters chop it
+            if (title.Length > 30)
+            {
+                slicedBookTitle = title.Substring(0, 30);
+            }
+
+            // if author is greater than 30 characters chop it
+            if (author.Length > 30)
+            {
+                slicedBookAuthor = author.Substring(0, 30);
+            }
+
             dbConnection.Insert("books", new KeyValuePair<string, object>[] {
-                                Pairing.Of("title", $"{title}"),
-                                Pairing.Of("author", $"{author}")
+                                Pairing.Of("title", $"{slicedBookTitle}"),
+                                Pairing.Of("author", $"{slicedBookAuthor}")
             }).Execute();
 
             id = dbConnection.Take("books").OrderBy("id", "desc").Limit(1).Execute()[0][0];
