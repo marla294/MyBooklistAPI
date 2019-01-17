@@ -97,7 +97,7 @@ namespace BookList.Biz.Database
 
         public static void DeleteUser(IDbConnection dbConnection, string userToken)
         {
-            if (!string.IsNullOrEmpty(userToken)) {
+            if (!string.IsNullOrWhiteSpace(userToken)) {
                 dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
             }
         }
