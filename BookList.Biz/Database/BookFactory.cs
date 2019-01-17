@@ -12,30 +12,18 @@ namespace BookList.Biz.Database
         public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
             string id;
-            string slicedBookTitle = title;
-            string slicedBookAuthor = author;
+            string checkedBookTitle = CheckInput(title, 30);
+            string checkedBookAuthor = CheckInput(author, 30);
 
             // Shouldn't be creating books with the title or author blank
-            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(author))
+            if (checkedBookTitle == null || checkedBookAuthor == null)
             {
                 return null;
             }
 
-            // if title is greater than 30 characters chop it
-            if (title.Length > 30)
-            {
-                slicedBookTitle = title.Substring(0, 30);
-            }
-
-            // if author is greater than 30 characters chop it
-            if (author.Length > 30)
-            {
-                slicedBookAuthor = author.Substring(0, 30);
-            }
-
             dbConnection.Insert("books", new KeyValuePair<string, object>[] {
-                                Pairing.Of("title", $"{slicedBookTitle}"),
-                                Pairing.Of("author", $"{slicedBookAuthor}")
+                                Pairing.Of("title", $"{checkedBookTitle}"),
+                                Pairing.Of("author", $"{checkedBookAuthor}")
             }).Execute();
 
             id = dbConnection.Take("books").OrderBy("id", "desc").Limit(1).Execute()[0][0];
@@ -73,6 +61,27 @@ namespace BookList.Biz.Database
         {
             dbConnection.Delete("booklist").Where(Pairing.Of("book", id)).Execute();
             dbConnection.Delete("books").Where(Pairing.Of("id", id)).Execute();
+        }
+
+        // Checks any input fields for books
+        // If the input is invalid, returns null
+        // If not, ensures the string is < the maxLength
+        // Returns valid input string
+        private static string CheckInput(string input, int maxLength)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return null;
+            }
+
+            string slicedInput = input;
+
+            if (input.Length > maxLength)
+            {
+                slicedInput = input.Substring(0, maxLength);
+            }
+
+            return slicedInput;
         }
     }
 }
