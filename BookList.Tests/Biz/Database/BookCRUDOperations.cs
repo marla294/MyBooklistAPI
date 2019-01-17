@@ -34,6 +34,76 @@ namespace BookList.Tests.Biz.Database
         }
 
         [Test]
+        public void TestCreateNewBookBlankTitle()
+        {
+            string newBookId = BookFactory.CreateNewBook(Db, "", "test author");
+
+            if (newBookId == null)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Int32.TryParse(newBookId, out int id);
+                BookFactory.DeleteBook(Db, id);
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestCreateNewBookBlankAuthor()
+        {
+            string newBookId = BookFactory.CreateNewBook(Db, "test book", "");
+
+            if (newBookId == null)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Int32.TryParse(newBookId, out int id);
+                BookFactory.DeleteBook(Db, id);
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestCreateNewBookTooLongTitle()
+        {
+            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "asdf123456asdf123456asdf123456asdf", "test author"), out int id))
+            {
+                var testBook = BookFactory.LoadSingle(Db, id);
+
+                Assert.IsNotNull(testBook);
+                Assert.AreEqual("asdf123456asdf123456asdf123456", testBook.Title);
+
+                BookFactory.DeleteBook(Db, id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestCreateNewBookTooLongAuthor()
+        {
+            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "asdf123456asdf123456asdf123456asdf"), out int id))
+            {
+                var testBook = BookFactory.LoadSingle(Db, id);
+
+                Assert.IsNotNull(testBook);
+                Assert.AreEqual("asdf123456asdf123456asdf123456", testBook.Author);
+
+                BookFactory.DeleteBook(Db, id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
         public void TestLoadAll()
         {
             if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int id))
