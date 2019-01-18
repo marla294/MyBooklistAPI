@@ -82,6 +82,7 @@
     <Compile Include="Database\ItemFactory.cs" />
     <Compile Include="Models\List.cs" />
     <Compile Include="Database\ListFactory.cs" />
+    <Compile Include="Database\FactoryUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

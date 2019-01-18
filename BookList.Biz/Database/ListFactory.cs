@@ -13,7 +13,7 @@ namespace BookList.Biz.Database
             string listId;
             int userId;
             User user = UserFactory.LoadSingleByToken(userToken);
-            string checkedListName = CheckInput(listName, 30);
+            string checkedListName = FactoryUtils.CheckInput(listName, 30);
 
             // if user doesn't exist don't create
             if (user != null) {
@@ -86,7 +86,7 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string listName) 
         {
-            string checkedListName = CheckInput(listName, 30);
+            string checkedListName = FactoryUtils.CheckInput(listName, 30);
 
             if (checkedListName != null) {
                 dbConnection.Update("lists", Pairing.Of("name", checkedListName)).Where(Pairing.Of("id", id)).Execute();
@@ -97,27 +97,6 @@ namespace BookList.Biz.Database
         {
             dbConnection.Delete("booklist").Where(Pairing.Of("list", id)).Execute();
             dbConnection.Delete("lists").Where(Pairing.Of("id", id)).Execute();
-        }
-
-        // Checks any input fields for lists
-        // If the input is invalid, returns null
-        // If not, ensures the string is < the maxLength
-        // Returns valid input string
-        private static string CheckInput(string input, int maxLength)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return null;
-            }
-
-            string slicedInput = input;
-
-            if (input.Length > maxLength)
-            {
-                slicedInput = input.Substring(0, maxLength);
-            }
-
-            return slicedInput;
         }
     }
 }
