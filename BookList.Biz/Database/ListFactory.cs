@@ -13,7 +13,7 @@ namespace BookList.Biz.Database
             string listId;
             int userId;
             User user = UserFactory.LoadSingleByToken(userToken);
-            string slicedListName = listName;
+            string checkedListName = CheckInput(listName, 30);
 
             // if user doesn't exist don't create
             if (user != null) {
@@ -22,20 +22,14 @@ namespace BookList.Biz.Database
                 return null;
             }
 
-            // if listName is blank don't create
-            if (string.IsNullOrWhiteSpace(listName))
+            // if listName is whitespace don't create
+            if (checkedListName == null)
             {
                 return null;
             }
 
-            // if listName is greater than 30 characters chop it
-            if (listName.Length > 30)
-            {
-                slicedListName = listName.Substring(0, 30);
-            }
-
             dbConnection.Insert("lists", new KeyValuePair<string, object>[] {
-                                Pairing.Of("name", slicedListName), 
+                                Pairing.Of("name", checkedListName), 
                                 Pairing.Of("owner", userId)
             }).Execute();
 
@@ -90,16 +84,12 @@ namespace BookList.Biz.Database
             return FilteredLists;
         }
 
-        public static void UpdateListName(IDbConnection dbConnection, int id, string newName) 
+        public static void UpdateListName(IDbConnection dbConnection, int id, string listName) 
         {
-            if (!string.IsNullOrWhiteSpace(newName)) {
-                string slicedNewName = newName;
+            string checkedListName = CheckInput(listName, 30);
 
-                if (newName.Length > 30) {
-                    slicedNewName = newName.Substring(0, 30);
-                }
-
-                dbConnection.Update("lists", Pairing.Of("name", slicedNewName)).Where(Pairing.Of("id", id)).Execute();
+            if (checkedListName != null) {
+                dbConnection.Update("lists", Pairing.Of("name", checkedListName)).Where(Pairing.Of("id", id)).Execute();
             }
         }
 
@@ -109,6 +99,25 @@ namespace BookList.Biz.Database
             dbConnection.Delete("lists").Where(Pairing.Of("id", id)).Execute();
         }
 
-        
+        // Checks any input fields for lists
+        // If the input is invalid, returns null
+        // If not, ensures the string is < the maxLength
+        // Returns valid input string
+        private static string CheckInput(string input, int maxLength)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return null;
+            }
+
+            string slicedInput = input;
+
+            if (input.Length > maxLength)
+            {
+                slicedInput = input.Substring(0, maxLength);
+            }
+
+            return slicedInput;
+        }
     }
 }
