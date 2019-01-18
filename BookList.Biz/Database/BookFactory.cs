@@ -12,8 +12,8 @@ namespace BookList.Biz.Database
         public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
             string id;
-            string checkedBookTitle = CheckInput(title, 30);
-            string checkedBookAuthor = CheckInput(author, 30);
+            string checkedBookTitle = FactoryUtils.CheckInput(title, 30);
+            string checkedBookAuthor = FactoryUtils.CheckInput(author, 30);
 
             // Shouldn't be creating books with the title or author blank
             if (checkedBookTitle == null || checkedBookAuthor == null)
@@ -61,27 +61,6 @@ namespace BookList.Biz.Database
         {
             dbConnection.Delete("booklist").Where(Pairing.Of("book", id)).Execute();
             dbConnection.Delete("books").Where(Pairing.Of("id", id)).Execute();
-        }
-
-        // Checks any input fields for books
-        // If the input is invalid, returns null
-        // If not, ensures the string is < the maxLength
-        // Returns valid input string
-        private static string CheckInput(string input, int maxLength)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return null;
-            }
-
-            string slicedInput = input;
-
-            if (input.Length > maxLength)
-            {
-                slicedInput = input.Substring(0, maxLength);
-            }
-
-            return slicedInput;
         }
     }
 }
