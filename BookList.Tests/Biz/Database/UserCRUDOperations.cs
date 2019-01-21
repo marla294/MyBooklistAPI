@@ -142,7 +142,23 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateInvalidUserTooLongName()
         {
-            var userToken = UserFactory.CreateNewUser(Db, "testasdf12testasdf12testasdf12testasdf12asdf", "testusername", "testpassword");
+            var userToken = UserFactory.CreateNewUser(Db, "asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfg", "testusername", "testpassword");
+
+            if (userToken != null)
+            {
+                UserFactory.DeleteUser(Db, userToken);
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+
+        [Test]
+        public void TestCreateInvalidUserNonAlphaName()
+        {
+            var userToken = UserFactory.CreateNewUser(Db, "asdf1234", "testusername", "testpassword");
 
             if (userToken != null)
             {
