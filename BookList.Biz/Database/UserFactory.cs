@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BookList.Biz.Models;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace BookList.Biz.Database
 {
@@ -104,7 +105,9 @@ namespace BookList.Biz.Database
 
         private static bool CheckUsername(string username)
         {
-            return !string.IsNullOrWhiteSpace(username) && username.Length >= 7 && username.Length <= 40;
+            var regEx = new Regex(@"^[a-zA-Z0-9_.@-]*$");
+
+            return !string.IsNullOrWhiteSpace(username) && regEx.IsMatch(username) && username.Length >= 7 && username.Length <= 40;
         }
 
         private static bool CheckPassword(string password)
@@ -114,7 +117,7 @@ namespace BookList.Biz.Database
 
         private static string HashPassword(string password)
         {
-            string salt = "5%d2$#@asdrewq@334";
+            string salt = "5 %d2$#@asdrewq@334";
             string saltedPassword = password + salt;
             byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
             var sBuilder = new StringBuilder();
