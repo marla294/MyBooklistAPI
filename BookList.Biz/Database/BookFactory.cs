@@ -12,8 +12,8 @@ namespace BookList.Biz.Database
         public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
             string id;
-            string checkedBookTitle = FactoryUtils.CheckInput(title, 30);
-            string checkedBookAuthor = FactoryUtils.CheckInput(author, 30);
+            string checkedBookTitle = FactoryUtils.CheckInput(title, 0, 30);
+            string checkedBookAuthor = FactoryUtils.CheckInput(author, 0, 30);
 
             // Shouldn't be creating books with the title or author blank
             if (checkedBookTitle == null || checkedBookAuthor == null)

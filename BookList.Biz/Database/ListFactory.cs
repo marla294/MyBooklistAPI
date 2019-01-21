@@ -13,7 +13,7 @@ namespace BookList.Biz.Database
             string listId;
             int userId;
             User user = UserFactory.LoadSingleByToken(userToken);
-            string checkedListName = FactoryUtils.CheckInput(listName, 30);
+            string checkedListName = FactoryUtils.CheckInput(listName, 0, 30);
 
             // if user doesn't exist don't create
             if (user != null) {
@@ -86,7 +86,7 @@ namespace BookList.Biz.Database
 
         public static void UpdateListName(IDbConnection dbConnection, int id, string listName) 
         {
-            string checkedListName = FactoryUtils.CheckInput(listName, 30);
+            string checkedListName = FactoryUtils.CheckInput(listName, 0, 30);
 
             if (checkedListName != null) {
                 dbConnection.Update("lists", Pairing.Of("name", checkedListName)).Where(Pairing.Of("id", id)).Execute();
