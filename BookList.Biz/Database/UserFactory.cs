@@ -19,12 +19,7 @@ namespace BookList.Biz.Database
                 return null;
             }
 
-            if (!CheckUsername(username) || !CheckPassword(password))
-            {
-                return null;
-            }
-
-            if (!(name.Length >= 1 && name.Length <= 40))
+            if (!CheckUsername(username) || !CheckPassword(password) || !CheckFirstname(name))
             {
                 return null;
             }
@@ -115,9 +110,16 @@ namespace BookList.Biz.Database
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 7 && password.Length <= 40;
         }
 
+        private static bool CheckFirstname(string firstname)
+        {
+            var regEx = new Regex(@"^[a-zA-Z]*$");
+
+            return !string.IsNullOrWhiteSpace(firstname) && regEx.IsMatch(firstname) && firstname.Length >= 1 && firstname.Length <= 40;
+        }
+
         private static string HashPassword(string password)
         {
-            string salt = "5 %d2$#@asdrewq@334";
+            string salt = "5%d2$#@asdrewq@334";
             string saltedPassword = password + salt;
             byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
             var sBuilder = new StringBuilder();
