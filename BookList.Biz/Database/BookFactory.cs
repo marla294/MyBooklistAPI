@@ -12,10 +12,10 @@ namespace BookList.Biz.Database
         public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
             string id;
-            string checkedBookTitle = FactoryUtils.CheckInput(title, 0, 30);
-            string checkedBookAuthor = FactoryUtils.CheckInput(author, 0, 30);
+            string checkedBookTitle = FactoryUtils.CheckInput(title, 0, 30, @"^[a-zA-Z0-9!.:;""'?\s]*$");
+            string checkedBookAuthor = FactoryUtils.CheckInput(author, 0, 30, @"^[a-zA-Z\s]*$");
 
-            // Shouldn't be creating books with the title or author blank
+            // If title or author don't pass the CheckInput test then don't create the book
             if (checkedBookTitle == null || checkedBookAuthor == null)
             {
                 return null;
