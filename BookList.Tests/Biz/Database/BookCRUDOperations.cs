@@ -88,18 +88,56 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewBookTooLongAuthor()
         {
-            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "asdf123456asdf123456asdf123456asdf"), out int id))
+            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfg"), out int id))
             {
                 var testBook = BookFactory.LoadSingle(Db, id);
 
                 Assert.IsNotNull(testBook);
-                Assert.AreEqual("asdf123456asdf123456asdf123456", testBook.Author);
+                Assert.AreEqual("asdfgasdfgasdfgasdfgasdfgasdfg", testBook.Author);
 
                 BookFactory.DeleteBook(Db, id);
             }
             else
             {
                 Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestCreateNewBookInvalidCharacterTitle()
+        {
+            var book = BookFactory.CreateNewBook(Db, "*&^%asdf", "test author");
+
+            if (book != null)
+            {
+                if (Int32.TryParse(book, out int id))
+                {
+                    BookFactory.DeleteBook(Db, id);
+                }
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+
+        [Test]
+        public void TestCreateNewBookInvalidCharacterAuthor()
+        {
+            var book = BookFactory.CreateNewBook(Db, "test book", "!@#$%^&*1234");
+
+            if (book != null)
+            {
+                if (Int32.TryParse(book, out int id))
+                {
+                    BookFactory.DeleteBook(Db, id);
+                }
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
             }
         }
 
