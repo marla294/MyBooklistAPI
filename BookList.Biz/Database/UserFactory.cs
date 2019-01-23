@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using BookList.Biz.Models;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 
 namespace BookList.Biz.Database
 {
@@ -100,21 +99,17 @@ namespace BookList.Biz.Database
 
         private static bool CheckUsername(string username)
         {
-            var regEx = new Regex(@"^[a-zA-Z0-9_.@-]*$");
-
-            return !string.IsNullOrWhiteSpace(username) && regEx.IsMatch(username) && username.Length >= 7 && username.Length <= 40;
+            return username.Length <= 40 && FactoryUtils.CheckInput(username, 7, 40, @"^[a-zA-Z0-9_.@-]*$") != null;
         }
 
         private static bool CheckPassword(string password)
         {
-            return !string.IsNullOrWhiteSpace(password) && password.Length >= 7 && password.Length <= 40;
+            return password.Length <= 40 && FactoryUtils.CheckInput(password, 7, 40) != null;
         }
 
         private static bool CheckFirstname(string firstname)
         {
-            var regEx = new Regex(@"^[a-zA-Z]*$");
-
-            return !string.IsNullOrWhiteSpace(firstname) && regEx.IsMatch(firstname) && firstname.Length >= 1 && firstname.Length <= 40;
+            return firstname.Length <= 40 && FactoryUtils.CheckInput(firstname, 1, 40, @"^[a-zA-Z]*$") != null;
         }
 
         private static string HashPassword(string password)
