@@ -29,6 +29,12 @@ namespace BookList.Service.Controllers
             return UserFactory.LoadSingleByToken(id);
         }
 
+        // id == userToken
+        public void Put(string id, [FromBody]UserData value)
+        {
+            UserFactory.UpdateFirstName(Db, id, value.Name);
+        }
+
         // returns the userToken if the user is found
         public string Post([FromBody]UserData value)
         {
