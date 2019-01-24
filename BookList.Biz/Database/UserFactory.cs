@@ -90,10 +90,25 @@ namespace BookList.Biz.Database
             }
         }
 
+        public static void UpdateFirstName(IDbConnection dbConnection, string userToken, string name)
+        {
+            if (CheckFirstname(name) && !string.IsNullOrWhiteSpace(userToken))
+            {
+                dbConnection
+                    .Update("users", Pairing.Of("name", name))
+                    .Where(Pairing.Of("userToken", userToken))
+                    .Execute();
+            }
+        }
+
         public static void DeleteUser(IDbConnection dbConnection, string userToken)
         {
-            if (!string.IsNullOrWhiteSpace(userToken)) {
-                dbConnection.Delete("users").Where(Pairing.Of("userToken", userToken)).Execute();
+            if (!string.IsNullOrWhiteSpace(userToken)) 
+            {
+                dbConnection
+                    .Delete("users")
+                    .Where(Pairing.Of("userToken", userToken))
+                    .Execute();
             }
         }
 
