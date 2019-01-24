@@ -50,12 +50,18 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewListBlankName()
         {
-            if (ListFactory.CreateNewList(Db, UserToken, "") == null)
+            var list = ListFactory.CreateNewList(Db, UserToken, "");
+
+            if (list == null)
             {
                 Assert.Pass();
             }
             else
             {
+                if (Int32.TryParse(list, out int id))
+                {
+                    ListFactory.DeleteList(Db, id);
+                }
                 Assert.Fail();
             }
         }
@@ -74,6 +80,25 @@ namespace BookList.Tests.Biz.Database
             }
             else
             {
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestCreateNewListInvalidName()
+        {
+            var list = ListFactory.CreateNewList(Db, UserToken, "#$%^asdf");
+
+            if (list == null)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                if (Int32.TryParse(list, out int id)) 
+                {
+                    ListFactory.DeleteList(Db, id);
+                }
                 Assert.Fail();
             }
         }
@@ -156,6 +181,27 @@ namespace BookList.Tests.Biz.Database
 
                 Assert.IsNotNull(testList);
                 Assert.AreEqual("asdf123456asdf123456asdf123456", testList.Name);
+
+                ListFactory.DeleteList(Db, id);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        // In the application, the client side strips the invalid characters before it gets to the server
+        // But if invalid characters get to the server somehow, then we want to just cancel updating the list altogether
+        [Test]
+        public void TestUpdateListInvalidName()
+        {
+            if (Int32.TryParse(ListFactory.CreateNewList(Db, UserToken), out int id))
+            {
+                ListFactory.UpdateListName(Db, id, "*&^%asdf");
+                var testList = ListFactory.LoadSingle(Db, id);
+
+                Assert.IsNotNull(testList);
+                Assert.AreEqual("New List", testList.Name);
 
                 ListFactory.DeleteList(Db, id);
             }
