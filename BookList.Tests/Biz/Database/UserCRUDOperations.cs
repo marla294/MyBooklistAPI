@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using BookList.Biz.Database;
+using BookList.Biz.Models;
 
 namespace BookList.Tests.Biz.Database
 {
@@ -230,6 +231,57 @@ namespace BookList.Tests.Biz.Database
                 UserFactory.DeleteUser(Db, testUserToken);
                 Assert.Fail();
             }
+        }
+
+        [Test]
+        public void TestUpdateUserFirstName()
+        {
+            var testUserToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
+            UserFactory.UpdateFirstName(Db, testUserToken, "UpdatedName");
+            User updatedUser = UserFactory.LoadSingleByToken(testUserToken);
+
+            Assert.AreEqual("UpdatedName", updatedUser.Name);
+
+            UserFactory.DeleteUser(Db, testUserToken);
+        }
+
+        [Test]
+        public void TestUpdateUserFirstNameBlank()
+        {
+            var testUserToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
+            UserFactory.UpdateFirstName(Db, testUserToken, "");
+            User updatedUser = UserFactory.LoadSingleByToken(testUserToken);
+
+            // Name shouldn't be updated since it is blank
+            Assert.AreEqual("test", updatedUser.Name);
+
+            UserFactory.DeleteUser(Db, testUserToken);
+        }
+
+        [Test]
+        public void TestUpdateUserFirstNameTooLong()
+        {
+            var testUserToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
+            UserFactory.UpdateFirstName(Db, testUserToken, "asdfasdfqwasdfasdfqwasdfasdfqwasdfasdfqwsdfg");
+            User updatedUser = UserFactory.LoadSingleByToken(testUserToken);
+
+            // Name shouldn't be updated since it was too long (will warn on the client side)
+            Assert.AreEqual("test", updatedUser.Name);
+
+            UserFactory.DeleteUser(Db, testUserToken);
+        }
+
+        [Test]
+        public void TestUpdateUserFirstNameInvalid()
+        {
+            var testUserToken = UserFactory.CreateNewUser(Db, "test", "testusername", "testpassword");
+            UserFactory.UpdateFirstName(Db, testUserToken, "@#$%^&*(");
+            User updatedUser = UserFactory.LoadSingleByToken(testUserToken);
+
+            // Name shouldn't be updated since there were invalid characters
+            Assert.AreEqual("test", updatedUser.Name);
+
+            UserFactory.DeleteUser(Db, testUserToken);
         }
 
         [Test]

@@ -90,7 +90,7 @@ namespace BookList.Biz.Database
             }
         }
 
-        public static void UpdateUserName(IDbConnection dbConnection, string userToken, string name)
+        public static void UpdateFirstName(IDbConnection dbConnection, string userToken, string name)
         {
             if (CheckFirstname(name) && !string.IsNullOrWhiteSpace(userToken))
             {
