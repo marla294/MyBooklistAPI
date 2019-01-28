@@ -77,17 +77,10 @@ namespace BookList.Biz.Database
                 return false;
             }
 
-            var hashedPwd = HashPassword(password);
-            var user = LoadSingle(username.ToLower());
+            User user = LoadSingle(username.ToLower());
+            string salt = "5%d2$#@asdrewq@334";
 
-            if (user != null)
-            {
-                return user.Password == hashedPwd ? true : false;
-            }
-            else
-            {
-                return false;
-            }
+            return user != null && BCrypt.Net.BCrypt.Verify(password + salt, user.Password);
         }
 
         public static void UpdateFirstName(IDbConnection dbConnection, string userToken, string name)
@@ -130,8 +123,16 @@ namespace BookList.Biz.Database
         private static string HashPassword(string password)
         {
             string salt = "5%d2$#@asdrewq@334";
-            string saltedPassword = password + salt;
-            byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
+
+            return BCrypt.Net.BCrypt.HashPassword(password + salt);
+        }
+
+        private static string GenerateUserToken()
+        {
+            var rando = new Random().Next(0, 1000000000).ToString();
+
+            string salt = "5%d2$#@asdrewq@334";
+            byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(rando + salt));
             var sBuilder = new StringBuilder();
 
             for (int i = 0; i < data.Length; i++)
@@ -140,13 +141,6 @@ namespace BookList.Biz.Database
             }
 
             return sBuilder.ToString();
-        }
-
-        private static string GenerateUserToken()
-        {
-            var rando = new Random().Next(0, 1000000000).ToString();
-
-            return HashPassword(rando);
         }
     }
 }
