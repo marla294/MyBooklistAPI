@@ -65,6 +65,9 @@
     <Reference Include="System.ValueTuple">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="BCrypt.Net">
+      <HintPath>..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +90,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="App.config" />
+    <None Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
