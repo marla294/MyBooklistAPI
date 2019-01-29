@@ -8,7 +8,7 @@ namespace BookList.Biz.Database
     public static class ListFactory
     {
         // returns the id of the new list
-        public static string CreateNewList(IDbConnection dbConnection, string userToken, string listName = "New List")
+        public static int? CreateNewList(IDbConnection dbConnection, string userToken, string listName = "New List")
         {
             string listId;
             int userId;
@@ -35,7 +35,8 @@ namespace BookList.Biz.Database
 
             listId = dbConnection.Take("lists").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
-            return listId;
+            return Int32.TryParse(listId, out int id) ? id : (int?)null;
+
         }
 
         public static List<List> LoadAll(IDbConnection dbConnection)

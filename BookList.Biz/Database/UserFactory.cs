@@ -15,7 +15,7 @@ namespace BookList.Biz.Database
             Salt = "5%d2$#@asdrewq@334";
         }
 
-        // returns the id of the new user
+        // returns the userToken of the new user
         // if the username is already taken, returns null
         public static string CreateNewUser(IDbConnection dbConnection, string name, string username, string password)
         {
