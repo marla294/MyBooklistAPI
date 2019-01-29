@@ -9,6 +9,12 @@ namespace BookList.Biz.Database
 {
     public static class UserFactory
     {
+        private static string Salt { get; set; }
+
+        static UserFactory() {
+            Salt = "5%d2$#@asdrewq@334";
+        }
+
         // returns the id of the new user
         // if the username is already taken, returns null
         public static string CreateNewUser(IDbConnection dbConnection, string name, string username, string password)
@@ -78,9 +84,8 @@ namespace BookList.Biz.Database
             }
 
             User user = LoadSingle(username.ToLower());
-            string salt = "5%d2$#@asdrewq@334";
 
-            return user != null && BCrypt.Net.BCrypt.Verify(password + salt, user.Password);
+            return user != null && BCrypt.Net.BCrypt.Verify(password + Salt, user.Password);
         }
 
         public static void UpdateFirstName(IDbConnection dbConnection, string userToken, string name)
@@ -122,17 +127,14 @@ namespace BookList.Biz.Database
 
         private static string HashPassword(string password)
         {
-            string salt = "5%d2$#@asdrewq@334";
-
-            return BCrypt.Net.BCrypt.HashPassword(password + salt);
+            return BCrypt.Net.BCrypt.HashPassword(password + Salt);
         }
 
         private static string GenerateUserToken()
         {
             var rando = new Random().Next(0, 1000000000).ToString();
 
-            string salt = "5%d2$#@asdrewq@334";
-            byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(rando + salt));
+            byte[] data = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(rando + Salt));
             var sBuilder = new StringBuilder();
 
             for (int i = 0; i < data.Length; i++)
