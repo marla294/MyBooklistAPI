@@ -25,11 +25,10 @@ namespace BookList.Tests.Biz.Database
                 UserToken = userToken;
             }
 
-            Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int bookId);
-
+            var bookId = BookFactory.CreateNewBook(Db, "test book", "test author");
             var listId = ListFactory.CreateNewList(Db, UserToken, "test list");
 
-            BookId = bookId;
+            BookId = (int)bookId;
             ListId = (int)listId;
         }
 

@@ -9,9 +9,9 @@ namespace BookList.Biz.Database
     {
         // returns the id of the new book
         // if the book can't be created returns null
-        public static string CreateNewBook(IDbConnection dbConnection, string title, string author)
+        public static int? CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
-            string id;
+            string bookId;
             string checkedBookTitle = FactoryUtils.CheckInput(title, 0, 30, @"^[a-zA-Z0-9!.:;""'?\s]*$");
             string checkedBookAuthor = FactoryUtils.CheckInput(author, 0, 30, @"^[a-zA-Z\s]*$");
 
@@ -26,11 +26,9 @@ namespace BookList.Biz.Database
                                 Pairing.Of("author", $"{checkedBookAuthor}")
             }).Execute();
 
-            id = dbConnection.Take("books").OrderBy("id", "desc").Limit(1).Execute()[0][0];
+            bookId = dbConnection.Take("books").OrderBy("id", "desc").Limit(1).Execute()[0][0];
 
-            Int32.TryParse(id, out int idConverted);
-
-            return id;
+            return Int32.TryParse(bookId, out int id) ? id : (int?)null;
         }
 
         public static List<Book> LoadAll(IDbConnection dbConnection)

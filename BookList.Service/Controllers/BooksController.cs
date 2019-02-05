@@ -28,7 +28,7 @@ namespace BookList.Service.Controllers
         }
 
         // returns the id of the new list as a string
-        public string Post([FromBody]BookFromBody value)
+        public int? Post([FromBody]BookFromBody value)
         {
             return BookFactory.CreateNewBook(Db, value.Title, value.Author);
         }
