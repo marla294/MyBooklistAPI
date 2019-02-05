@@ -17,26 +17,28 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewBook()
         {
-            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int id))
+            var id = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+            if (id == null)
             {
-                var testBook = BookFactory.LoadSingle(Db, id);
+                Assert.Fail();
+            }
+            else
+            {
+                var testBook = BookFactory.LoadSingle(Db, (int)id);
 
                 Assert.IsNotNull(testBook);
                 Assert.AreEqual("test book", testBook.Title);
                 Assert.AreEqual("test author", testBook.Author);
 
-                BookFactory.DeleteBook(Db, id);
-            }
-            else
-            {
-                Assert.Fail();
+                BookFactory.DeleteBook(Db, (int)id);
             }
         }
 
         [Test]
         public void TestCreateNewBookBlankTitle()
         {
-            string newBookId = BookFactory.CreateNewBook(Db, "", "test author");
+            int? newBookId = BookFactory.CreateNewBook(Db, "", "test author");
 
             if (newBookId == null)
             {
@@ -44,8 +46,7 @@ namespace BookList.Tests.Biz.Database
             }
             else
             {
-                Int32.TryParse(newBookId, out int id);
-                BookFactory.DeleteBook(Db, id);
+                BookFactory.DeleteBook(Db, (int)newBookId);
                 Assert.Fail();
             }
         }
@@ -53,7 +54,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewBookBlankAuthor()
         {
-            string newBookId = BookFactory.CreateNewBook(Db, "test book", "");
+            int? newBookId = BookFactory.CreateNewBook(Db, "test book", "");
 
             if (newBookId == null)
             {
@@ -61,8 +62,7 @@ namespace BookList.Tests.Biz.Database
             }
             else
             {
-                Int32.TryParse(newBookId, out int id);
-                BookFactory.DeleteBook(Db, id);
+                BookFactory.DeleteBook(Db, (int)newBookId);
                 Assert.Fail();
             }
         }
@@ -70,110 +70,112 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewBookTooLongTitle()
         {
-            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "asdf123456asdf123456asdf123456asdf", "test author"), out int id))
+            int? newBookId = BookFactory.CreateNewBook(Db, "asdf123456asdf123456asdf123456asdf", "test author");
+
+            if (newBookId == null)
             {
-                var testBook = BookFactory.LoadSingle(Db, id);
+                Assert.Fail();
+            }
+            else
+            {
+                var testBook = BookFactory.LoadSingle(Db, (int)newBookId);
 
                 Assert.IsNotNull(testBook);
                 Assert.AreEqual("asdf123456asdf123456asdf123456", testBook.Title);
 
-                BookFactory.DeleteBook(Db, id);
-            }
-            else
-            {
-                Assert.Fail();
+                BookFactory.DeleteBook(Db, (int)newBookId);
             }
         }
 
         [Test]
         public void TestCreateNewBookTooLongAuthor()
         {
-            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfg"), out int id))
+            int? newBookId = BookFactory.CreateNewBook(Db, "test book", "asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfg");
+
+            if (newBookId == null)
             {
-                var testBook = BookFactory.LoadSingle(Db, id);
+                Assert.Fail();
+            }
+            else
+            {
+                var testBook = BookFactory.LoadSingle(Db, (int)newBookId);
 
                 Assert.IsNotNull(testBook);
                 Assert.AreEqual("asdfgasdfgasdfgasdfgasdfgasdfg", testBook.Author);
 
-                BookFactory.DeleteBook(Db, id);
-            }
-            else
-            {
-                Assert.Fail();
+                BookFactory.DeleteBook(Db, (int)newBookId);
             }
         }
 
         [Test]
         public void TestCreateNewBookInvalidCharacterTitle()
         {
-            var book = BookFactory.CreateNewBook(Db, "*&^%asdf", "test author");
+            int? newBookId = BookFactory.CreateNewBook(Db, "*&^%asdf", "test author");
 
-            if (book != null)
+            if (newBookId == null)
             {
-                if (Int32.TryParse(book, out int id))
-                {
-                    BookFactory.DeleteBook(Db, id);
-                }
-                Assert.Fail();
+                Assert.Pass();
             }
             else
             {
-                Assert.Pass();
+                BookFactory.DeleteBook(Db, (int)newBookId);
+                Assert.Fail();
             }
         }
 
         [Test]
         public void TestCreateNewBookInvalidCharacterAuthor()
         {
-            var book = BookFactory.CreateNewBook(Db, "test book", "!@#$%^&*1234");
+            int? newBookId = BookFactory.CreateNewBook(Db, "test book", "!@#$%^&*1234");
 
-            if (book != null)
+            if (newBookId == null)
             {
-                if (Int32.TryParse(book, out int id))
-                {
-                    BookFactory.DeleteBook(Db, id);
-                }
-                Assert.Fail();
+                Assert.Pass();
             }
             else
             {
-                Assert.Pass();
+                BookFactory.DeleteBook(Db, (int)newBookId);
+                Assert.Fail();
             }
         }
 
         [Test]
         public void TestLoadAll()
         {
-            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int id))
+            int? newBookId = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+            if (newBookId == null)
+            {
+                Assert.Fail();
+            }
+            else
             {
                 var testBooks = BookFactory.LoadAll(Db);
-                var testBook = testBooks.Find(book => book.Id == id);
+                var testBook = testBooks.Find(book => book.Id == (int)newBookId);
 
                 Assert.IsNotNull(testBooks);
                 Assert.IsNotNull(testBook);
 
-                BookFactory.DeleteBook(Db, id);
-            }
-            else
-            {
-                Assert.Fail();
+                BookFactory.DeleteBook(Db, (int)newBookId);
             }
         }
 
         [Test]
         public void TestDeleteBook()
         {
-            if (Int32.TryParse(BookFactory.CreateNewBook(Db, "test book", "test author"), out int id))
+            int? newBookId = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+            if (newBookId == null)
             {
-                BookFactory.DeleteBook(Db, id);
-
-                var testBook = BookFactory.LoadSingle(Db, id);
-
-                Assert.IsNull(testBook);
+                Assert.Fail();
             }
             else
             {
-                Assert.Fail();
+                BookFactory.DeleteBook(Db, (int)newBookId);
+
+                var testBook = BookFactory.LoadSingle(Db, (int)newBookId);
+
+                Assert.IsNull(testBook);
             }
         }
     }
