@@ -70,7 +70,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewBookTooLongTitle()
         {
-            int? newBookId = BookFactory.CreateNewBook(Db, "asdf123456asdf123456asdf123456asdf", "test author");
+            int? newBookId = BookFactory.CreateNewBook(Db, "AsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwerty", "test author");
 
             if (newBookId == null)
             {
@@ -81,7 +81,7 @@ namespace BookList.Tests.Biz.Database
                 var testBook = BookFactory.LoadSingle(Db, (int)newBookId);
 
                 Assert.IsNotNull(testBook);
-                Assert.AreEqual("asdf123456asdf123456asdf123456", testBook.Title);
+                Assert.AreEqual("AsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwerty", testBook.Title);
 
                 BookFactory.DeleteBook(Db, (int)newBookId);
             }
@@ -90,7 +90,7 @@ namespace BookList.Tests.Biz.Database
         [Test]
         public void TestCreateNewBookTooLongAuthor()
         {
-            int? newBookId = BookFactory.CreateNewBook(Db, "test book", "asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfg");
+            int? newBookId = BookFactory.CreateNewBook(Db, "test book", "AsdfqwertyAsdfqwertyAsdfqwertyAsdfqwertyAsdfqwerty");
 
             if (newBookId == null)
             {
@@ -101,7 +101,7 @@ namespace BookList.Tests.Biz.Database
                 var testBook = BookFactory.LoadSingle(Db, (int)newBookId);
 
                 Assert.IsNotNull(testBook);
-                Assert.AreEqual("asdfgasdfgasdfgasdfgasdfgasdfg", testBook.Author);
+                Assert.AreEqual("AsdfqwertyAsdfqwertyAsdfqwerty", testBook.Author);
 
                 BookFactory.DeleteBook(Db, (int)newBookId);
             }

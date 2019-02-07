@@ -12,7 +12,7 @@ namespace BookList.Biz.Database
         public static int? CreateNewBook(IDbConnection dbConnection, string title, string author)
         {
             string bookId;
-            string checkedBookTitle = FactoryUtils.CheckInput(title, 0, 30, @"^[a-zA-Z0-9!.:;""'?\s]*$");
+            string checkedBookTitle = FactoryUtils.CheckInput(title, 0, 120, @"^[a-zA-Z0-9!.:;""'?\s]*$");
             string checkedBookAuthor = FactoryUtils.CheckInput(author, 0, 30, @"^[a-zA-Z\s]*$");
 
             // If title or author don't pass the CheckInput test then don't create the book
