@@ -146,7 +146,7 @@ namespace BookList.Tests.Biz.Database
 
             if (newBookId == null)
             {
-                Assert.Fail();
+                Assert.Fail("Book not created properly");
             }
             else
             {
@@ -161,13 +161,36 @@ namespace BookList.Tests.Biz.Database
         }
 
         [Test]
+        public void TestUpdateBook()
+        {
+            var id = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+            if (id == null)
+            {
+                Assert.Fail("Book not created properly");
+            }
+            else
+            {
+                BookFactory.UpdateBook(Db, (int)id, "updated title", "updated author");
+
+                var testBook = BookFactory.LoadSingle(Db, (int)id);
+
+                Assert.IsNotNull(testBook);
+                Assert.AreEqual("updated title", testBook.Title);
+                Assert.AreEqual("updated author", testBook.Author);
+
+                BookFactory.DeleteBook(Db, (int)id);
+            }
+        }
+
+        [Test]
         public void TestDeleteBook()
         {
             int? newBookId = BookFactory.CreateNewBook(Db, "test book", "test author");
 
             if (newBookId == null)
             {
-                Assert.Fail();
+                Assert.Fail("Book not created properly");
             }
             else
             {

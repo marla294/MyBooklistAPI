@@ -66,8 +66,8 @@ namespace BookList.Biz.Database
                 return;
             }
 
-            dbConnection.Update("books", Pairing.Of("title", $"{checkedBookTitle}"));
-            dbConnection.Update("books", Pairing.Of("author", $"{checkedBookAuthor}"));
+            dbConnection.Update("books", Pairing.Of("title", $"{checkedBookTitle}")).Execute();
+            dbConnection.Update("books", Pairing.Of("author", $"{checkedBookAuthor}")).Execute();
         }
 
         public static void DeleteBook(IDbConnection dbConnection, int id)
