@@ -55,6 +55,21 @@ namespace BookList.Biz.Database
             return LoadAll(dbConnection).FirstOrDefault<Book>(book => book.Id == id);
         }
 
+        public static void UpdateBook(IDbConnection dbConnection, int id, string title, string author)
+        {
+            string checkedBookTitle = FactoryUtils.CheckInput(title, 0, 120, @"^[a-zA-Z0-9!.:;""'?\s]*$");
+            string checkedBookAuthor = FactoryUtils.CheckInput(author, 0, 30, @"^[a-zA-Z\s]*$");
+
+            // If title or author don't pass the CheckInput test then don't update the book
+            if (checkedBookTitle == null || checkedBookAuthor == null)
+            {
+                return;
+            }
+
+            dbConnection.Update("books", Pairing.Of("title", $"{checkedBookTitle}"));
+            dbConnection.Update("books", Pairing.Of("author", $"{checkedBookAuthor}"));
+        }
+
         public static void DeleteBook(IDbConnection dbConnection, int id)
         {
             dbConnection.Delete("booklist").Where(Pairing.Of("book", id)).Execute();
