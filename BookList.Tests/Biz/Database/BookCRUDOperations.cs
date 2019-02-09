@@ -184,6 +184,102 @@ namespace BookList.Tests.Biz.Database
         }
 
         [Test]
+        public void TestUpdateBookBlankTitle()
+        {
+            int? id = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+
+            if (id == null)
+            {
+                Assert.Fail("Book not created properly");
+            }
+            else
+            {
+                BookFactory.UpdateBook(Db, (int)id, "", "updated author");
+
+                var testBook = BookFactory.LoadSingle(Db, (int)id);
+
+                Assert.IsNotNull(testBook);
+                Assert.AreEqual("test book", testBook.Title);
+                Assert.AreEqual("test author", testBook.Author);
+
+                BookFactory.DeleteBook(Db, (int)id);
+            }
+        }
+
+        [Test]
+        public void TestUpdateBookBlankAuthor()
+        {
+            int? id = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+
+            if (id == null)
+            {
+                Assert.Fail("Book not created properly");
+            }
+            else
+            {
+                BookFactory.UpdateBook(Db, (int)id, "updated title", "");
+
+                var testBook = BookFactory.LoadSingle(Db, (int)id);
+
+                Assert.IsNotNull(testBook);
+                Assert.AreEqual("test book", testBook.Title);
+                Assert.AreEqual("test author", testBook.Author);
+
+                BookFactory.DeleteBook(Db, (int)id);
+            }
+        }
+
+        [Test]
+        public void TestUpdateBookInvalidCharacterTitle()
+        {
+            int? id = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+
+            if (id == null)
+            {
+                Assert.Fail("Book not created properly");
+            }
+            else
+            {
+                BookFactory.UpdateBook(Db, (int)id, "*&^%asdf", "updated author");
+
+                var testBook = BookFactory.LoadSingle(Db, (int)id);
+
+                Assert.IsNotNull(testBook);
+                Assert.AreEqual("test book", testBook.Title);
+                Assert.AreEqual("test author", testBook.Author);
+
+                BookFactory.DeleteBook(Db, (int)id);
+            }
+        }
+
+        [Test]
+        public void TestUpdateBookInvalidCharacterAuthor()
+        {
+            int? id = BookFactory.CreateNewBook(Db, "test book", "test author");
+
+
+            if (id == null)
+            {
+                Assert.Fail("Book not created properly");
+            }
+            else
+            {
+                BookFactory.UpdateBook(Db, (int)id, "updated title", "*&^%asdf");
+
+                var testBook = BookFactory.LoadSingle(Db, (int)id);
+
+                Assert.IsNotNull(testBook);
+                Assert.AreEqual("test book", testBook.Title);
+                Assert.AreEqual("test author", testBook.Author);
+
+                BookFactory.DeleteBook(Db, (int)id);
+            }
+        }
+
+        [Test]
         public void TestDeleteBook()
         {
             int? newBookId = BookFactory.CreateNewBook(Db, "test book", "test author");
