@@ -86,6 +86,7 @@
     <Compile Include="Models\List.cs" />
     <Compile Include="Database\ListFactory.cs" />
     <Compile Include="Database\FactoryUtils.cs" />
+    <Compile Include="Database\CRUDOperations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
